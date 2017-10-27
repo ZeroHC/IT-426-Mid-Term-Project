@@ -1,5 +1,6 @@
 package launcher;
 
+
 import model.FitnessModel;
 import ui.FitnessView;
 

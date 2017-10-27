@@ -1,5 +1,8 @@
 package model;
 
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,13 +10,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class Checklist
+public class Checklist extends Application
 {
     String[] checklist = {"binoculars", "flashlight"};
 
+    @Override
     public void start(Stage stage) throws Exception
     {
         stage.setScene(createChecklist());
+        stage.setTitle("Checklist");
+        stage.show();
     }
 
     public Scene createChecklist()
@@ -32,7 +38,29 @@ public class Checklist
             box.setPrefWidth(200);
         }
 
+        vBox.getChildren().addAll(boxes);
 
+        for(int i = 0; i < checklist.length; i++)
+        {
+            final CheckBox box = boxes[i];
+            final String listItem = checklist[i];
+
+            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>()
+            {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+                {
+                    if(newValue == true)
+                    {
+                        box.setText(listItem + " packed!");
+                    }
+                    else
+                    {
+                        box.setText(listItem);
+                    }
+                }
+            });
+        }
 
         return new Scene(vBox, 300, 300);
     }
