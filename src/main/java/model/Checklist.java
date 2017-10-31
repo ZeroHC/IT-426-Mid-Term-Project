@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class Checklist extends Application
 {
-    String[] checklist = {"binoculars", "flashlight"};
+    String[] checklist = {"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
     @Override
     public void start(Stage stage) throws Exception
