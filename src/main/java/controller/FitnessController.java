@@ -1,32 +1,24 @@
 package controller;
 
 import javafx.scene.Scene;
-import model.FitnessModel;
-import ui.FitnessView;
 
 public class FitnessController {
 
-    private Scene view;
+    //Used to hold the scene information passed from the view.
+    private Scene scene;
 
-    //default constructor
-    public FitnessController(){
-
+    public FitnessController(Scene scene){
+        this.scene = scene;
     }
 
-    public FitnessController(FitnessModel model, FitnessView view){
-
-    }
-
-    //Returns the scene for the triggered button event.
     public Scene updateView(){
-        return getScene();
+        return scene;
     }
 
-    public Scene getScene(){
-        return view;
+    public void setView(Scene scene){
+        this.scene = scene;
     }
 
-    public void setScene(Scene view){
-        this.view = view;
-    }
+
+
 }
