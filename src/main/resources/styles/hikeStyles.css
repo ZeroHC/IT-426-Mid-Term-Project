@@ -1,0 +1,26 @@
+.root{
+    /* use -fx- as prefix for javafx styling*/
+    -fx-background-color: #cce6ff;
+    -fx-font-size: 16px;
+    -fx-alignment: top-center;
+    -fx-spacing: 40px;
+    -fx-padding: 15px;
+}
+
+.hBox{
+    -fx-alignment: center-left;
+}
+
+#buttonRow{
+    -fx-alignment: center;
+    -fx-spacing: 30px;
+}
+
+.button{
+    -fx-min-height: 40px;
+    -fx-min-width: 100px;
+}
+
+.check-box{
+    -fx-alignment: center-left;
+}
