@@ -2,6 +2,8 @@ package ui;
 
 import controller.FitnessController;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,6 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -18,7 +21,6 @@ import javafx.scene.effect.Reflection;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -33,9 +35,10 @@ public class FitnessView extends Application {
     private static final int EXERCISE_TRACKER_WIDTH = 500;
     private static final int EXERCISE_TRACKER_HEADER_FOOTER = 100;
     private static final int BUTTON_SHADOW_RADIUS = 1;
-    private static final int BUTTON_SHADOW_OFFSET = 3;
+    private static final int BUTTON_SHADOW_OFFSET = 2;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
-    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS"};
+    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", "CHECKLIST"};
+    private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
     //Scene object to hold current scene.
     private Scene currentScene;
@@ -45,6 +48,7 @@ public class FitnessView extends Application {
 
     //Controller to perform necessary actions.
     private FitnessController controller = new FitnessController(defaultStartingScene());
+
 
 
     //Initial scene setup for application.
@@ -132,6 +136,10 @@ public class FitnessView extends Application {
             case "BACK":
                 scene = home();
                 break;
+
+            case "CHECKLIST":
+                scene = checkList();
+                break;
         }
 
         return scene;
@@ -182,7 +190,7 @@ public class FitnessView extends Application {
         VBox menuContainer = new VBox();
         menuContainer.setAlignment(Pos.CENTER);
         menuContainer.setSpacing(20);
-        menuContainer.getStylesheets().add("Josh_Style.css");
+        menuContainer.getStylesheets().add("styles/HikemasterStyles.css");
         menuContainer.setId("home-image");
 
         HBox title = new HBox();
@@ -202,8 +210,7 @@ public class FitnessView extends Application {
         Button[] buttons = makeButtons(BUTTON_NAMES_FOR_HOME);
 
         buttons[0].setId("new-hike-btn-icon");
-        buttons[1].setId("previous-hike-btn-icon");
-        buttons[2].setId("scheduled-btn-icon");
+        buttons[1].setId("scheduled-btn-icon");
         buttons[BUTTON_SHADOW_OFFSET].setId("exercise-progress-btn-icon");
 
         addButtons(menuContainer, buttons);
@@ -227,7 +234,7 @@ public class FitnessView extends Application {
     private Scene exerciseTracker(){
 
         VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("Josh_Style.css");
+        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
         mainContainer.setAlignment(Pos.TOP_CENTER);
         mainContainer.setMaxSize(EXERCISE_TRACKER_WIDTH, HEIGHT);
 
@@ -280,7 +287,7 @@ public class FitnessView extends Application {
     //Scene for displaying user's data on heart rate and steps taken.
     private Scene exerciseProgress(){
         VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("Josh_Style.css");
+        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
         mainContainer.setAlignment(Pos.TOP_LEFT);
         mainContainer.setMinSize(WIDTH, HEIGHT);
         mainContainer.setMaxSize(WIDTH, HEIGHT);
@@ -373,7 +380,7 @@ public class FitnessView extends Application {
     private Scene newTrail(){
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.getStylesheets().add("Josh_Style.css");
+        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
 
         Button back = makeBackButton(BACK);
 
@@ -383,15 +390,64 @@ public class FitnessView extends Application {
     }
 
     //
-    private Scene checkList(){
-        return null;
+    private Scene checkList()
+    {
+        VBox vBox = new VBox();
+        vBox.getStylesheets().add("styles/HikemasterStyles.css");
+        vBox.setPadding(new Insets(10));
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+        Text checklistTitle = titleMaker("Checklist");
+        vBox.getChildren().add(checklistTitle);
+
+        CheckBox[] boxes = new CheckBox[CHECKLIST.length];
+
+        for(int i = 0; i < CHECKLIST.length; i++)
+        {
+            CheckBox box = new CheckBox(CHECKLIST[i]);
+            boxes[i] = box;
+            box.setPrefWidth(200);
+        }
+
+        vBox.getChildren().addAll(boxes);
+
+        for(int i = 0; i < CHECKLIST.length; i++)
+        {
+            final CheckBox box = boxes[i];
+            final String listItem = CHECKLIST[i];
+
+            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>()
+            {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+                {
+                    if(newValue == true)
+                    {
+                        box.setText(listItem + " packed!");
+                    }
+                    else
+                    {
+                        box.setText(listItem);
+                    }
+                }
+            });
+        }
+
+//        Scene checklistScene = new Scene(vBox, 400, 600);
+//        checklistScene.getStylesheets().add("styles/hikeStyles.css");
+//
+        Button back = makeBackButton(BACK);
+        vBox.getChildren().add(back);
+//
+        return new Scene(vBox, 400, 600);
+
     }
 
     //
     private Scene scheduledHikes(){
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
-        container.getStylesheets().add("Josh_Style.css");
+        container.getStylesheets().add("styles/HikemasterStyles.css");
 
         Text text = titleMaker("Scheduled Hike");
 
