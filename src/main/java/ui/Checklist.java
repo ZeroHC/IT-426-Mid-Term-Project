@@ -1,4 +1,4 @@
-package model;
+package ui;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -18,7 +18,7 @@ public class Checklist extends Application
     public void start(Stage stage) throws Exception
     {
         stage.setScene(createChecklist());
-        stage.setTitle("Checklist");
+        stage.setTitle("Hike Master 9000");
         stage.show();
     }
 
@@ -62,11 +62,9 @@ public class Checklist extends Application
             });
         }
 
-        return new Scene(vBox, 300, 300);
-    }
+        Scene checklistScene = new Scene(vBox, 400, 600);
+        checklistScene.getStylesheets().add("styles/hikeStyles.css");
 
-    public void addChecklistItem()
-    {
-
+        return checklistScene;
     }
 }
