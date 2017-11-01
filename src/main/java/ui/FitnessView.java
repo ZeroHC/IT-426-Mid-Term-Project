@@ -1,5 +1,6 @@
 package ui;
 
+import com.jfoenix.controls.JFXCheckBox;
 import controller.FitnessController;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -400,11 +401,11 @@ public class FitnessView extends Application {
         Text checklistTitle = titleMaker("Checklist");
         vBox.getChildren().add(checklistTitle);
 
-        CheckBox[] boxes = new CheckBox[CHECKLIST.length];
+        JFXCheckBox[] boxes = new JFXCheckBox[CHECKLIST.length];
 
         for(int i = 0; i < CHECKLIST.length; i++)
         {
-            CheckBox box = new CheckBox(CHECKLIST[i]);
+            JFXCheckBox box = new JFXCheckBox(CHECKLIST[i]);
             boxes[i] = box;
             box.setPrefWidth(200);
         }
