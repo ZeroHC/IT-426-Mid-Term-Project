@@ -500,7 +500,7 @@ public class FitnessView extends Application {
     {
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.getStylesheets().add("Josh_Style.css");
+        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
 
         Text title = titleMaker("Hike Detail");
 

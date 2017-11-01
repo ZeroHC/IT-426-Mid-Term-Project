@@ -91,3 +91,7 @@ Button:hover{
     -fx-alignment: center-left;
 }
 
+#buttonRow{
+    -fx-alignment: center;
+    -fx-spacing: 30px;
+}
