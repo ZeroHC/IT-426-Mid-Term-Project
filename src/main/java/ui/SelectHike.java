@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -29,16 +30,12 @@ public class SelectHike extends Application
         Text header = new Text("Select Hike");
         selectHikeMenu.getChildren().add(header);
 
-        ArrayList<String> allHikes = FileReadingHelper.fileChecker();
-        String[] hikeSelector = new String[]{};
 
-        for (String hike : allHikes)
-        {
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
 
-        }
-
-        Button nextButton = new Button("Next");
-        nextButton.setOnAction(new EventHandler<ActionEvent>()
+        Button backButton = new Button("Back");
+        backButton.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
@@ -47,7 +44,20 @@ public class SelectHike extends Application
             }
         });
 
-        selectHikeMenu.getChildren().add(nextButton);
+        Button nextButton = new Button("Next");
+        nextButton.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                //goes to the next scene
+            }
+        });
+
+
+        buttonRow.getChildren().addAll(backButton, nextButton);
+
+        selectHikeMenu.getChildren().add(buttonRow);
 
         Scene selectHikeScene = new Scene(selectHikeMenu, 400, 600);
         selectHikeScene.getStylesheets().add("styles/hikeStyles.css");

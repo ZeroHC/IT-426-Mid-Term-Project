@@ -68,6 +68,7 @@ Button:hover{
     -fx-graphic: url("images/web/ic_show_chart_white_24dp_1x.png");
 }
 
+
 .label-text{
     -fx-font-weight: bolder;
     -fx-font-size: 40px;
@@ -76,4 +77,9 @@ Button:hover{
 .title-text{
     -fx-font-size: 50px;
     /*-fx-fill: white;*/
+}
+
+#buttonRow{
+    -fx-alignment: center;
+    -fx-spacing: 30px;
 }

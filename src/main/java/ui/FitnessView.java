@@ -11,6 +11,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -30,10 +31,11 @@ public class FitnessView extends Application {
     private static final int HEIGHT = 630;
     private static final int EXERCISE_TRACKER_BODY_HEIGHT = 430;
     private static final String BACK = "BACK";
+    private static final String NEXT = "NEXT";
     private static final int EXERCISE_TRACKER_WIDTH = 500;
     private static final int EXERCISE_TRACKER_HEADER_FOOTER = 100;
     private static final int BUTTON_SHADOW_RADIUS = 1;
-    private static final int BUTTON_SHADOW_OFFSET = 3;
+    private static final int BUTTON_SHADOW_OFFSET = 2;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
     private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS"};
 
@@ -104,6 +106,20 @@ public class FitnessView extends Application {
         return button;
     }
 
+    //Makes a button that goes to the home scene.
+    private Button makeNextButton(String name){
+
+        Button button = new Button(name);
+        //button.getStyleClass().add("back-btn-icon");
+        DropShadow shadow = addDropShadow();
+
+        addMouseHoverEvent(button, shadow);
+
+        setButtonActionForSceneChange(button, NEXT);
+
+        return button;
+    }
+
     //Helper method for adding multiple buttons to node.
     private void addButtons(VBox container, Button[] buttons){
         for (Button button : buttons){
@@ -131,6 +147,10 @@ public class FitnessView extends Application {
 
             case "BACK":
                 scene = home();
+                break;
+
+            case "NEXT":
+                scene = hikeDetail();
                 break;
         }
 
@@ -202,8 +222,7 @@ public class FitnessView extends Application {
         Button[] buttons = makeButtons(BUTTON_NAMES_FOR_HOME);
 
         buttons[0].setId("new-hike-btn-icon");
-        buttons[1].setId("previous-hike-btn-icon");
-        buttons[2].setId("scheduled-btn-icon");
+        buttons[1].setId("scheduled-btn-icon");
         buttons[BUTTON_SHADOW_OFFSET].setId("exercise-progress-btn-icon");
 
         addButtons(menuContainer, buttons);
@@ -375,9 +394,19 @@ public class FitnessView extends Application {
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.getStylesheets().add("Josh_Style.css");
 
+        Text title = titleMaker("Select Hike");
+        mainContainer.getChildren().add(title);
+
         Button back = makeBackButton(BACK);
 
-        mainContainer.getChildren().add(back);
+        Button next = makeNextButton(NEXT);
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(back, next);
+
+        mainContainer.getChildren().add(buttonRow);
 
         return new Scene(mainContainer, WIDTH, HEIGHT);
     }
@@ -408,4 +437,41 @@ public class FitnessView extends Application {
     }
 
 
+    //
+    private Scene hikeDetail()
+    {
+        VBox mainContainer = new VBox();
+        mainContainer.setAlignment(Pos.CENTER);
+        mainContainer.getStylesheets().add("Josh_Style.css");
+
+        Text title = titleMaker("Hike Detail");
+
+        VBox inputContainer = new VBox();
+        inputContainer.setAlignment(Pos.CENTER_LEFT);
+        inputContainer.setSpacing(20);
+
+        HBox locationRow = new HBox();
+        locationRow.setAlignment(Pos.CENTER);
+
+        Label hikeLocation = new Label("Location:\t");
+        TextField locationInput = new TextField();
+
+        locationRow.getChildren().addAll(hikeLocation, locationInput);
+
+        HBox dateRow = new HBox();
+        dateRow.setAlignment(Pos.CENTER);
+
+        Label hikeDate = new Label("Date:\t");
+        DatePicker dateInput = new DatePicker();
+
+        dateRow.getChildren().addAll(hikeDate, dateInput);
+
+        inputContainer.getChildren().addAll(locationRow, dateRow);
+
+        Button back = makeBackButton(BACK);
+
+        mainContainer.getChildren().addAll(title, inputContainer, back);
+
+        return new Scene(mainContainer, WIDTH, HEIGHT);
+    }
 }
