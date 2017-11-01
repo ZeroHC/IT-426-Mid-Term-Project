@@ -55,7 +55,7 @@ public class ReminderMessage extends Application
         vBox.getChildren().addAll(boxes);
 
         Scene listedMessagesScene = new Scene(vBox, 400, 600);
-        listedMessagesScene.getStylesheets().add("styles/hikeStyles.css");
+        listedMessagesScene.getStylesheets().add("styles/HikemasterStyles.css");
 
         return listedMessagesScene;
     }

@@ -491,7 +491,29 @@ public class FitnessView extends Application {
 
     //
     private Scene reminderMessages(){
-        return null;
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10));
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+
+        String[] messageList = {"Where your fitbit!", "Be sure to stretch!", "Grab your backpack!",
+                "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check your Checklist!"};
+
+        JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
+
+        for(int i = 0; i < messageList.length; i++)
+        {
+            JFXCheckBox box = new JFXCheckBox(messageList[i]);
+            boxes[i] = box;
+            box.setPrefWidth(200);
+        }
+
+        vBox.getChildren().addAll(boxes);
+
+        Scene listedMessagesScene = new Scene(vBox, 400, 600);
+        listedMessagesScene.getStylesheets().add("styles/HikemasterStyles.css");
+
+        return listedMessagesScene;
     }
 
 
