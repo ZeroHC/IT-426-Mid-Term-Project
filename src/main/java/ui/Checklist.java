@@ -10,6 +10,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.xml.soap.Text;
+
 public class Checklist extends Application
 {
     String[] checklist = {"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};

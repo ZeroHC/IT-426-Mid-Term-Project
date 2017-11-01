@@ -26,14 +26,6 @@ public class ReminderMessage extends Application
     String[] messageList = {"Where your fitbit!", "Be sure to stretch!", "Grab your backpack!",
             "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check the Checklist!"};
 
-//    public ArrayList messageList()
-//    {
-//        ArrayList messages = new ArrayList();
-//        messages.add("Where your fitbit!");
-//        messages.add("Be sure to stretch!");
-//        messages.add("Grab backpack!");
-//        return messages;
-//    }
     @Override
     public void start(Stage stage) throws Exception
     {
@@ -55,19 +47,17 @@ public class ReminderMessage extends Application
 
         for(int i = 0; i < messageList.length; i++)
         {
-            CheckBox button = new CheckBox(messageList[i]);
-            boxes[i] = button;
-            button.setPrefWidth(200);
+            CheckBox box = new CheckBox(messageList[i]);
+            boxes[i] = box;
+            box.setPrefWidth(200);
         }
 
         vBox.getChildren().addAll(boxes);
-
 
         Scene listedMessagesScene = new Scene(vBox, 400, 600);
         listedMessagesScene.getStylesheets().add("styles/hikeStyles.css");
 
         return listedMessagesScene;
-
     }
 
     public Scene addNewMessage()
@@ -94,19 +84,6 @@ public class ReminderMessage extends Application
 
         messageRow.getChildren().addAll(messageLabel, messageField);
         addNewMessageBox.getChildren().add(messageRow);
-
-        //Place for calendar
-//        HBox calendarRow = new HBox();
-//        calendarRow.setSpacing(10);
-//        calendarRow.setAlignment(Pos.CENTER_RIGHT);
-//
-//        Label calendarLabel = new Label("Choose the date: ");
-//        DatePicker messageCalendar = new DatePicker();
-//
-//
-//        calendarRow.getChildren().addAll(calendarLabel, messageCalendar);
-//        addNewMessageBox.getChildren().add(calendarRow);
-
 
         return new Scene(addNewMessageBox, 300, 300);
     }
