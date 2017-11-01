@@ -35,6 +35,10 @@ public class FitnessView extends Application {
     private static final int EXERCISE_TRACKER_BODY_HEIGHT = 430;
     private static final String BACK = "BACK";
     private static final String NEXT = "NEXT";
+    private static final String HOME_SCENE = "HOME";
+    private static final String SELECT_HIKE_SCENE = "NEW HIKE";
+    private static final String HIKE_DETAIL_SCENE = "HIKE DETAIL";
+    private static final String REMINDER_MESSAGES_SCENE = "REMINDER MESSAGES";
     private static final int EXERCISE_TRACKER_WIDTH = 500;
     private static final int EXERCISE_TRACKER_HEADER_FOOTER = 100;
     private static final int BUTTON_SHADOW_RADIUS = 1;
@@ -98,29 +102,29 @@ public class FitnessView extends Application {
     }
 
     //Makes a button that goes to the home scene.
-    private Button makeBackButton(String name){
+    private Button makeBackButton(String buttonName, String sceneName){
 
-        Button button = new Button(name);
+        Button button = new Button(buttonName);
         button.getStyleClass().add("back-btn-icon");
         DropShadow shadow = addDropShadow();
 
         addMouseHoverEvent(button, shadow);
 
-        setButtonActionForSceneChange(button, BACK);
+        setButtonActionForSceneChange(button, sceneName);
 
         return button;
     }
 
     //Makes a button that goes to the home scene.
-    private Button makeNextButton(String name){
+    private Button makeNextButton(String buttonName, String sceneName){
 
-        Button button = new Button(name);
+        Button button = new Button(buttonName);
         //button.getStyleClass().add("back-btn-icon");
         DropShadow shadow = addDropShadow();
 
         addMouseHoverEvent(button, shadow);
 
-        setButtonActionForSceneChange(button, NEXT);
+        setButtonActionForSceneChange(button, sceneName);
 
         return button;
     }
@@ -150,7 +154,7 @@ public class FitnessView extends Application {
                 scene = exerciseProgress();
                 break;
 
-            case "BACK":
+            case "HOME":
                 scene = home();
                 break;
 
@@ -158,8 +162,12 @@ public class FitnessView extends Application {
                 scene = checkList();
                 break;
 
-            case "NEXT":
+            case "HIKE DETAIL":
                 scene = hikeDetail();
+                break;
+
+            case "REMINDER MESSAGES":
+                scene = reminderMessages();
                 break;
         }
 
@@ -295,7 +303,7 @@ public class FitnessView extends Application {
 
         middle.getChildren().addAll(heartRate, heartRateEntry, steps, stepsEntry);
 
-        Button button = makeBackButton(BACK);
+        Button button = makeBackButton(BACK, HOME_SCENE);
 
         top.getChildren().add(title);
         bottom.getChildren().add(button);
@@ -389,7 +397,7 @@ public class FitnessView extends Application {
         middle.getChildren().add(chartBox);
 
 
-        Button back = makeBackButton(BACK);
+        Button back = makeBackButton(BACK, HOME_SCENE);
         bottom.getChildren().add(back);
 
         mainContainer.getChildren().addAll(top, middle, bottom);
@@ -406,9 +414,9 @@ public class FitnessView extends Application {
         Text title = titleMaker("Select Hike");
         mainContainer.getChildren().add(title);
 
-        Button back = makeBackButton(BACK);
+        Button back = makeBackButton(BACK, HOME_SCENE);
 
-        Button next = makeNextButton(NEXT);
+        Button next = makeNextButton(NEXT, HIKE_DETAIL_SCENE);
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
@@ -467,7 +475,7 @@ public class FitnessView extends Application {
 //        Scene checklistScene = new Scene(vBox, 400, 600);
 //        checklistScene.getStylesheets().add("styles/hikeStyles.css");
 //
-        Button back = makeBackButton(BACK);
+        Button back = makeBackButton(BACK, HOME_SCENE);
         vBox.getChildren().add(back);
 //
         return new Scene(vBox, 400, 600);
@@ -482,7 +490,7 @@ public class FitnessView extends Application {
 
         Text text = titleMaker("Scheduled Hike");
 
-        Button back = makeBackButton(BACK);
+        Button back = makeBackButton(BACK, HOME_SCENE);
 
         container.getChildren().addAll(text, back);
 
@@ -495,6 +503,10 @@ public class FitnessView extends Application {
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
+
+        Text title = titleMaker("Reminder Messages");
+
+        vBox.getChildren().add(title);
 
         String[] messageList = {"Where your fitbit!", "Be sure to stretch!", "Grab your backpack!",
                 "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check your Checklist!"};
@@ -510,7 +522,18 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        Scene listedMessagesScene = new Scene(vBox, 400, 600);
+        Button back = makeBackButton(BACK, HIKE_DETAIL_SCENE);
+
+        Button next = makeNextButton(NEXT, "");
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(back, next);
+
+        vBox.getChildren().add(buttonRow);
+
+        Scene listedMessagesScene = new Scene(vBox, WIDTH, HEIGHT);
         listedMessagesScene.getStylesheets().add("styles/HikemasterStyles.css");
 
         return listedMessagesScene;
@@ -548,9 +571,16 @@ public class FitnessView extends Application {
 
         inputContainer.getChildren().addAll(locationRow, dateRow);
 
-        Button back = makeBackButton(BACK);
+        Button back = makeBackButton(BACK, SELECT_HIKE_SCENE);
 
-        mainContainer.getChildren().addAll(title, inputContainer, back);
+        Button next = makeNextButton(NEXT, REMINDER_MESSAGES_SCENE);
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(back, next);
+
+        mainContainer.getChildren().addAll(title, inputContainer, buttonRow);
 
         return new Scene(mainContainer, WIDTH, HEIGHT);
     }
