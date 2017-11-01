@@ -524,7 +524,7 @@ public class FitnessView extends Application {
 
         Button back = makeBackButton(BACK, HIKE_DETAIL_SCENE);
 
-        Button next = makeNextButton(NEXT, "");
+        Button next = makeNextButton(NEXT, HOME_SCENE);
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
