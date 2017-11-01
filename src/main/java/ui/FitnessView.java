@@ -35,8 +35,7 @@ public class FitnessView extends Application {
     private static final int BUTTON_SHADOW_RADIUS = 1;
     private static final int BUTTON_SHADOW_OFFSET = 3;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
-    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "PREVIOUS HIKE",
-                                                    "SCHEDULED HIKE", "EXERCISE PROGRESS"};
+    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS"};
 
     //Scene object to hold current scene.
     private Scene currentScene;
@@ -120,10 +119,6 @@ public class FitnessView extends Application {
         switch (sceneName){
             case "NEW HIKE":
                 scene = newTrail();
-                break;
-
-            case "PREVIOUS HIKE":
-                scene = previousHike();
                 break;
 
             case "SCHEDULED HIKE":
@@ -412,17 +407,5 @@ public class FitnessView extends Application {
         return null;
     }
 
-    //
-    private Scene previousHike(){
-        VBox menuContainer = new VBox();
-        menuContainer.getStylesheets().add("Josh_Style.css");
 
-        Text title = titleMaker("Previous Hike");
-
-        Button back = makeBackButton(BACK);
-
-        menuContainer.getChildren().addAll(title, back);
-
-        return new Scene(menuContainer, WIDTH, HEIGHT);
-    }
 }
