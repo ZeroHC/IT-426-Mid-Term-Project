@@ -16,8 +16,7 @@ public class FitnessController {
     private Scene scene;
 
     SAXBuilder builder = new SAXBuilder();
-    File xmlFile = new File("/Users/Naoki_Shisho/Desktop/" +
-            "IT-426-Mid-Term-Project/data/master.xml");
+    File xmlFile;
 
     public FitnessController(Scene scene){
         this.scene = scene;
@@ -37,8 +36,7 @@ public class FitnessController {
 
         builder = new SAXBuilder();
 
-        xmlFile = new File("/Users/Naoki_Shisho/Desktop/" +
-                "IT-426-Mid-Term-Project/data/master.xml");
+        xmlFile = new File("data/master.xml");
 
         try {
 
@@ -63,7 +61,4 @@ public class FitnessController {
 
         return reminderString;
     }
-
-
-
 }

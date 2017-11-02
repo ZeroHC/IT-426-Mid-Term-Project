@@ -1,6 +1,7 @@
 package ui;
 
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDatePicker;
 import controller.FitnessController;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -564,7 +565,7 @@ public class FitnessView extends Application {
         dateRow.setAlignment(Pos.CENTER);
 
         Label hikeDate = new Label("Date:\t");
-        DatePicker dateInput = new DatePicker();
+        JFXDatePicker dateInput = new JFXDatePicker();
 
         dateRow.getChildren().addAll(hikeDate, dateInput);
 

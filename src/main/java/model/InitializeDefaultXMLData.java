@@ -10,7 +10,7 @@ import static model.ValidateOS.isWindows;
 public class InitializeDefaultXMLData {
 
     private static File defaultXMLData = null;
-    private final static String windowsPath = "c:\\HikeMaster9000\\master.xml";
+    private final static String windowsPath = "data/master.xml";
     private static String macPath = "";
     private final static String fileName = "/Data/master.xml";
 
