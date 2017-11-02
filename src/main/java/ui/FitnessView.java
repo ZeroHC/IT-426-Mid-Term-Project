@@ -165,7 +165,7 @@ public class FitnessView extends Application {
             case "HIKE DETAIL":
                 scene = hikeDetail();
                 break;
-
+            //Might need to be removed
             case "REMINDER MESSAGES":
                 scene = reminderMessages();
                 break;
