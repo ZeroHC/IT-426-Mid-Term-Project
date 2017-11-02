@@ -508,8 +508,7 @@ public class FitnessView extends Application {
 
         vBox.getChildren().add(title);
 
-        String[] messageList = {"Where your fitbit!", "Be sure to stretch!", "Grab your backpack!",
-                "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check your Checklist!"};
+        String[] messageList = controller.loadReminderMessages();
 
         JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
 
