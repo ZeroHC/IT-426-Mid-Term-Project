@@ -14,11 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.MouseEvent;
@@ -89,6 +85,22 @@ public class FitnessView extends Application {
         }
 
         return buttons;
+    }
+
+    private Scene getWaitingSceneForReminderMessage()
+    {
+        VBox box = new VBox();
+
+        //center out layout and add padding
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(10));
+
+        ProgressIndicator progress = new ProgressIndicator();
+        Text text = new Text("Checking for reminder messages...");
+
+        box.getChildren().addAll(progress, text);
+
+        return new Scene(box, 300, 100);
     }
 
     //Sets the action for buttons to change to the correct scene.
