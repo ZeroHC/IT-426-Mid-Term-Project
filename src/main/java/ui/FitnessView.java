@@ -95,10 +95,10 @@ public class FitnessView extends Application {
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(10));
 
-        ProgressIndicator progress = new ProgressIndicator();
+        ProgressIndicator showProgressCircle = new ProgressIndicator();
         Text text = new Text("Checking for reminder messages...");
 
-        box.getChildren().addAll(progress, text);
+        box.getChildren().addAll(showProgressCircle, text);
 
         return new Scene(box, 300, 100);
     }
