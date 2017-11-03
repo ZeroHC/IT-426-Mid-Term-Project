@@ -20,15 +20,6 @@ public class InitializeDefaultXMLData {
     public static void InitializeDefaultData(){
 
         try {
-//            defaultXMLData = new File(fileName);
-//            if (defaultXMLData.getParentFile().mkdir() && defaultXMLData.createNewFile())
-//            {
-//                System.out.println("The file was created ^_^ ");
-//                defaultXMl(defaultXMLData.getAbsolutePath());
-//            }else {
-//                System.out.println("the file already exists...");
-//            }
-
             if(isWindows()){
                 defaultXMLData = new File(System.getProperty("user.dir") + folderName);
 

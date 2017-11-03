@@ -44,6 +44,13 @@ Button:hover{
 .back-btn-icon:hover{
     -fx-graphic: url("../images/web/ic_arrow_back_white_24dp_1x.png");
 }
+.forward-btn-icon{
+    -fx-graphic: url("../images/web/ic_arrow_forward_black_24dp_1x.png");
+}
+
+.forward-btn-icon:hover{
+    -fx-graphic: url("../images/web/ic_arrow_forward_white_24dp_1x.png");
+}
 
 #new-hike-btn-icon{
     -fx-graphic: url("../images/web/ic_explore_black_24dp_1x.png");
@@ -94,4 +101,11 @@ Button:hover{
 #buttonRow{
     -fx-alignment: center;
     -fx-spacing: 30px;
+}
+
+#inputContainer{
+    -fx-spacing: 30px;
+    -fx-padding: 50px;
+    -fx-alignment: center;
+    -fx-max-width: 300px;
 }

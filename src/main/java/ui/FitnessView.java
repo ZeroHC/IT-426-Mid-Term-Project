@@ -1,7 +1,6 @@
 package ui;
 
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.*;
 import controller.FitnessController;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -17,11 +16,14 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
 
 public class FitnessView extends Application {
 
@@ -132,7 +134,7 @@ public class FitnessView extends Application {
     private Button makeNextButton(String buttonName, String sceneName){
 
         Button button = new Button(buttonName);
-        //button.getStyleClass().add("back-btn-icon");
+        button.getStyleClass().add("forward-btn-icon");
         DropShadow shadow = addDropShadow();
 
         addMouseHoverEvent(button, shadow);
@@ -433,10 +435,16 @@ public class FitnessView extends Application {
     private Scene newTrail(){
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
+        mainContainer.setSpacing(50);
         mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
 
         Text title = titleMaker("Select Hike");
         mainContainer.getChildren().add(title);
+
+        JFXComboBox<Label> hikeList = new JFXComboBox<>();
+        hikeList.setPromptText("Select a hike or create new");
+        hikeList.getItems().add(new Label("New"));
+
 
         Button back = makeBackButton(BACK, HOME_SCENE);
 
@@ -447,7 +455,7 @@ public class FitnessView extends Application {
 
         buttonRow.getChildren().addAll(back, next);
 
-        mainContainer.getChildren().add(buttonRow);
+        mainContainer.getChildren().addAll(hikeList, buttonRow);
 
         return new Scene(mainContainer, WIDTH, HEIGHT);
     }
@@ -510,13 +518,18 @@ public class FitnessView extends Application {
     private Scene scheduledHikes(){
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
+        container.setSpacing(30);
         container.getStylesheets().add("styles/HikemasterStyles.css");
 
         Text text = titleMaker("Scheduled Hike");
 
+        JFXListView<Label> list = new JFXListView<>();
+        list.setMaxWidth(500);
+        for(int i = 0 ; i < 4 ; i++) list.getItems().add(new Label("Item " + i));
+
         Button back = makeBackButton(BACK, HOME_SCENE);
 
-        container.getChildren().addAll(text, back);
+        container.getChildren().addAll(text, list, back);
 
         return new Scene(container, WIDTH, HEIGHT);
     }
@@ -573,26 +586,29 @@ public class FitnessView extends Application {
         Text title = titleMaker("Hike Detail");
 
         VBox inputContainer = new VBox();
-        inputContainer.setAlignment(Pos.CENTER_LEFT);
-        inputContainer.setSpacing(20);
+        inputContainer.setId("inputContainer");
 
-        HBox locationRow = new HBox();
-        locationRow.setAlignment(Pos.CENTER);
+        JFXTextField locationInput = new JFXTextField();
+        locationInput.setPromptText("Location");
 
-        Label hikeLocation = new Label("Location:\t");
-        TextField locationInput = new TextField();
+        HBox dateContainer = new HBox();
+        JFXTextField dateInput = new JFXTextField();
+        dateInput.setPromptText("Date");
 
-        locationRow.getChildren().addAll(hikeLocation, locationInput);
+        JFXDatePicker datePicker = new JFXDatePicker();
+        datePicker.setDefaultColor(Color.valueOf("#3f51b5"));
+        datePicker.setMaxWidth(0);
 
-        HBox dateRow = new HBox();
-        dateRow.setAlignment(Pos.CENTER);
+        datePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event)
+            {
+                dateInput.setText(datePicker.getValue().toString());
+            }
+        });
 
-        Label hikeDate = new Label("Date:\t");
-        JFXDatePicker dateInput = new JFXDatePicker();
+        dateContainer.getChildren().addAll(dateInput, datePicker);
 
-        dateRow.getChildren().addAll(hikeDate, dateInput);
-
-        inputContainer.getChildren().addAll(locationRow, dateRow);
+        inputContainer.getChildren().addAll(locationInput, dateContainer);
 
         Button back = makeBackButton(BACK, SELECT_HIKE_SCENE);
 
