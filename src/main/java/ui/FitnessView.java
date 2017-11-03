@@ -297,6 +297,7 @@ public class FitnessView extends Application {
 
         heartRateEntry.setMaxWidth(250);
 
+
         Label steps = labelMaker("Steps");
         TextField stepsEntry = new TextField();
 
@@ -304,10 +305,20 @@ public class FitnessView extends Application {
 
         middle.getChildren().addAll(heartRate, heartRateEntry, steps, stepsEntry);
 
+        Button submitButton = new Button("Submit");
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.addHeartRate(heartRateEntry.getText());
+                heartRateEntry.setText("");
+            }
+        });
+
         Button button = makeBackButton(BACK, HOME_SCENE);
 
         top.getChildren().add(title);
         bottom.getChildren().add(button);
+        bottom.getChildren().add(submitButton);
 
         mainContainer.getChildren().addAll(top, middle, bottom);
 
