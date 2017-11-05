@@ -1,22 +1,14 @@
 package ui;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.*;
-import java.util.ArrayList;
 
 
 public class ReminderMessage extends Application
@@ -55,7 +47,7 @@ public class ReminderMessage extends Application
         vBox.getChildren().addAll(boxes);
 
         Scene listedMessagesScene = new Scene(vBox, 400, 600);
-        listedMessagesScene.getStylesheets().add("styles/HikemasterStyles.css");
+        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return listedMessagesScene;
     }

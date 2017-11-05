@@ -13,9 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import static model.ValidateOS.isMac;
-import static model.ValidateOS.isWindows;
-
 public class FitnessController {
 
     //Used to hold the scene information passed from the view.
@@ -43,66 +40,68 @@ public class FitnessController {
 
         String[] reminderString = null;
 
-        try {
-            builder = new SAXBuilder();
+        documentFileSetup();
 
-            if (isWindows()){
-                xmlFile = new File("data/master.xml");
-            }
+        List reminderMessageList = rootNode.getChildren("reminders");
 
-            if(isMac()){
-                xmlFile = new File("data/master.xml");
-            }
+        reminderString = new String[reminderMessageList.size()];
 
-            xmlFileDocument = (Document) builder.build(xmlFile);
-            rootNode = xmlFileDocument.getRootElement();
+        for (int i = 0; i < reminderMessageList.size(); i++){
+            Element node = (Element) reminderMessageList.get(i);
 
-            List reminderMessageList = rootNode.getChildren("reminders");
-
-            reminderString = new String[reminderMessageList.size()];
-
-            for (int i = 0; i < reminderMessageList.size(); i++){
-                Element node = (Element) reminderMessageList.get(i);
-
-                reminderString[i] = node.getChildText("message");
-            }
-
-        }catch (JDOMException exception){
-            System.out.println(exception.getMessage());
-        }catch (IOException exception){
-            System.out.println(exception.getMessage());
+            reminderString[i] = node.getChildText("message");
         }
 
         return reminderString;
     }
 
-
     //Writes the value of the heart rate to the XML
     public void addHeartRate(String heartRateValue){
-        try {
 
+        documentFileSetup();
+
+        rootNode.addContent(new Element("heartRate").
+                        setAttribute("id", "1").
+                        addContent(new Element("rate").
+                                   setText(heartRateValue)));
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
+
+    }
+
+    public void addSteps(String stepsTaken){
+        documentFileSetup();
+
+        rootNode.addContent(new Element("numberOfSteps").
+                setAttribute("id", "1").setText(stepsTaken));
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
+    }
+
+    private void documentFileSetup(){
+
+        try {
             builder = new SAXBuilder();
 
-            if (isWindows()){
-                xmlFile = new File("data/master.xml");
-            }
-
-            if(isMac()){
-                xmlFile = new File("data/master.xml");
-            }
+            xmlFile = new File("data/master.xml");
 
             xmlFileDocument = (Document) builder.build(xmlFile);
+
             rootNode = xmlFileDocument.getRootElement();
 
-            Element heartRate = rootNode.getChild("heartRate");
+        }catch (IOException exception){
+            System.out.println(exception.getMessage());
+        }catch (JDOMException exception){
+            System.out.println(exception.getMessage());
+        }
+    }
 
-            heartRate.addContent(new Element("rate").setText(heartRateValue));
-
+    private void writeToXMLFile(Document xmlDocument, File xmlFile){
+        try {
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(xmlFileDocument, new FileWriter(xmlFile.getAbsolutePath()));
-
-        }catch (Exception exception){
+            xmlOutput.output(xmlDocument, new FileWriter(xmlFile.getAbsolutePath()));
+        }catch (IOException exception){
             System.out.println(exception.getMessage());
         }
     }

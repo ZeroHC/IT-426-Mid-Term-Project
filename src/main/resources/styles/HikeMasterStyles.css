@@ -1,21 +1,15 @@
 .root{
-    /* use -fx- as prefix for javafx styling*/
-    -fx-background-color: #cce6ff;
+    /*-fx-background-color: #cce6ff;*/
+    -fx-background-color: white;
     -fx-font-size: 16px;
-    /*-fx-alignment: top-center;*/
-    /*-fx-spacing: 40px;*/
-    /*-fx-padding: 15px;*/
+
 }
 
 #home-image{
     -fx-background-image: url(../images/HikingBackground.jpg);
 }
 
-.window-top{
-    /*-fx-background-color: #003c8f;*/
-}
-
-.window-mid, .window-bot{
+.window-top, .window-mid, .window-bot{
     -fx-background-color: white;
 }
 
@@ -32,9 +26,14 @@ Button:hover{
     -fx-text-fill: white;
 }
 
-.home-buttons{
-    -fx-min-width: 190px;
-    -fx-max-width: 190px;
+.home-btn{
+    -fx-min-width: 220px;
+    -fx-max-width: 220px;
+}
+
+#buttonRow{
+    -fx-alignment: center;
+    -fx-spacing: 30px;
 }
 
 .back-btn-icon{
@@ -98,14 +97,18 @@ Button:hover{
     -fx-alignment: center-left;
 }
 
-#buttonRow{
-    -fx-alignment: center;
-    -fx-spacing: 30px;
-}
-
 #inputContainer{
     -fx-spacing: 30px;
     -fx-padding: 50px;
     -fx-alignment: center;
     -fx-max-width: 300px;
+}
+
+.hBox{
+    -fx-alignment: center-left;
+}
+
+.button{
+    -fx-min-height: 40px;
+    -fx-min-width: 100px;
 }

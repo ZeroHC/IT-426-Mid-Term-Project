@@ -22,13 +22,11 @@ public class MakeDefaultXML {
 
         xmlDocument = makeRoot("hiker");
 
-        makeNode(xmlDocument, "scheduledHike");
+        makeNode(xmlDocument, "hike");
 
         makeNode(xmlDocument, "previouslyHiked");
 
         makeReminderMessages(xmlDocument, defaultReminderMessages);
-
-        xmlDocument.getRootElement().addContent(new Element("heartRate").setAttribute("id", "1"));
 
         XMLOutputter xmlOutput = new XMLOutputter();
 

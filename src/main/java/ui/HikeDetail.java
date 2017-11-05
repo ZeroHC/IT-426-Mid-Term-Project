@@ -99,7 +99,7 @@ public class HikeDetail extends Application
         newHikeMenu.getChildren().addAll(header, locationRow, dateRow, buttonRow);
 
         Scene newHikeScene = new Scene(newHikeMenu, 360, 500);
-        newHikeScene.getStylesheets().add("styles/hikeStyles.css");
+        newHikeScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return newHikeScene;
     }

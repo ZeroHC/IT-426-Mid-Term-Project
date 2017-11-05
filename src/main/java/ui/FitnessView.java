@@ -16,14 +16,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.time.LocalDate;
 
 public class FitnessView extends Application {
 
@@ -43,6 +40,9 @@ public class FitnessView extends Application {
     private static final int BUTTON_SHADOW_RADIUS = 1;
     private static final int BUTTON_SHADOW_OFFSET = 2;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
+    public static final int JANURARY = 1;
+    public static final int DISPLAY_EACH_MONTH = 1;
+    public static final int DECEMBER = 12;
     private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", "CHECKLIST"};
     private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
@@ -56,9 +56,8 @@ public class FitnessView extends Application {
     private FitnessController controller = new FitnessController(defaultStartingScene());
 
 
-
     //Initial scene setup for application.
-    private Scene defaultStartingScene(){
+    private Scene defaultStartingScene() {
         return currentScene = home();
     }
 
@@ -67,21 +66,22 @@ public class FitnessView extends Application {
         mainStage = stage;
         stage.setTitle("Hike Master 9000");
         stage.setScene(currentScene);
+        stage.setResizable(false);
         stage.show();
 
     }
 
     //Makes an array of buttons
-    private Button[] makeButtons(String[] name){
+    private Button[] makeButtons(String[] name) {
 
         Button[] buttons = new Button[name.length];
 
         DropShadow shadow = addDropShadow();
 
-        for (int i = INITIALIZING_VALUE; i < name.length; i++){
+        for (int i = INITIALIZING_VALUE; i < name.length; i++) {
 
             buttons[i] = new Button(name[i].toUpperCase());
-            buttons[i].getStyleClass().add("home-buttons");
+            buttons[i].getStyleClass().add("home-btn");
             addMouseHoverEvent(buttons[i], shadow);
             setButtonActionForSceneChange(buttons[i], name[i]);
         }
@@ -89,8 +89,7 @@ public class FitnessView extends Application {
         return buttons;
     }
 
-    private Scene getWaitingSceneForReminderMessage()
-    {
+    private Scene getWaitingSceneForReminderMessage() {
         VBox box = new VBox();
 
         //center out layout and add padding
@@ -106,7 +105,7 @@ public class FitnessView extends Application {
     }
 
     //Sets the action for buttons to change to the correct scene.
-    private void setButtonActionForSceneChange(Button button, String key){
+    private void setButtonActionForSceneChange(Button button, String key) {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -117,7 +116,7 @@ public class FitnessView extends Application {
     }
 
     //Makes a button that goes to the home scene.
-    private Button makeBackButton(String buttonName, String sceneName){
+    private Button makeBackButton(String buttonName, String sceneName) {
 
         Button button = new Button(buttonName);
         button.getStyleClass().add("back-btn-icon");
@@ -131,7 +130,7 @@ public class FitnessView extends Application {
     }
 
     //Makes a button that goes to the home scene.
-    private Button makeNextButton(String buttonName, String sceneName){
+    private Button makeNextButton(String buttonName, String sceneName) {
 
         Button button = new Button(buttonName);
         button.getStyleClass().add("forward-btn-icon");
@@ -144,19 +143,27 @@ public class FitnessView extends Application {
         return button;
     }
 
+    private Button makeBasicSubmitButton(){
+        Button button = new Button("SUBMIT");
+        DropShadow shadow = addDropShadow();
+        addMouseHoverEvent(button, shadow);
+
+        return button;
+    }
+
     //Helper method for adding multiple buttons to node.
-    private void addButtons(VBox container, Button[] buttons){
-        for (Button button : buttons){
+    private void addButtons(VBox container, Button[] buttons) {
+        for (Button button : buttons) {
             container.getChildren().add(button);
         }
     }
 
     //Provides scene to be set by controller.
-    private Scene sceneSelector(String sceneName){
+    private Scene sceneSelector(String sceneName) {
 
         Scene scene = null;
 
-        switch (sceneName){
+        switch (sceneName) {
             case "NEW HIKE":
                 scene = newTrail();
                 break;
@@ -190,12 +197,12 @@ public class FitnessView extends Application {
     }
 
     //Creates a shadow effect for button.
-    private DropShadow addDropShadow(){
+    private DropShadow addDropShadow() {
         return new DropShadow(BUTTON_SHADOW_RADIUS, BUTTON_SHADOW_OFFSET, BUTTON_SHADOW_OFFSET, Color.GRAY);
     }
 
     //Adds mouse events to buttons.
-    private void addMouseHoverEvent(Button button, DropShadow shadow){
+    private void addMouseHoverEvent(Button button, DropShadow shadow) {
         EventHandler<MouseEvent> mouseOverEventEventHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -215,26 +222,26 @@ public class FitnessView extends Application {
     }
 
     //Generates text for title headings.
-    private Text titleMaker(String titleName){
+    private Text titleMaker(String titleName) {
         Text title = new Text(titleName);
         title.getStyleClass().add("title-text");
         return title;
     }
 
     //Generates text for labels.
-    private Label labelMaker(String labaleName){
-        Label label = new Label(labaleName);
+    private Label labelMaker(String lableName) {
+        Label label = new Label(lableName);
         label.getStyleClass().add("label-text");
         return label;
     }
 
     //Starting screen.
-    private Scene home(){
+    private Scene home() {
 
         VBox menuContainer = new VBox();
         menuContainer.setAlignment(Pos.CENTER);
         menuContainer.setSpacing(20);
-        menuContainer.getStylesheets().add("styles/HikemasterStyles.css");
+        menuContainer.getStylesheets().add("styles/HikeMasterStyles.css");
         menuContainer.setId("home-image");
 
         HBox title = new HBox();
@@ -275,10 +282,10 @@ public class FitnessView extends Application {
     }
 
     //Scene for adding information about user's heart rate and steps taken.
-    private Scene exerciseTracker(){
+    private Scene exerciseTracker() {
 
         VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
+        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
         mainContainer.setAlignment(Pos.TOP_CENTER);
         mainContainer.setMaxSize(EXERCISE_TRACKER_WIDTH, HEIGHT);
 
@@ -307,31 +314,48 @@ public class FitnessView extends Application {
         Text title = titleMaker("Exercise Tracker");
 
         Label heartRate = labelMaker("Heart Rate");
-        TextField heartRateEntry = new TextField();
+
+        JFXTextField heartRateEntry = new JFXTextField();
+
+//        TextField heartRateEntry = new TextField();
+
+        heartRateEntry.setAlignment(Pos.CENTER);
 
         heartRateEntry.setMaxWidth(250);
 
 
         Label steps = labelMaker("Steps");
-        TextField stepsEntry = new TextField();
+        JFXTextField stepsEntry = new JFXTextField();
 
+        stepsEntry.setAlignment(Pos.CENTER);
         stepsEntry.setMaxWidth(250);
 
         middle.getChildren().addAll(heartRate, heartRateEntry, steps, stepsEntry);
 
-        Button submitButton = new Button("Submit");
+        Button submitButton = makeBasicSubmitButton();
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                controller.addHeartRate(heartRateEntry.getText());
-                heartRateEntry.setText("");
+                if (!heartRateEntry.getText().isEmpty() && !stepsEntry.getText().isEmpty()){
+                    controller.addHeartRate(heartRateEntry.getText());
+                    controller.addSteps(stepsEntry.getText());
+                    heartRateEntry.setText("");
+                    stepsEntry.setText("");
+                    controller.setView(currentScene = sceneSelector(HOME_SCENE));
+                    mainStage.setScene(controller.updateView());
+                }else {
+                    Alert missingEntry = new Alert(Alert.AlertType.INFORMATION);
+
+                    missingEntry.setHeaderText(null);
+
+                    missingEntry.setContentText("You are missing one or more fields");
+
+                    missingEntry.showAndWait();
+                }
             }
         });
 
-        Button button = makeBackButton(BACK, HOME_SCENE);
-
         top.getChildren().add(title);
-        bottom.getChildren().add(button);
         bottom.getChildren().add(submitButton);
 
         mainContainer.getChildren().addAll(top, middle, bottom);
@@ -340,9 +364,9 @@ public class FitnessView extends Application {
     }
 
     //Scene for displaying user's data on heart rate and steps taken.
-    private Scene exerciseProgress(){
+    private Scene exerciseProgress() {
         VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
+        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
         mainContainer.setAlignment(Pos.TOP_LEFT);
         mainContainer.setMinSize(WIDTH, HEIGHT);
         mainContainer.setMaxSize(WIDTH, HEIGHT);
@@ -368,7 +392,7 @@ public class FitnessView extends Application {
         Text title = titleMaker("Exercise Progress");
         top.getChildren().add(title);
 
-        NumberAxis xMonth = new NumberAxis(1, 12, 1);
+        NumberAxis xMonth = new NumberAxis(JANURARY, DECEMBER, DISPLAY_EACH_MONTH);
         xMonth.setLabel("Month");
 
         NumberAxis yHeartRate = new NumberAxis(0, 240, 60);
@@ -379,23 +403,16 @@ public class FitnessView extends Application {
         XYChart.Series<Number, Number> coordinates = new XYChart.Series<>();
         coordinates.setName("Heart Rate per Hike");
 
-        coordinates.getData().add(new XYChart.Data<>(1, 90));
-        coordinates.getData().add(new XYChart.Data<>(2, 85));
-        coordinates.getData().add(new XYChart.Data<>(3, 88));
-        coordinates.getData().add(new XYChart.Data<>(4, 70));
-        coordinates.getData().add(new XYChart.Data<>(5, 76));
-        coordinates.getData().add(new XYChart.Data<>(6, 70));
-        coordinates.getData().add(new XYChart.Data<>(7, 68));
-        coordinates.getData().add(new XYChart.Data<>(8, 100));
-        coordinates.getData().add(new XYChart.Data<>(9, 89));
-        coordinates.getData().add(new XYChart.Data<>(10, 60));
+        for(int i = 1; i < 13; i++){
+            coordinates.getData().add(new XYChart.Data<>(i, i * 10));
+        }
 
         heartRate.getData().add(coordinates);
 
-        NumberAxis xStepMonth = new NumberAxis(1, 12, 1);
+        NumberAxis xStepMonth = new NumberAxis(JANURARY, DECEMBER, DISPLAY_EACH_MONTH);
         xStepMonth.setLabel("Month");
 
-        NumberAxis ySteps = new NumberAxis(0, 20000, 10000);
+        NumberAxis ySteps = new NumberAxis(0, 100000, 10000);
         ySteps.setLabel("Steps");
 
         final LineChart<Number, Number> steps = new LineChart<>(xStepMonth, ySteps);
@@ -403,16 +420,9 @@ public class FitnessView extends Application {
         XYChart.Series<Number, Number> stepCoordinates = new XYChart.Series<>();
         stepCoordinates.setName("Steps per Hike");
 
-        stepCoordinates.getData().add(new XYChart.Data<>(1, 6000));
-        stepCoordinates.getData().add(new XYChart.Data<>(2, 4000));
-        stepCoordinates.getData().add(new XYChart.Data<>(3, 3456));
-        stepCoordinates.getData().add(new XYChart.Data<>(4, 2345));
-        stepCoordinates.getData().add(new XYChart.Data<>(5, 3657));
-        stepCoordinates.getData().add(new XYChart.Data<>(5, 10000));
-        stepCoordinates.getData().add(new XYChart.Data<>(7, 4567));
-        stepCoordinates.getData().add(new XYChart.Data<>(8, 9876));
-        stepCoordinates.getData().add(new XYChart.Data<>(9, 2345));
-        stepCoordinates.getData().add(new XYChart.Data<>(10, 12345));
+        for (int i = 1; i < 13; i++){
+            stepCoordinates.getData().add(new XYChart.Data<>(i, i * 5000));
+        }
 
         steps.getData().add(stepCoordinates);
 
@@ -432,11 +442,11 @@ public class FitnessView extends Application {
     }
 
     //
-    private Scene newTrail(){
+    private Scene newTrail() {
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setSpacing(50);
-        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
+        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
 
         Text title = titleMaker("Select Hike");
         mainContainer.getChildren().add(title);
@@ -446,9 +456,9 @@ public class FitnessView extends Application {
         hikeList.getItems().add(new Label("New"));
 
 
-        Button back = makeBackButton(BACK, HOME_SCENE);
+        Button back = makeBackButton(null, HOME_SCENE);
 
-        Button next = makeNextButton(NEXT, HIKE_DETAIL_SCENE);
+        Button next = makeNextButton(null, HIKE_DETAIL_SCENE);
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
@@ -461,10 +471,9 @@ public class FitnessView extends Application {
     }
 
     //
-    private Scene checkList()
-    {
+    private Scene checkList() {
         VBox vBox = new VBox();
-        vBox.getStylesheets().add("styles/HikemasterStyles.css");
+        vBox.getStylesheets().add("styles/HikeMasterStyles.css");
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
@@ -473,8 +482,7 @@ public class FitnessView extends Application {
 
         JFXCheckBox[] boxes = new JFXCheckBox[CHECKLIST.length];
 
-        for(int i = 0; i < CHECKLIST.length; i++)
-        {
+        for (int i = 0; i < CHECKLIST.length; i++) {
             JFXCheckBox box = new JFXCheckBox(CHECKLIST[i]);
             boxes[i] = box;
             box.setPrefWidth(200);
@@ -482,50 +490,40 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        for(int i = 0; i < CHECKLIST.length; i++)
-        {
+        for (int i = 0; i < CHECKLIST.length; i++) {
             final CheckBox box = boxes[i];
             final String listItem = CHECKLIST[i];
 
-            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>()
-            {
+            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
-                {
-                    if(newValue == true)
-                    {
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue == true) {
                         box.setText(listItem + " packed!");
-                    }
-                    else
-                    {
+                    } else {
                         box.setText(listItem);
                     }
                 }
             });
         }
 
-//        Scene checklistScene = new Scene(vBox, 400, 600);
-//        checklistScene.getStylesheets().add("styles/hikeStyles.css");
-//
         Button back = makeBackButton(BACK, HOME_SCENE);
         vBox.getChildren().add(back);
-//
-        return new Scene(vBox, 400, 600);
 
+        return new Scene(vBox, WIDTH, HEIGHT);
     }
 
     //
-    private Scene scheduledHikes(){
+    private Scene scheduledHikes() {
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
         container.setSpacing(30);
-        container.getStylesheets().add("styles/HikemasterStyles.css");
+        container.getStylesheets().add("styles/HikeMasterStyles.css");
 
         Text text = titleMaker("Scheduled Hike");
 
         JFXListView<Label> list = new JFXListView<>();
         list.setMaxWidth(500);
-        for(int i = 0 ; i < 4 ; i++) list.getItems().add(new Label("Item " + i));
+        for (int i = 0; i < 4; i++) list.getItems().add(new Label("Item " + i));
 
         Button back = makeBackButton(BACK, HOME_SCENE);
 
@@ -535,7 +533,7 @@ public class FitnessView extends Application {
     }
 
     //
-    private Scene reminderMessages(){
+    private Scene reminderMessages() {
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
@@ -549,8 +547,7 @@ public class FitnessView extends Application {
 
         JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
 
-        for(int i = 0; i < messageList.length; i++)
-        {
+        for (int i = 0; i < messageList.length; i++) {
             JFXCheckBox box = new JFXCheckBox(messageList[i]);
             boxes[i] = box;
             box.setPrefWidth(200);
@@ -558,9 +555,9 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        Button back = makeBackButton(BACK, HIKE_DETAIL_SCENE);
+        Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
 
-        Button next = makeNextButton(NEXT, HOME_SCENE);
+        Button next = makeNextButton(null, HOME_SCENE);
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
@@ -570,18 +567,17 @@ public class FitnessView extends Application {
         vBox.getChildren().add(buttonRow);
 
         Scene listedMessagesScene = new Scene(vBox, WIDTH, HEIGHT);
-        listedMessagesScene.getStylesheets().add("styles/HikemasterStyles.css");
+        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return listedMessagesScene;
     }
 
-
     //
-    private Scene hikeDetail()
-    {
+    private Scene hikeDetail() {
+
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.getStylesheets().add("styles/HikemasterStyles.css");
+        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
 
         Text title = titleMaker("Hike Detail");
 
@@ -600,8 +596,8 @@ public class FitnessView extends Application {
         datePicker.setMaxWidth(0);
 
         datePicker.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event)
-            {
+            @Override
+            public void handle(ActionEvent event) {
                 dateInput.setText(datePicker.getValue().toString());
             }
         });
@@ -610,9 +606,9 @@ public class FitnessView extends Application {
 
         inputContainer.getChildren().addAll(locationInput, dateContainer);
 
-        Button back = makeBackButton(BACK, SELECT_HIKE_SCENE);
+        Button back = makeBackButton(null, SELECT_HIKE_SCENE);
 
-        Button next = makeNextButton(NEXT, REMINDER_MESSAGES_SCENE);
+        Button next = makeNextButton(null, REMINDER_MESSAGES_SCENE);
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
