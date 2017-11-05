@@ -18,6 +18,7 @@ public class FitnessController {
     //Used to hold the scene information passed from the view.
     private Scene scene;
 
+    //The initial fields for handling the xml file.
     private SAXBuilder builder;
     private File xmlFile;
     private Document xmlFileDocument;
@@ -35,21 +36,67 @@ public class FitnessController {
         this.scene = scene;
     }
 
-    //
-    public String[] loadReminderMessages(){
-
-        String[] reminderString = null;
+    public String[] getStepData(){
+        String[] stepValues;
 
         documentFileSetup();
 
-        List reminderMessageList = rootNode.getChildren("reminders");
+        Element year = rootNode.getChild("year");
+
+        Element month = year.getChild("month");
+
+        List stepTakenList = month.getChildren("numberOfSteps");
+
+        stepValues = new String[stepTakenList.size()];
+
+        for(int i = 0; i < stepTakenList.size(); i++){
+            Element node = (Element) stepTakenList.get(i);
+
+            stepValues[i] = node.getText();
+        }
+
+        return stepValues;
+    }
+
+    public String[] getHeartRateData(){
+        String[] heartRateValues;
+
+        documentFileSetup();
+
+        Element year = rootNode.getChild("year");
+
+        Element month = year.getChild("month");
+
+        List heartRateList = month.getChildren("heartRate");
+
+        heartRateValues = new String[heartRateList.size()];
+
+        for(int i = 0; i < heartRateList.size(); i++){
+            Element node = (Element) heartRateList.get(i);
+
+            heartRateValues[i] = node.getText();
+        }
+
+        return heartRateValues;
+    }
+
+    //
+    public String[] loadReminderMessages(){
+
+        String[] reminderString;
+
+        documentFileSetup();
+
+        Element reminder = rootNode.getChild("reminders");
+
+        List reminderMessageList = reminder.getChildren("message");
 
         reminderString = new String[reminderMessageList.size()];
 
         for (int i = 0; i < reminderMessageList.size(); i++){
             Element node = (Element) reminderMessageList.get(i);
 
-            reminderString[i] = node.getChildText("message");
+            reminderString[i] = node.getText();
         }
 
         return reminderString;
@@ -60,10 +107,11 @@ public class FitnessController {
 
         documentFileSetup();
 
-        rootNode.addContent(new Element("heartRate").
-                        setAttribute("id", "1").
-                        addContent(new Element("rate").
-                                   setText(heartRateValue)));
+        Element year = rootNode.getChild("year");
+
+        Element month = year.getChild("month");
+
+        month.addContent(new Element("heartRate").setText(heartRateValue));
 
         writeToXMLFile(xmlFileDocument, xmlFile);
 
@@ -72,8 +120,11 @@ public class FitnessController {
     public void addSteps(String stepsTaken){
         documentFileSetup();
 
-        rootNode.addContent(new Element("numberOfSteps").
-                setAttribute("id", "1").setText(stepsTaken));
+        Element year = rootNode.getChild("year");
+
+        Element month = year.getChild("month");
+
+        month.addContent(new Element("numberOfSteps").setText(stepsTaken));
 
         writeToXMLFile(xmlFileDocument, xmlFile);
     }

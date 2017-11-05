@@ -16,6 +16,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -26,7 +27,7 @@ public class FitnessView extends Application {
 
     //Constants.
     private static final int INITIALIZING_VALUE = 0;
-    private static final int WIDTH = 960;
+    private static final int WIDTH = 950;
     private static final int HEIGHT = 630;
     private static final int EXERCISE_TRACKER_BODY_HEIGHT = 430;
     private static final String BACK = "BACK";
@@ -43,7 +44,10 @@ public class FitnessView extends Application {
     public static final int JANURARY = 1;
     public static final int DISPLAY_EACH_MONTH = 1;
     public static final int DECEMBER = 12;
-    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", "CHECKLIST"};
+
+    //Checklist needs to be implemented into the scheduled hike scene.
+    //Each checklist must correspond to the hike that owns that checklist.
+    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", /*"CHECKLIST"*/};
     private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
     //Scene object to hold current scene.
@@ -55,7 +59,6 @@ public class FitnessView extends Application {
     //Controller to perform necessary actions.
     private FitnessController controller = new FitnessController(defaultStartingScene());
 
-
     //Initial scene setup for application.
     private Scene defaultStartingScene() {
         return currentScene = home();
@@ -65,6 +68,7 @@ public class FitnessView extends Application {
     public void start(Stage stage) {
         mainStage = stage;
         stage.setTitle("Hike Master 9000");
+        stage.getIcons().add(new Image("images/leafIcon32x33.jpg"));
         stage.setScene(currentScene);
         stage.setResizable(false);
         stage.show();
@@ -143,6 +147,7 @@ public class FitnessView extends Application {
         return button;
     }
 
+    //Makes a submit button that can have a customized action set
     private Button makeBasicSubmitButton(){
         Button button = new Button("SUBMIT");
         DropShadow shadow = addDropShadow();
@@ -266,18 +271,6 @@ public class FitnessView extends Application {
 
         addButtons(menuContainer, buttons);
 
-        //Temporary button until other buttons are made.
-        Button tempButton = new Button("Exercise Tracker".toUpperCase());
-        tempButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                controller.setView(exerciseTracker());
-                mainStage.setScene(controller.updateView());
-            }
-        });
-
-        menuContainer.getChildren().add(tempButton);
-
         return new Scene(menuContainer, WIDTH, HEIGHT);
     }
 
@@ -365,6 +358,10 @@ public class FitnessView extends Application {
 
     //Scene for displaying user's data on heart rate and steps taken.
     private Scene exerciseProgress() {
+
+        String[] stepData = controller.getStepData();
+        String[] heartRateData = controller.getHeartRateData();
+
         VBox mainContainer = new VBox();
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
         mainContainer.setAlignment(Pos.TOP_LEFT);
@@ -400,19 +397,19 @@ public class FitnessView extends Application {
 
         final LineChart<Number, Number> heartRate = new LineChart<>(xMonth, yHeartRate);
 
-        XYChart.Series<Number, Number> coordinates = new XYChart.Series<>();
-        coordinates.setName("Heart Rate per Hike");
+        XYChart.Series<Number, Number> heartCoordinates = new XYChart.Series<>();
+        heartCoordinates.setName("Heart Rate per Hike");
 
-        for(int i = 1; i < 13; i++){
-            coordinates.getData().add(new XYChart.Data<>(i, i * 10));
+        for(int i = 0; i < heartRateData.length; i++){
+            heartCoordinates.getData().add(new XYChart.Data<>(i + 1, Integer.parseInt(heartRateData[i])));
         }
 
-        heartRate.getData().add(coordinates);
+        heartRate.getData().add(heartCoordinates);
 
         NumberAxis xStepMonth = new NumberAxis(JANURARY, DECEMBER, DISPLAY_EACH_MONTH);
         xStepMonth.setLabel("Month");
 
-        NumberAxis ySteps = new NumberAxis(0, 100000, 10000);
+        NumberAxis ySteps = new NumberAxis(0, 30000, 5000);
         ySteps.setLabel("Steps");
 
         final LineChart<Number, Number> steps = new LineChart<>(xStepMonth, ySteps);
@@ -420,8 +417,8 @@ public class FitnessView extends Application {
         XYChart.Series<Number, Number> stepCoordinates = new XYChart.Series<>();
         stepCoordinates.setName("Steps per Hike");
 
-        for (int i = 1; i < 13; i++){
-            stepCoordinates.getData().add(new XYChart.Data<>(i, i * 5000));
+        for (int i = 0; i < stepData.length; i++){
+            stepCoordinates.getData().add(new XYChart.Data<>(i + 1, Integer.parseInt(stepData[i])));
         }
 
         steps.getData().add(stepCoordinates);

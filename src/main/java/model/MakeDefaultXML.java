@@ -22,11 +22,19 @@ public class MakeDefaultXML {
 
         xmlDocument = makeRoot("hiker");
 
-        makeNode(xmlDocument, "hike");
+        Element root = xmlDocument.getRootElement();
 
         makeNode(xmlDocument, "previouslyHiked");
 
-        makeReminderMessages(xmlDocument, defaultReminderMessages);
+        makeNode(xmlDocument, "reminders");
+
+        Element reminders = root.getChild("reminders");
+
+        makeReminderMessages(reminders, defaultReminderMessages);
+
+        makeNode(xmlDocument, "year");
+
+        root.getChild("year").setAttribute("id", "2017");
 
         XMLOutputter xmlOutput = new XMLOutputter();
 
@@ -45,18 +53,11 @@ public class MakeDefaultXML {
     }
 
     //
-    public static void makeReminderMessages(Document document, String[] reminderMessages){
-
-        String idNumberString;
-        int idNumber = 1;
+    public static void makeReminderMessages(Element element, String[] reminderMessages){
 
         for (int i = 0; i < reminderMessages.length; i++){
-            idNumberString = "" + idNumber;
-            document.getRootElement().addContent(new Element("reminders").
-                    setAttribute("id", idNumberString).
-                    addContent(new Element("message").
-                            setText(reminderMessages[i])));
-            idNumber++;
+
+            element.addContent(new Element("message").setText(reminderMessages[i]));
         }
     }
 }

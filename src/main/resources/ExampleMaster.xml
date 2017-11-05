@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hiker>
+
+  <previouslyHiked>
+    <location>Soos Creek Trail</location>
+  </previouslyHiked>
+
+  <reminders>
+    <message>Wear your fitbit!</message>
+    <message>Be sure to stretch!</message>
+  </reminders>
+
+
+  <year id="2017">
+    <month monthNumber = "1">
+      <heartRate id="1">55</heartRate>
+      <numberOfSteps id="1">1579</numberOfSteps>
+    </month>
+  </year>
+
+</hiker>
