@@ -22,7 +22,8 @@ public class ReminderMessage extends Application
     public void start(Stage stage) throws Exception
     {
         popUpMessage();
-//        stage.setScene(addNewMessage());
+//        stage.setScene(getMessageScene(messageList, 1));
+        //stage.setScene(addNewMessage());
         stage.setScene(showListedMessages());
         stage.setTitle("Hike Master 9000");
         stage.show();
@@ -50,6 +51,16 @@ public class ReminderMessage extends Application
         listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return listedMessagesScene;
+    }
+
+    public void popUpMessage()
+    {
+        Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
+        hikeReminder.setTitle("Hike Master 9000");
+        hikeReminder.setHeaderText("Reminder");
+        hikeReminder.setContentText(message + messageList[0]);
+
+        hikeReminder.showAndWait();
     }
 
     public Scene addNewMessage()
@@ -80,14 +91,34 @@ public class ReminderMessage extends Application
         return new Scene(addNewMessageBox, 300, 300);
     }
 
-    public void popUpMessage()
+    private Scene getMessageScene(String[] defaultReminderMessages, int position)
     {
-        Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
-        hikeReminder.setTitle("Hike Master 9000");
-        hikeReminder.setHeaderText("Reminder");
-        hikeReminder.setContentText(messageList[0]);
+        VBox getMessageBox = new VBox();
 
-        hikeReminder.showAndWait();
+        //center out layout and add padding
+        getMessageBox.setAlignment(Pos.CENTER);
+        getMessageBox.setPadding(new Insets(10));
+
+        Text text = new Text(defaultReminderMessages[position]);
+        Button button = new Button("Next");
+
+        //Do something when the user clicks a butoon
+//        button.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                if (position + 1 >= defaultReminderMessages.length)
+//                {
+//                    stage.setScene(getFinalScene());
+//                }
+//                else
+//                {
+//                    stage.setScene(getIntermediateScene(messages,position +1));
+//                }
+//            }
+//        });
+        return new Scene(getMessageBox);
     }
 }
 

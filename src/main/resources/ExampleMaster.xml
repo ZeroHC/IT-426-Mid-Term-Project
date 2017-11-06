@@ -13,8 +13,10 @@
 
   <year id="2017">
     <month monthNumber = "1">
-      <heartRate id="1">55</heartRate>
-      <numberOfSteps id="1">1579</numberOfSteps>
+      <hike id ="1">
+        <heartRate id="1">55</heartRate>
+        <numberOfSteps id="1">1579</numberOfSteps>
+      </hike>
     </month>
   </year>
 
