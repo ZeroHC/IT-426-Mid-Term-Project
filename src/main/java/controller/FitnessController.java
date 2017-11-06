@@ -8,12 +8,14 @@
 package controller;
 
 import javafx.scene.Scene;
+import model.Hike;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;  
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -181,5 +183,60 @@ public class FitnessController {
         }catch (IOException exception){
             System.out.println(exception.getMessage());
         }
+    }
+
+    public void addHike(Hike hike)
+    {
+        documentFileSetup();
+
+        Element allHikes = rootNode.getChild("previouslyHiked");
+
+        allHikes.addContent(new Element("location").setText(hike.getLocation()));
+
+        allHikes.addContent(new Element("date").setText(hike.getDate()));
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
+    }
+
+    public String[] getHikeLocations()
+    {
+        String[] locationString;
+
+        documentFileSetup();
+
+        Element allHikes = rootNode.getChild("previouslyHiked");
+
+        List locationList = allHikes.getChildren("location");
+
+        locationString = new String[locationList.size()];
+
+        for (int i = 0; i < locationList.size(); i++){
+            Element node = (Element) locationList.get(i);
+
+            locationString[i] = node.getText();
+        }
+
+        return locationString;
+    }
+
+    public String[] getHikeDates()
+    {
+        String[] dateString;
+
+        documentFileSetup();
+
+        Element allHikes = rootNode.getChild("previouslyHiked");
+
+        List dateList = allHikes.getChildren("date");
+
+        dateString = new String[dateList.size()];
+
+        for (int i = 0; i < dateList.size(); i++){
+            Element node = (Element) dateList.get(i);
+
+            dateString[i] = node.getText();
+        }
+
+        return dateString;
     }
 }

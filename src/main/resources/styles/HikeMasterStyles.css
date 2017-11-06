@@ -111,3 +111,8 @@ Button:hover{
     -fx-min-height: 40px;
     -fx-min-width: 100px;
 }
+
+#hikeRow{
+    -fx-alignment: center;
+    -fx-spacing: 30px;
+}

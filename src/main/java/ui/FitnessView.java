@@ -28,6 +28,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Hike;
+
+import java.time.LocalDate;
 
 public class FitnessView extends Application {
 
@@ -37,7 +40,6 @@ public class FitnessView extends Application {
     private static final int HEIGHT = 630;
     private static final int EXERCISE_TRACKER_BODY_HEIGHT = 430;
     private static final String BACK = "BACK";
-    private static final String NEXT = "NEXT";
     private static final String HOME_SCENE = "HOME";
     private static final String SELECT_HIKE_SCENE = "NEW HIKE";
     private static final String HIKE_DETAIL_SCENE = "HIKE DETAIL";
@@ -50,6 +52,10 @@ public class FitnessView extends Application {
     public static final int JANURARY = 1;
     public static final int DISPLAY_EACH_MONTH = 1;
     public static final int DECEMBER = 12;
+    private static final String CHECKLIST_SCENE = "CHECKLIST";
+    private static final String SCHEDULED_HIKE_SCENE = "SCHEDULED HIKE";
+    private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
+    private static final String EXERCISE_TRACKER_SCENE = "EXERCISE TRACKER";
 
     //Checklist needs to be implemented into the scheduled hike scene.
     //Each checklist must correspond to the hike that owns that checklist.
@@ -61,6 +67,15 @@ public class FitnessView extends Application {
 
     //A copy of the stage parameter in the start method.
     private Stage mainStage;
+
+    //Hike object to hold the current hike info
+    private Hike hike = new Hike();
+
+    //temporary location holder
+    private Label tempLocationHolder;
+
+    //temporary holding today's date
+    private LocalDate today = LocalDate.now();
 
     //Controller to perform necessary actions.
     private FitnessController controller = new FitnessController(defaultStartingScene());
@@ -140,9 +155,9 @@ public class FitnessView extends Application {
     }
 
     //Makes a button that goes to the home scene.
-    private Button makeNextButton(String buttonName, String sceneName) {
+    private Button makeNextButton(String sceneName) {
 
-        Button button = new Button(buttonName);
+        Button button = new Button();
         button.getStyleClass().add("forward-btn-icon");
         DropShadow shadow = addDropShadow();
 
@@ -174,32 +189,38 @@ public class FitnessView extends Application {
 
         Scene scene = null;
 
-        switch (sceneName) {
-            case "NEW HIKE":
-                scene = newTrail();
-                break;
-
-            case "SCHEDULED HIKE":
-                scene = scheduledHikes();
-                break;
-
-            case "EXERCISE PROGRESS":
-                scene = exerciseProgress();
-                break;
-
-            case "HOME":
+        switch (sceneName)
+        {
+            case HOME_SCENE:
                 scene = home();
                 break;
 
-            case "CHECKLIST":
+            case SELECT_HIKE_SCENE:
+                scene = newTrail();
+                break;
+
+            case SCHEDULED_HIKE_SCENE:
+                scene = scheduledHikes();
+                break;
+
+            case EXERCISE_TRACKER_SCENE:
+                scene = exerciseTracker();
+                break;
+
+            case EXERCISE_PROGRESS_SCENE:
+                scene = exerciseProgress();
+                break;
+
+            case HIKE_DETAIL_SCENE:
+                scene = hikeDetail();
+                break;
+
+            case CHECKLIST_SCENE:
                 scene = checkList();
                 break;
 
-            case "HIKE DETAIL":
-                scene = hikeDetail();
-                break;
             //Might need to be removed
-            case "REMINDER MESSAGES":
+            case REMINDER_MESSAGES_SCENE:
                 scene = reminderMessages();
                 break;
         }
@@ -240,8 +261,8 @@ public class FitnessView extends Application {
     }
 
     //Generates text for labels.
-    private Label labelMaker(String lableName) {
-        Label label = new Label(lableName);
+    private Label labelMaker(String labelName) {
+        Label label = new Label(labelName);
         label.getStyleClass().add("label-text");
         return label;
     }
@@ -343,13 +364,7 @@ public class FitnessView extends Application {
                     controller.setView(currentScene = sceneSelector(HOME_SCENE));
                     mainStage.setScene(controller.updateView());
                 }else {
-                    Alert missingEntry = new Alert(Alert.AlertType.INFORMATION);
-
-                    missingEntry.setHeaderText(null);
-
-                    missingEntry.setContentText("You are missing one or more fields");
-
-                    missingEntry.showAndWait();
+                    displayAlertWindow();
                 }
             }
         });
@@ -444,33 +459,225 @@ public class FitnessView extends Application {
         return new Scene(mainContainer, WIDTH, HEIGHT);
     }
 
-    //
-    private Scene newTrail() {
+    //scene for user to select or create a trail
+    private Scene newTrail()
+    {
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setSpacing(50);
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
 
-        Text title = titleMaker("Select Hike");
-        mainContainer.getChildren().add(title);
+        Text selectHikeTitle = titleMaker("Select Hike");
+        mainContainer.getChildren().add(selectHikeTitle);
+
+        Label userNote = new Label("Select a hike or create new");
 
         JFXComboBox<Label> hikeList = new JFXComboBox<>();
-        hikeList.setPromptText("Select a hike or create new");
-        hikeList.getItems().add(new Label("New"));
+        hikeList.setMinWidth(200);
+
+        Label newHike = new Label("New");
+        hikeList.getItems().add(newHike);
+        hikeList.setValue(newHike);
+
+        String[] locations = controller.getHikeLocations();
+
+        for (String location : locations)
+        {
+            hikeList.getItems().add(new Label(location));
+        }
 
 
         Button back = makeBackButton(null, HOME_SCENE);
 
-        Button next = makeNextButton(null, HIKE_DETAIL_SCENE);
+        Button next = makeNextButton(HIKE_DETAIL_SCENE);
+
+        next.setOnMousePressed(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                if (!hikeList.getValue().getText().equals("New"))
+                {
+                    tempLocationHolder = hikeList.getValue();
+                }
+                else tempLocationHolder = new Label("");
+            }
+        });
 
         HBox buttonRow = new HBox();
         buttonRow.setId("buttonRow");
 
         buttonRow.getChildren().addAll(back, next);
 
-        mainContainer.getChildren().addAll(hikeList, buttonRow);
+        mainContainer.getChildren().addAll(userNote, hikeList, buttonRow);
 
         return new Scene(mainContainer, WIDTH, HEIGHT);
+    }
+
+    //scene for user to input trail information
+    private Scene hikeDetail()
+    {
+        VBox mainContainer = new VBox();
+        mainContainer.setAlignment(Pos.CENTER);
+        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
+
+        Text title = titleMaker("Hike Detail");
+
+        VBox inputContainer = new VBox();
+        inputContainer.setId("inputContainer");
+
+        JFXTextField locationInput = new JFXTextField();
+        locationInput.setPromptText("Location");
+
+        if (!tempLocationHolder.getText().equals(""))
+        {
+            locationInput.setText(tempLocationHolder.getText());
+            tempLocationHolder.setText("");
+        }
+
+        HBox dateContainer = new HBox();
+        JFXTextField dateInput = new JFXTextField();
+        dateInput.setPromptText("Date");
+
+        JFXDatePicker datePicker = new JFXDatePicker();
+        datePicker.setDefaultColor(Color.valueOf("#3f51b5"));
+        datePicker.setMaxWidth(0);
+
+        datePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dateInput.setText(datePicker.getValue().toString());
+            }
+        });
+
+        dateContainer.getChildren().addAll(dateInput, datePicker);
+
+        inputContainer.getChildren().addAll(locationInput, dateContainer);
+
+        Button back = makeBackButton(null, SELECT_HIKE_SCENE);
+
+        Button next = makeNextButton(REMINDER_MESSAGES_SCENE);
+
+        next.setOnMousePressed(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                if (!locationInput.getText().isEmpty() && !dateInput.getText().isEmpty())
+                {
+                    hike.setLocation(locationInput.getText());
+                    hike.setDate(dateInput.getText());
+                }
+                else
+                {
+                    displayAlertWindow();
+                }
+            }
+        });
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(back, next);
+
+        mainContainer.getChildren().addAll(title, inputContainer, buttonRow);
+
+        return new Scene(mainContainer, WIDTH, HEIGHT);
+    }
+
+    //scene for display scheduled hikes that is coming up
+    private Scene scheduledHikes()
+    {
+        VBox container = new VBox();
+        container.setAlignment(Pos.CENTER);
+        container.setSpacing(30);
+        container.getStylesheets().add("styles/HikeMasterStyles.css");
+
+        Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
+        container.getChildren().add(scheduledHikeTitle);
+
+        String[] locations = controller.getHikeLocations();
+        String[] dates = controller.getHikeDates();
+
+        for (int i = 0; i < locations.length; i++)
+        {
+            LocalDate date = LocalDate.parse(dates[i]);
+            if (date.equals(today) || date.isAfter(today))
+            {
+                HBox hikeRow = new HBox();
+                hikeRow.setId("hikeRow");
+
+                Label hikeDate = new Label(dates[i]);
+                Label hikeLocation = new Label(locations[i]);
+
+                Button checkListButton = new Button("Check List");
+                setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
+
+                Button reminderMessageButton = new Button("Reminder Messages");
+                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+
+                Button doneButton = new Button("Done");
+                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
+
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                container.getChildren().add(hikeRow);
+            }
+        }
+
+        Button back = makeBackButton(BACK, HOME_SCENE);
+
+        container.getChildren().add(back);
+
+        return new Scene(container, WIDTH, HEIGHT);
+    }
+
+    //
+    private Scene reminderMessages() {
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10));
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+
+        Text title = titleMaker("Reminder Messages");
+
+        vBox.getChildren().add(title);
+
+        String[] messageList = controller.loadReminderMessages();
+
+        JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
+
+        for (int i = 0; i < messageList.length; i++) {
+            JFXCheckBox box = new JFXCheckBox(messageList[i]);
+            boxes[i] = box;
+            box.setPrefWidth(200);
+        }
+
+        vBox.getChildren().addAll(boxes);
+
+        Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
+
+        Button next = makeNextButton(HOME_SCENE);
+
+        next.setOnMouseReleased(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                controller.addHike(hike);
+            }
+        });
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(back, next);
+
+        vBox.getChildren().add(buttonRow);
+
+        Scene listedMessagesScene = new Scene(vBox, WIDTH, HEIGHT);
+        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
+
+        return listedMessagesScene;
     }
 
     //
@@ -515,111 +722,14 @@ public class FitnessView extends Application {
         return new Scene(vBox, WIDTH, HEIGHT);
     }
 
-    //
-    private Scene scheduledHikes() {
-        VBox container = new VBox();
-        container.setAlignment(Pos.CENTER);
-        container.setSpacing(30);
-        container.getStylesheets().add("styles/HikeMasterStyles.css");
+    private void displayAlertWindow()
+    {
+        Alert missingEntry = new Alert(Alert.AlertType.INFORMATION);
 
-        Text text = titleMaker("Scheduled Hike");
+        missingEntry.setHeaderText(null);
 
-        JFXListView<Label> list = new JFXListView<>();
-        list.setMaxWidth(500);
-        for (int i = 0; i < 4; i++) list.getItems().add(new Label("Item " + i));
+        missingEntry.setContentText("You are missing one or more fields");
 
-        Button back = makeBackButton(BACK, HOME_SCENE);
-
-        container.getChildren().addAll(text, list, back);
-
-        return new Scene(container, WIDTH, HEIGHT);
-    }
-
-    //
-    private Scene reminderMessages() {
-        VBox vBox = new VBox();
-        vBox.setPadding(new Insets(10));
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(10);
-
-        Text title = titleMaker("Reminder Messages");
-
-        vBox.getChildren().add(title);
-
-        String[] messageList = controller.loadReminderMessages();
-
-        JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
-
-        for (int i = 0; i < messageList.length; i++) {
-            JFXCheckBox box = new JFXCheckBox(messageList[i]);
-            boxes[i] = box;
-            box.setPrefWidth(200);
-        }
-
-        vBox.getChildren().addAll(boxes);
-
-        Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
-
-        Button next = makeNextButton(null, HOME_SCENE);
-
-        HBox buttonRow = new HBox();
-        buttonRow.setId("buttonRow");
-
-        buttonRow.getChildren().addAll(back, next);
-
-        vBox.getChildren().add(buttonRow);
-
-        Scene listedMessagesScene = new Scene(vBox, WIDTH, HEIGHT);
-        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
-
-        return listedMessagesScene;
-    }
-
-    //
-    private Scene hikeDetail() {
-
-        VBox mainContainer = new VBox();
-        mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
-
-        Text title = titleMaker("Hike Detail");
-
-        VBox inputContainer = new VBox();
-        inputContainer.setId("inputContainer");
-
-        JFXTextField locationInput = new JFXTextField();
-        locationInput.setPromptText("Location");
-
-        HBox dateContainer = new HBox();
-        JFXTextField dateInput = new JFXTextField();
-        dateInput.setPromptText("Date");
-
-        JFXDatePicker datePicker = new JFXDatePicker();
-        datePicker.setDefaultColor(Color.valueOf("#3f51b5"));
-        datePicker.setMaxWidth(0);
-
-        datePicker.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dateInput.setText(datePicker.getValue().toString());
-            }
-        });
-
-        dateContainer.getChildren().addAll(dateInput, datePicker);
-
-        inputContainer.getChildren().addAll(locationInput, dateContainer);
-
-        Button back = makeBackButton(null, SELECT_HIKE_SCENE);
-
-        Button next = makeNextButton(null, REMINDER_MESSAGES_SCENE);
-
-        HBox buttonRow = new HBox();
-        buttonRow.setId("buttonRow");
-
-        buttonRow.getChildren().addAll(back, next);
-
-        mainContainer.getChildren().addAll(title, inputContainer, buttonRow);
-
-        return new Scene(mainContainer, WIDTH, HEIGHT);
+        missingEntry.showAndWait();
     }
 }
