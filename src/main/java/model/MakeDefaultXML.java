@@ -62,29 +62,10 @@ public class MakeDefaultXML {
         makeReminderMessages(reminders, defaultReminderMessages);
 
         //Makes a child node in root called year.
-        makeNode(xmlDocument, "year");
+        makeNode(xmlDocument, "date");
 
         //Sets a unique id attribute for the year node.
-        root.getChild("year").setAttribute("id", "2017");
-
-        //Field that holds the child node year.
-        Element year = root.getChild("year");
-
-        //Loop to make children nodes for year called month.
-        for(int i = 1; i < 13; i++){
-            makeNode(year, "month");
-        }
-
-        //Field that holds the child node month.
-        List month = year.getChildren("month");
-
-        //Loop for setting a number string attribute to denote the number of that month
-        //in each month node.
-        for(int i = 0; i < month.size(); i++){
-            Element node = (Element) month.get(i);
-
-            node.setAttribute("monthNumber", "" + (i + 1));
-        }
+        root.getChild("date").setAttribute("id", "2017-11-06");
 
         //XML output object.
         XMLOutputter xmlOutput = new XMLOutputter();
@@ -114,6 +95,7 @@ public class MakeDefaultXML {
     //A facade to make node children to another node.
     private static void makeReminderMessages(Element element, String[] reminderMessages){
 
+        //Loop to add nodes to parent node.
         for (int i = 0; i < reminderMessages.length; i++){
 
             element.addContent(new Element("message").setText(reminderMessages[i]));

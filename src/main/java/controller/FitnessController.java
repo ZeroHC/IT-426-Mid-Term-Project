@@ -57,6 +57,11 @@ public class FitnessController {
         return scene;
     }
 
+    /**
+     * This method is used to set the scene.
+     *
+     * @param scene
+     */
     public void setView(Scene scene){
         this.scene = scene;
     }
@@ -66,11 +71,9 @@ public class FitnessController {
 
         documentFileSetup();
 
-        Element year = rootNode.getChild("year");
+        Element date = rootNode.getChild("date");
 
-        Element month = year.getChild("month");
-
-        List stepTakenList = month.getChildren("numberOfSteps");
+        List stepTakenList = date.getChildren("numberOfSteps");
 
         stepValues = new String[stepTakenList.size()];
 
@@ -88,11 +91,9 @@ public class FitnessController {
 
         documentFileSetup();
 
-        Element year = rootNode.getChild("year");
+        Element date = rootNode.getChild("date");
 
-        Element month = year.getChild("month");
-
-        List heartRateList = month.getChildren("heartRate");
+        List heartRateList = date.getChildren("heartRate");
 
         heartRateValues = new String[heartRateList.size()];
 

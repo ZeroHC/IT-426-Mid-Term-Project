@@ -14,6 +14,8 @@
   <year id="2017">
     <month monthNumber = "1">
       <hike id ="1">
+        <location></location>
+        <date></date>
         <heartRate id="1">55</heartRate>
         <numberOfSteps id="1">1579</numberOfSteps>
       </hike>
