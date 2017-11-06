@@ -1,3 +1,10 @@
+/*
+* Daniel Capps, Joshua Hawks, Hanchen Liu
+* 11/06/2017
+* HikeDetail.java
+*
+*/
+
 package ui;
 
 import javafx.application.Application;

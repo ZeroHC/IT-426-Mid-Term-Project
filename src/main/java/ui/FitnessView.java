@@ -1,3 +1,9 @@
+/*
+* Daniel Capps, Joshua Hawks, Hanchen Liu
+* 11/06/2017
+*
+*/
+
 package ui;
 
 import com.jfoenix.controls.*;

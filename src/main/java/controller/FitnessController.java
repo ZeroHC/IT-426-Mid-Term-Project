@@ -1,3 +1,10 @@
+/*
+* Daniel Capps, Joshua Hawks, Hanchen Liu
+* 11/06/2017
+* FitnessController.java
+* This file takes care of the main actions of the application.
+*/
+
 package controller;
 
 import javafx.scene.Scene;
@@ -13,6 +20,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class handles the main actions of the application.
+ *
+ * @author Daniel Capps, Joshua Hawks, Hanchen Liu
+ * @version 1.0
+ */
 public class FitnessController {
 
     //Used to hold the scene information passed from the view.
@@ -24,10 +37,22 @@ public class FitnessController {
     private Document xmlFileDocument;
     private Element rootNode;
 
+    /**
+     * This is a constructor method that allows us to handle the interaction with the view.
+     *
+     * @param scene This parameter is used to handle the changes to the scenes for the view and
+     *              initially has the default scene from the view.
+     */
+    //Constructor which initializes a scene for the start of the application.
     public FitnessController(Scene scene){
         this.scene = scene;
     }
 
+    /**
+     * This method is used to update the scene.
+     *
+     * @return The method returns a scene object.
+     */
     public Scene updateView(){
         return scene;
     }
