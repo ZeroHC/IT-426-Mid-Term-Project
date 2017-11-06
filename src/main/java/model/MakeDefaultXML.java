@@ -2,6 +2,7 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -36,6 +37,20 @@ public class MakeDefaultXML {
 
         root.getChild("year").setAttribute("id", "2017");
 
+        Element year = root.getChild("year");
+
+        for(int i = 1; i < 13; i++){
+            makeNode(year, "month");
+        }
+
+        List month = year.getChildren("month");
+
+        for(int i = 0; i < month.size(); i++){
+            Element node = (Element) month.get(i);
+
+            node.setAttribute("monthNumber", "" + (i + 1));
+        }
+
         XMLOutputter xmlOutput = new XMLOutputter();
 
         xmlOutput.setFormat(Format.getPrettyFormat());
@@ -50,6 +65,11 @@ public class MakeDefaultXML {
     //
     private static void makeNode(Document document, String nodeName){
         document.getRootElement().addContent(new Element(nodeName));
+    }
+
+    //
+    private static void makeNode(Element element, String nodeName){
+        element.addContent(new Element(nodeName));
     }
 
     //
