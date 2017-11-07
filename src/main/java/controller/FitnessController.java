@@ -243,24 +243,31 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public String getReminderMessage(String reminderValue, String dateToSearchFor)
+    public String[] getReminderMessage(String reminderMessages, String dateToSearchFor)
     {
-        Element allHikes = rootNode.getChild("allHikeDetails");
+        //Field for string array to be returned.
+        String[] reminderMessage;
 
-        List dates = allHikes.getChildren("date");
+        //Dig down to the reminder messages.
+        Element hikes = rootNode.getChild(ALL_HIKE_DETAILS);
+        Element date = hikes.getChild(DATE_ELEMENT_STRING);
 
-        Element dateNode;
 
-        for (int i = 0; i < dates.size(); i++){
-            dateNode = (Element) dates.get(i);
+        //A list of the children in the reminder node.
+        List reminderMessageList = date.getChildren(REMINDER_MESSAGE_ELEMENT_STRING);
 
-            String attributeHolder = dateNode.getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor)){
-                dateNode.getText();
-            }
+        //Provides the array with the exact size it needs to be to hold the list.
+        reminderMessage = new String[reminderMessageList.size()];
+
+        //Inserts the value of each child into the array.
+        for (int i = 0; i < reminderMessageList.size(); i++){
+            Element node = (Element) reminderMessageList.get(i);
+
+            reminderMessage[i] = node.getText();
         }
-        Element message = new Element(REMINDER_MESSAGE_ELEMENT_STRING).get
-        return rootNode.getChildren("reminderMessages");
+
+        return reminderMessage;
+
     }
 
     //Template method for setting up the document.
