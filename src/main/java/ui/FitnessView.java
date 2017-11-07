@@ -35,8 +35,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Hike;
+import model.ReminderMessages;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class provides a GUI for users to be able to interact with the application.
@@ -84,6 +87,8 @@ public class FitnessView extends Application {
 
     //Hike object to hold the current hike info
     private Hike hike = new Hike();
+
+    private ReminderMessages reminderMessages = new ReminderMessages();
 
     //temporary location holder
     private Label tempLocationHolder;
@@ -711,6 +716,24 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
+        /*for (int i = 0; i < messageList.length; i++) {
+            final CheckBox box = boxes[i];
+            final String listItem = messageList[i];
+
+            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue) {
+                        box.setText("Reminder Set!");
+                    } else {
+                        box.setText(listItem);
+                    }
+                }
+            });
+        }*/
+
+        reminderMessages.setMessages(new ArrayList<>(messageList.length));
+
         for (int i = 0; i < messageList.length; i++) {
             final CheckBox box = boxes[i];
             final String listItem = messageList[i];
@@ -718,14 +741,15 @@ public class FitnessView extends Application {
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue == true) {
-                        box.setText("Reminder Set!");
+                    if (newValue) {
+                        reminderMessages.addMessage(box.getText());
                     } else {
-                        box.setText(listItem);
+                        reminderMessages.removeMessage(box.getText());
                     }
                 }
             });
         }
+
 
         Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
 
@@ -736,7 +760,9 @@ public class FitnessView extends Application {
             @Override
             public void handle(MouseEvent event)
             {
-                controller.addNewReminderMessage();
+                controller.addHike(hike);
+                controller.addNewReminderMessage(reminderMessages);
+
             }
         });
 
