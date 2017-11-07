@@ -10,6 +10,8 @@ package ui;
 
 import com.jfoenix.controls.*;
 import controller.FitnessController;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,6 +33,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Hike;
 
 import java.time.LocalDate;
@@ -109,7 +112,17 @@ public class FitnessView extends Application {
         stage.setScene(currentScene);
         stage.setResizable(false);
         stage.show();
+        popUpMessage();
+    }
 
+    public void popUpMessage()
+    {
+        Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
+        hikeReminder.setTitle("Hike Master 9000");
+        hikeReminder.setHeaderText("Reminder");
+        hikeReminder.setContentText("Wear your fitbit!");
+
+        hikeReminder.showAndWait();
     }
 
     //Makes an array of buttons
@@ -128,25 +141,6 @@ public class FitnessView extends Application {
         }
 
         return buttons;
-    }
-
-    private Scene getWaitingSceneForReminderMessage() {
-        VBox box = new VBox();
-
-        //center out layout and add padding
-        box.setAlignment(Pos.CENTER);
-        box.setPadding(new Insets(10));
-
-        ProgressIndicator showProgressCircle = new ProgressIndicator();
-        Text text = new Text("Checking for reminder messages...");
-
-        box.getChildren().addAll(showProgressCircle, text);
-
-        //if (date == currentDate)
-
-
-
-        return new Scene(box, 300, 100);
     }
 
     //Sets the action for buttons to change to the correct scene.
@@ -717,6 +711,22 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
+        for (int i = 0; i < messageList.length; i++) {
+            final CheckBox box = boxes[i];
+            final String listItem = messageList[i];
+
+            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue == true) {
+                        box.setText("Reminder Set!");
+                    } else {
+                        box.setText(listItem);
+                    }
+                }
+            });
+        }
+
         Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
 
         Button next = makeNextButton(HOME_SCENE);
@@ -726,7 +736,7 @@ public class FitnessView extends Application {
             @Override
             public void handle(MouseEvent event)
             {
-                controller.addHike(hike);
+                controller.addNewReminderMessage();
             }
         });
 
@@ -796,9 +806,11 @@ public class FitnessView extends Application {
         Text reminderTitle = titleMaker("Reminders");
         reminderContainer.getChildren().add(reminderTitle);
 
+        String[] messageList = controller.loadReminderMessages();
+
         ListView listedMessages = new ListView();
 
-//        listedMessages.getItems().addAll(FXCollections.observableArrayList(messageList));
+        listedMessages.getItems().addAll(FXCollections.observableArrayList(messageList));
 
         reminderContainer.getChildren().add(listedMessages);
 
