@@ -94,10 +94,10 @@ public class FitnessController {
         documentFileSetup();
 
         //Gets the child node
-        Element date = rootNode.getChild("date");
+        Element allHikes = rootNode.getChild("allHikeDetails");
 
         //A list from the child node date.
-        List stepTakenList = date.getChildren("numberOfSteps");
+        List stepTakenList = allHikes.getChildren("date");
 
         //Provides the array with the exact size it needs to be to hold the list.
         stepValues = new String[stepTakenList.size()];
@@ -221,6 +221,27 @@ public class FitnessController {
             String attributeHolder = dateNode.getAttributeValue("id");
             if (attributeHolder.contentEquals(dateToSearchFor)){
                 dateNode.addContent(new Element("steps").setText(stepsTaken));
+            }
+        }
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
+    }
+
+    public void heartRateAndStepsOrganizer(String numericMonth, String dateToSearchFor){
+        documentFileSetup();
+
+        Element allHikes = rootNode.getChild("allHikeDetails");
+
+        List dates = allHikes.getChildren("date");
+
+        Element dateNode;
+
+        for (int i = 0; i < dates.size(); i++){
+            dateNode = (Element) dates.get(i);
+
+            String attributeHolder = dateNode.getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor)){
+                dateNode.addContent(new Element("months").setAttribute("id", numericMonth));
             }
         }
 

@@ -76,7 +76,7 @@ public class FitnessView extends Application {
 
     //Checklist needs to be implemented into the scheduled hike scene.
     //Each checklist must correspond to the hike that owns that checklist.
-    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", /*"CHECKLIST"*/};
+    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS"};
     private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
     //Holds the hike date for parsing.
@@ -167,9 +167,11 @@ public class FitnessView extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                hikeDate = date;
+//                final String month = hikeDate.substring(5, 7);
+//                controller.heartRateAndStepsOrganizer(month, hikeDate);
                 controller.setView(currentScene = sceneSelector(key));
                 mainStage.setScene(controller.updateView());
-                hikeDate = date;
             }
         });
     }
@@ -377,9 +379,6 @@ public class FitnessView extends Application {
         top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.getStyleClass().add("window-top");
 
-        HBox menuHolder = new HBox();
-        VBox menu = new VBox();
-
         VBox middle = new VBox();
         middle.setAlignment(Pos.CENTER);
         middle.setSpacing(10);
@@ -399,12 +398,9 @@ public class FitnessView extends Application {
 
         JFXTextField heartRateEntry = new JFXTextField();
 
-//        TextField heartRateEntry = new TextField();
-
         heartRateEntry.setAlignment(Pos.CENTER);
 
         heartRateEntry.setMaxWidth(250);
-
 
         Label steps = labelMaker("Steps");
         JFXTextField stepsEntry = new JFXTextField();
@@ -581,6 +577,7 @@ public class FitnessView extends Application {
     //scene for user to input trail information
     private Scene hikeDetail()
     {
+        //final String monthHolder;
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
@@ -611,12 +608,17 @@ public class FitnessView extends Application {
             @Override
             public void handle(ActionEvent event) {
                 dateInput.setText(datePicker.getValue().toString());
+
+                //to delete later.
+                final String monthHolder = dateInput.getText(5,7);
+                System.out.println(monthHolder);
             }
         });
 
         dateContainer.getChildren().addAll(dateInput, datePicker);
 
         inputContainer.getChildren().addAll(locationInput, dateContainer);
+
 
         Button back = makeBackButton(null, SELECT_HIKE_SCENE);
 
