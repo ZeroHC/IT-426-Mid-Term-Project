@@ -306,8 +306,20 @@ public class FitnessController {
         documentFileSetup();
 
         Element allHikeDetails = rootNode.getChild(ALL_HIKE_DETAILS);
-        Element allHikeLocations = allHikeDetails.getChild(DATE_ELEMENT_STRING);
-        return getLocationStrings(allHikeLocations);
+
+        List dateList = allHikeDetails.getChildren(DATE_ELEMENT_STRING);
+
+        String[] locations = new String[dateList.size()];
+
+        int firstIndex = 0;
+
+        for (int i = 0; i < dateList.size(); i++)
+        {
+            Element node = (Element) dateList.get(i);
+            locations[i] = getLocationStrings(node)[firstIndex];
+        }
+
+        return locations;
     }
 
     private String[] getLocationStrings(Element locationElement)
@@ -338,16 +350,14 @@ public class FitnessController {
 
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
 
-        String[] dateString = new String[allHikes.getContentSize()];
+        List dateList = allHikes.getChildren(DATE_ELEMENT_STRING);
 
-        documentFileSetup();
+        String[] dateString = new String[dateList.size()];
 
-        int i = 0;
-
-        for (Element dateElement : allHikes.getChildren(DATE_ELEMENT_STRING))
+        for (int i = 0; i < dateList.size(); i++)
         {
-            dateString[i] = dateElement.getAttributeValue("id");
-            i++;
+            Element date = (Element)dateList.get(i);
+            dateString[i] = date.getAttributeValue("id");
         }
 
         return dateString;

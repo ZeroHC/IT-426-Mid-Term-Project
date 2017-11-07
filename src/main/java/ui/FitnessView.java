@@ -529,11 +529,13 @@ public class FitnessView extends Application {
 
         String[] locations = controller.getHikeLocations();
 
-        for (String location : locations)
+        if (locations != null)
         {
-            hikeList.getItems().add(new Label(location));
+            for (String location : locations)
+            {
+                hikeList.getItems().add(new Label(location));
+            }
         }
-
 
         Button back = makeBackButton(null, HOME_SCENE);
 
