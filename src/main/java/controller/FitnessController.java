@@ -252,12 +252,13 @@ public class FitnessController {
         documentFileSetup();
 
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
-        Element date = allHikes.getChild(DATE_ELEMENT_STRING);
+        List<Element> dates = allHikes.getChildren(DATE_ELEMENT_STRING);
+        Element last = dates.get(dates.size() - 1);
 
         for (int i = 0; i < reminderMessages.getMessages().size(); i++)
         {
             Element message = new Element(REMINDER_MESSAGE_ELEMENT_STRING).setText(reminderMessages.getMessages().get(i));
-            date.addContent(message);
+            last.addContent(message);
         }
 
         writeToXMLFile(xmlFileDocument, xmlFile);
