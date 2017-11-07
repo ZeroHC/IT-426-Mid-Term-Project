@@ -13,6 +13,7 @@ import controller.FitnessController;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -49,6 +50,8 @@ public class FitnessView extends Application {
     private static final int EXERCISE_TRACKER_BODY_HEIGHT = 430;
     private static final String BACK = "BACK";
     private static final String HOME_SCENE = "HOME";
+    private static final String ADD = "ADD";
+    private static final String DONE = "DONE";
     private static final String SELECT_HIKE_SCENE = "NEW HIKE";
     private static final String HIKE_DETAIL_SCENE = "HIKE DETAIL";
     private static final String REMINDER_MESSAGES_SCENE = "REMINDER MESSAGES";
@@ -57,7 +60,7 @@ public class FitnessView extends Application {
     private static final int BUTTON_SHADOW_RADIUS = 1;
     private static final int BUTTON_SHADOW_OFFSET = 2;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
-    private static final int JANURARY = 1;
+    private static final int JANUARY = 1;
     private static final int DISPLAY_EACH_MONTH = 1;
     private static final int DECEMBER = 12;
     private static final String CHECKLIST_SCENE = "CHECKLIST";
@@ -139,6 +142,10 @@ public class FitnessView extends Application {
 
         box.getChildren().addAll(showProgressCircle, text);
 
+        //if (date == currentDate)
+
+
+
         return new Scene(box, 300, 100);
     }
 
@@ -177,6 +184,34 @@ public class FitnessView extends Application {
         addMouseHoverEvent(button, shadow);
 
         setButtonActionForSceneChange(button, sceneName);
+
+        return button;
+    }
+
+    //Makes a button for the reminder button scene to add reminders.
+    private Button makeAddButton(String buttonName) {
+
+        Button button = new Button();
+        button.getStyleClass().add("forward-btn-icon");
+        DropShadow shadow = addDropShadow();
+
+        addMouseHoverEvent(button, shadow);
+
+        setButtonActionForSceneChange(button, buttonName);
+
+        return button;
+    }
+
+    //Makes a button for the reminder button scene to be done with the reminder scene.
+    private Button makeDoneButton(String buttonName) {
+
+        Button button = new Button();
+        button.getStyleClass().add("forward-btn-icon");
+        DropShadow shadow = addDropShadow();
+
+        addMouseHoverEvent(button, shadow);
+
+        setButtonActionForSceneChange(button, buttonName);
 
         return button;
     }
@@ -423,7 +458,7 @@ public class FitnessView extends Application {
         Text title = titleMaker("Exercise Progress");
         top.getChildren().add(title);
 
-        NumberAxis xMonth = new NumberAxis(JANURARY, DECEMBER, DISPLAY_EACH_MONTH);
+        NumberAxis xMonth = new NumberAxis(JANUARY, DECEMBER, DISPLAY_EACH_MONTH);
         xMonth.setLabel("Month");
 
         NumberAxis yHeartRate = new NumberAxis(0, 240, 60);
@@ -440,7 +475,7 @@ public class FitnessView extends Application {
 
         heartRate.getData().add(heartCoordinates);
 
-        NumberAxis xStepMonth = new NumberAxis(JANURARY, DECEMBER, DISPLAY_EACH_MONTH);
+        NumberAxis xStepMonth = new NumberAxis(JANUARY, DECEMBER, DISPLAY_EACH_MONTH);
         xStepMonth.setLabel("Month");
 
         NumberAxis ySteps = new NumberAxis(0, 30000, 5000);
@@ -746,6 +781,49 @@ public class FitnessView extends Application {
         vBox.getChildren().add(back);
 
         return new Scene(vBox, WIDTH, HEIGHT);
+    }
+
+    private Scene reminderButtonScene()
+    {
+        VBox reminderContainer = new VBox();
+        reminderContainer.setAlignment(Pos.CENTER);
+        reminderContainer.getStylesheets().add("styles/HikeMasterStyles.css");
+        reminderContainer.setPadding(new Insets(10));
+        reminderContainer.setSpacing(10);
+
+        Text reminderTitle = titleMaker("Reminders");
+        reminderContainer.getChildren().add(reminderTitle);
+
+        ListView listedMessages = new ListView();
+
+//        listedMessages.getItems().addAll(FXCollections.observableArrayList(messageList));
+
+        reminderContainer.getChildren().add(listedMessages);
+
+        Button add = makeAddButton(ADD);
+
+        Button done = makeDoneButton(DONE);
+
+        add.setOnMouseReleased(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                controller.addHike(hike);
+            }
+        });
+
+        HBox buttonRow = new HBox();
+        buttonRow.setId("buttonRow");
+
+        buttonRow.getChildren().addAll(add, done);
+
+        reminderContainer.getChildren().add(buttonRow);
+
+        Scene listedMessagesScene = new Scene(reminderContainer, WIDTH, HEIGHT);
+        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
+
+        return listedMessagesScene;
     }
 
     private void displayAlertWindow()

@@ -8,14 +8,17 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 
 public class ReminderMessage extends Application
@@ -43,22 +46,18 @@ public class ReminderMessage extends Application
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
-        CheckBox[] boxes = new CheckBox[messageList.length];
+        ListView listedMessages = new ListView();
 
-        for(int i = 0; i < messageList.length; i++)
-        {
-            CheckBox box = new CheckBox(messageList[i]);
-            boxes[i] = box;
-            box.setPrefWidth(200);
-        }
+        listedMessages.getItems().addAll(FXCollections.observableArrayList(messageList));
 
-        vBox.getChildren().addAll(boxes);
+        vBox.getChildren().add(listedMessages);
 
-        Scene listedMessagesScene = new Scene(vBox, 400, 600);
+        Scene listedMessagesScene = new Scene(vBox, 400, 400);
         listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return listedMessagesScene;
     }
+
 
     public void popUpMessage()
     {

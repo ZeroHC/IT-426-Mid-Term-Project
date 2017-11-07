@@ -189,13 +189,6 @@ public class FitnessController {
 
     }
 
-
-    /**
-     * This method adds the value of steps to the xml file.
-     *
-     * @param stepsTaken A string with the numeric value of the number of steps the user has taken.
-     */
-    //Needs to be updated.
     public void addSteps(String stepsTaken){
         documentFileSetup();
 
@@ -208,21 +201,20 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    public void addNewReminderMessage(){
+
+    }
+
     //Template method for setting up the document.
     private void documentFileSetup(){
 
         try {
-
-            //Creates a new document using a SAX parser.
             builder = new SAXBuilder();
 
-            //The xml file that is to be parsed.
             xmlFile = new File("data/master.xml");
 
-            //Builds the JDOM document based on the Sax parser.
             xmlFileDocument = (Document) builder.build(xmlFile);
 
-            //Gets the root node of the xml document.
             rootNode = xmlFileDocument.getRootElement();
 
         }catch (IOException exception){
@@ -232,16 +224,10 @@ public class FitnessController {
         }
     }
 
-    //Template method for writing to the xml file.
     private void writeToXMLFile(Document xmlDocument, File xmlFile){
         try {
-            //Create an object to write new content to the xml file.
             XMLOutputter xmlOutput = new XMLOutputter();
-
-            //Provides indentation to the document to make it easier to read when viewing the file directly.
             xmlOutput.setFormat(Format.getPrettyFormat());
-
-            //Writes the new content to the xml file.
             xmlOutput.output(xmlDocument, new FileWriter(xmlFile.getAbsolutePath()));
         }catch (IOException exception){
             System.out.println(exception.getMessage());
