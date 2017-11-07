@@ -67,9 +67,6 @@ public class MakeDefaultXML {
         //Makes a child node in root called all hikes.
         makeNode(xmlDocument, "allHikeDetails");
 
-        //Makes a child node in all hikes called date.
-        root.getChild("allHikeDetails").addContent(new Element("date"));
-
         //XML output object.
         XMLOutputter xmlOutput = new XMLOutputter();
 

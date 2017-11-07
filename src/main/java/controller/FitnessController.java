@@ -277,12 +277,10 @@ public class FitnessController {
         documentFileSetup();
 
         Element dateElement = new Element(DATE_ELEMENT_STRING).setAttribute("id", hike.getDate());
+
         dateElement.addContent(new Element(LOCATION_ELEMENT_STRING).setText(hike.getLocation()));
+
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
-        if (allHikes.getChild(DATE_ELEMENT_STRING).getContentSize() == 0)
-        {
-            allHikes.removeChild(DATE_ELEMENT_STRING);
-        }
 
         allHikes.addContent(dateElement);
 
@@ -316,7 +314,14 @@ public class FitnessController {
         for (int i = 0; i < dateList.size(); i++)
         {
             Element node = (Element) dateList.get(i);
-            locations[i] = getLocationStrings(node)[firstIndex];
+            if (getLocationStrings(node).length == 0)
+            {
+                return locations;
+            }
+            else
+            {
+                locations[i] = getLocationStrings(node)[firstIndex];
+            }
         }
 
         return locations;
