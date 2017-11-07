@@ -21,6 +21,7 @@ import org.jdom2.output.XMLOutputter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,6 +51,11 @@ public class FitnessController {
     private File xmlFile;
     private Document xmlFileDocument;
     private Element rootNode;
+
+    //Hike object to hold the current hike info
+    private Hike hike = new Hike();
+
+    private ReminderMessages reminderMessages = new ReminderMessages();
 
     /**
      * This is a constructor method that allows us to handle the interaction with the view.
@@ -227,7 +233,7 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public void addNewReminderMessage(ReminderMessages reminderMessages){
+    public void addNewReminderMessage(){
         documentFileSetup();
 
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
@@ -274,20 +280,18 @@ public class FitnessController {
 
     /**
      * this method adds one hike information to the file
-     *
-     * @param hike user created hike
      */
-    public void addHike(Hike hike)
+    public void addHike()
     {
         //add location to one specific spot in the file
-        addHikeLocation(hike);
+        addHikeLocation();
 
         //add the date and location to the file
-        addHikeDetails(hike);
+        addHikeDetails();
     }
 
     //this method adds the location to the previously hiked element
-    private void addHikeLocation(Hike hike)
+    private void addHikeLocation()
     {
         //setup for the necessary documents
         documentFileSetup();
@@ -324,7 +328,7 @@ public class FitnessController {
     }
 
     //this method adds the date and the location of the hike to the xml file
-    private void addHikeDetails(Hike hike)
+    private void addHikeDetails()
     {
         //setup for necessary document
         documentFileSetup();
@@ -457,5 +461,30 @@ public class FitnessController {
 
         //returns the date array
         return dateStrings;
+    }
+
+    public void setHikeLocation(String location)
+    {
+        hike.setLocation(location);
+    }
+
+    public void setHikeDate(String date)
+    {
+        hike.setDate(date);
+    }
+
+    public void setHikeReminderMessages(int capacity)
+    {
+        reminderMessages.setMessages(new ArrayList<>(capacity));
+    }
+
+    public void addHikeReminderMessage(String message)
+    {
+        reminderMessages.addMessage(message);
+    }
+
+    public void removeHikeReminderMessage(String message)
+    {
+        reminderMessages.removeMessage(message);
     }
 }
