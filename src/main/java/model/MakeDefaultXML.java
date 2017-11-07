@@ -61,10 +61,10 @@ public class MakeDefaultXML {
         //Makes child nodes with reminder messages for the reminders node
         makeReminderMessages(reminders, defaultReminderMessages);
 
-        //Makes a child node in root called year.
+        //Makes a child node in root called date.
         makeNode(xmlDocument, "date");
 
-        //Sets a unique id attribute for the year node.
+        //Sets a unique id attribute for the date node.
         root.getChild("date").setAttribute("id", "2017-11-06");
 
         //XML output object.

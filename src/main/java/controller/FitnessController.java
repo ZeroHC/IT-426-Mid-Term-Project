@@ -15,7 +15,6 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -62,23 +61,35 @@ public class FitnessController {
     /**
      * This method is used to set the scene.
      *
-     * @param scene
+     * @param scene Provides the value of the scene object that the field needs to be set to.
      */
     public void setView(Scene scene){
         this.scene = scene;
     }
 
+    /**
+     * This method gets the steps data for calculating the steps data.
+     *
+     * @return This method returns a string array with numeric strings.
+     */
     public String[] getStepData(){
+
+        //Field for string to be returned.
         String[] stepValues;
 
+        //Method call to setup the necessary document and file.
         documentFileSetup();
 
+        //Gets the child node
         Element date = rootNode.getChild("date");
 
+        //A list from the child node date.
         List stepTakenList = date.getChildren("numberOfSteps");
 
+        //Provides the array with the exact size it needs to be to hold the list.
         stepValues = new String[stepTakenList.size()];
 
+        //Inserts the value of each child into the array.
         for(int i = 0; i < stepTakenList.size(); i++){
             Element node = (Element) stepTakenList.get(i);
 
@@ -88,17 +99,29 @@ public class FitnessController {
         return stepValues;
     }
 
+    /**
+     * This method gets the heart rate data for calculating the steps data.
+     *
+     * @return This method returns a string array with numeric strings.
+     */
     public String[] getHeartRateData(){
+
+        //Field for string array to be returned.
         String[] heartRateValues;
 
+        //Method call to setup the necessary document and file.
         documentFileSetup();
 
+        //Gets the child node date.
         Element date = rootNode.getChild("date");
 
+        //List of children from date node.
         List heartRateList = date.getChildren("heartRate");
 
+        //Provides the array with the exact size it needs to be to hold the list.
         heartRateValues = new String[heartRateList.size()];
 
+        //Inserts the value of each child into the array.
         for(int i = 0; i < heartRateList.size(); i++){
             Element node = (Element) heartRateList.get(i);
 
@@ -108,19 +131,29 @@ public class FitnessController {
         return heartRateValues;
     }
 
-    //
+    /**
+     * This method loads an array of strings that contain the reminder messages.
+     *
+     * @return This method returns a string array with reminder messages.
+     */
     public String[] loadReminderMessages(){
 
+        //Field for string array to be returned.
         String[] reminderString;
 
+        //Method call to setup the necessary document and file.
         documentFileSetup();
 
+        //Gets the child node reminders.
         Element reminder = rootNode.getChild("reminders");
 
+        //A list of the children in the reminder node.
         List reminderMessageList = reminder.getChildren("message");
 
+        //Provides the array with the exact size it needs to be to hold the list.
         reminderString = new String[reminderMessageList.size()];
 
+        //Inserts the value of each child into the array.
         for (int i = 0; i < reminderMessageList.size(); i++){
             Element node = (Element) reminderMessageList.get(i);
 
@@ -130,9 +163,15 @@ public class FitnessController {
         return reminderString;
     }
 
-    //Writes the value of the heart rate to the XML
+    /**
+     * This method adds the value of heart rate to the xml file.
+     *
+     * @param heartRateValue A string with the numeric value of the user's heart rate.
+     */
+    //Needs to be updated.
     public void addHeartRate(String heartRateValue){
 
+        //Method call to setup the necessary document and file.
         documentFileSetup();
 
         Element year = rootNode.getChild("year");
@@ -145,6 +184,13 @@ public class FitnessController {
 
     }
 
+
+    /**
+     * This method adds the value of steps to the xml file.
+     *
+     * @param stepsTaken A string with the numeric value of the number of steps the user has taken.
+     */
+    //Needs to be updated.
     public void addSteps(String stepsTaken){
         documentFileSetup();
 
@@ -157,15 +203,21 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    //Template method for setting up the document.
     private void documentFileSetup(){
 
         try {
+
+            //Creates a new document using a SAX parser.
             builder = new SAXBuilder();
 
+            //The xml file that is to be parsed.
             xmlFile = new File("data/master.xml");
 
+            //Builds the JDOM document based on the Sax parser.
             xmlFileDocument = (Document) builder.build(xmlFile);
 
+            //Gets the root node of the xml document.
             rootNode = xmlFileDocument.getRootElement();
 
         }catch (IOException exception){
@@ -175,16 +227,26 @@ public class FitnessController {
         }
     }
 
+    //Template method for writing to the xml file.
     private void writeToXMLFile(Document xmlDocument, File xmlFile){
         try {
+            //Create an object to write new content to the xml file.
             XMLOutputter xmlOutput = new XMLOutputter();
+
+            //Provides indentation to the document to make it easier to read when viewing the file directly.
             xmlOutput.setFormat(Format.getPrettyFormat());
+
+            //Writes the new content to the xml file.
             xmlOutput.output(xmlDocument, new FileWriter(xmlFile.getAbsolutePath()));
         }catch (IOException exception){
             System.out.println(exception.getMessage());
         }
     }
 
+    /**
+     *
+     * @param hike
+     */
     public void addHike(Hike hike)
     {
         documentFileSetup();
@@ -198,6 +260,10 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getHikeLocations()
     {
         String[] locationString;
@@ -219,6 +285,10 @@ public class FitnessController {
         return locationString;
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getHikeDates()
     {
         String[] dateString;

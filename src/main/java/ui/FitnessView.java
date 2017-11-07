@@ -1,6 +1,8 @@
 /*
 * Daniel Capps, Joshua Hawks, Hanchen Liu
 * 11/06/2017
+* FitnessView.java
+* This class contains all the views of the application.
 *
 */
 
@@ -32,6 +34,12 @@ import model.Hike;
 
 import java.time.LocalDate;
 
+/**
+ * This class provides a GUI for users to be able to interact with the application.
+ *
+ * @author Daniel Capps, Joshua Hawks, Hanchen Liu
+ * @version 1.0
+ */
 public class FitnessView extends Application {
 
     //Constants.
@@ -49,9 +57,9 @@ public class FitnessView extends Application {
     private static final int BUTTON_SHADOW_RADIUS = 1;
     private static final int BUTTON_SHADOW_OFFSET = 2;
     private static final int EXERCISE_PROGRESS_WIDTH = 960;
-    public static final int JANURARY = 1;
-    public static final int DISPLAY_EACH_MONTH = 1;
-    public static final int DECEMBER = 12;
+    private static final int JANURARY = 1;
+    private static final int DISPLAY_EACH_MONTH = 1;
+    private static final int DECEMBER = 12;
     private static final String CHECKLIST_SCENE = "CHECKLIST";
     private static final String SCHEDULED_HIKE_SCENE = "SCHEDULED HIKE";
     private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
@@ -85,6 +93,11 @@ public class FitnessView extends Application {
         return currentScene = home();
     }
 
+    /**
+     * Starts the application.
+     *
+     * @param stage A parameter that provides access to a set of methods for starting the application.
+     */
     @Override
     public void start(Stage stage) {
         mainStage = stage;
