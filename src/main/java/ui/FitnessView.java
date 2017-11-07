@@ -654,12 +654,15 @@ public class FitnessView extends Application {
     //scene for display scheduled hikes that is coming up
     private Scene scheduledHikes()
     {
-
-
+        ScrollPane windowScroller = new ScrollPane();
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
         container.setSpacing(30);
-        container.getStylesheets().add("styles/HikeMasterStyles.css");
+        windowScroller.getStylesheets().add("styles/HikeMasterStyles.css");
+
+        windowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        windowScroller.setContent(container);
 
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
         container.getChildren().add(scheduledHikeTitle);
@@ -690,7 +693,7 @@ public class FitnessView extends Application {
                 Button reminderMessageButton = new Button("Reminder Messages");
                 setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
-                    Button doneButton = new Button("Done");
+                    Button doneButton = new Button("Add Exercise Data");
                     setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
 
                 hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
@@ -702,7 +705,7 @@ public class FitnessView extends Application {
 
         container.getChildren().add(back);
 
-        return new Scene(container, WIDTH, HEIGHT);
+        return new Scene(windowScroller, WIDTH, HEIGHT);
     }
 
     //
