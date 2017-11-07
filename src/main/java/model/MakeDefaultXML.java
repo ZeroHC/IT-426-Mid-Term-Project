@@ -52,6 +52,9 @@ public class MakeDefaultXML {
         //Makes a child node to the root for previously hiked trails.
         makeNode(xmlDocument, "previouslyHiked");
 
+/*        //Makes a child node to the previously hiked trails called location
+        root.getChild("previouslyHiked").addContent(new Element("location"));*/
+
         //Makes a child node to the root to hold the reminder messages.
         makeNode(xmlDocument, "reminders");
 
@@ -61,11 +64,11 @@ public class MakeDefaultXML {
         //Makes child nodes with reminder messages for the reminders node
         makeReminderMessages(reminders, defaultReminderMessages);
 
-        //Makes a child node in root called date.
-        makeNode(xmlDocument, "date");
+        //Makes a child node in root called all hikes.
+        makeNode(xmlDocument, "allHikeDetails");
 
-        //Sets a unique id attribute for the date node.
-        root.getChild("date").setAttribute("id", "2017-11-06");
+        //Makes a child node in all hikes called date.
+        root.getChild("allHikeDetails").addContent(new Element("date"));
 
         //XML output object.
         XMLOutputter xmlOutput = new XMLOutputter();

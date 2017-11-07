@@ -19,6 +19,7 @@ import org.jdom2.output.XMLOutputter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +30,10 @@ import java.util.List;
  */
 public class FitnessController {
 
+    private static final String PREVIOUSLY_HIKED_ELEMENT_STRING = "previouslyHiked";
+    private static final String DATE_ELEMENT_STRING = "date";
+    private static final String LOCATION_ELEMENT_STRING = "location";
+    private static final String ALL_HIKE_DETAILS = "allHikeDetails";
     //Used to hold the scene information passed from the view.
     private Scene scene;
 
@@ -249,13 +254,51 @@ public class FitnessController {
      */
     public void addHike(Hike hike)
     {
+        addHikeLocation(hike);
+
+        addHikeDetails(hike);
+    }
+
+    private void addHikeLocation(Hike hike)
+    {
         documentFileSetup();
 
-        Element allHikes = rootNode.getChild("previouslyHiked");
+        if (rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING).getContentSize() == 0 || !duplicateChecker(hike.getLocation()))
+        {
+            Element allHikeLocations = rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING);
 
-        allHikes.addContent(new Element("location").setText(hike.getLocation()));
+            allHikeLocations.addContent(new Element(LOCATION_ELEMENT_STRING).setText(hike.getLocation()));
+        }
 
-        allHikes.addContent(new Element("date").setText(hike.getDate()));
+        writeToXMLFile(xmlFileDocument, xmlFile);
+    }
+
+    private boolean duplicateChecker(String checker)
+    {
+        String[] locations = getHikeLocations();
+        for (String location : locations)
+        {
+            if (location.equals(checker))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addHikeDetails(Hike hike)
+    {
+        documentFileSetup();
+
+        Element dateElement = new Element(DATE_ELEMENT_STRING).setAttribute("id", hike.getDate());
+        dateElement.addContent(new Element(LOCATION_ELEMENT_STRING).setText(hike.getLocation()));
+        Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
+        if (allHikes.getChild(DATE_ELEMENT_STRING).getContentSize() == 0)
+        {
+            allHikes.removeChild(DATE_ELEMENT_STRING);
+        }
+
+        allHikes.addContent(dateElement);
 
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
@@ -266,17 +309,31 @@ public class FitnessController {
      */
     public String[] getHikeLocations()
     {
-        String[] locationString;
-
         documentFileSetup();
 
-        Element allHikes = rootNode.getChild("previouslyHiked");
+        Element hikeLocations = rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING);
+        return getLocationStrings(hikeLocations);
+    }
 
-        List locationList = allHikes.getChildren("location");
+    public String[] getScheduledHikes()
+    {
+        documentFileSetup();
+
+        Element allHikeDetails = rootNode.getChild(ALL_HIKE_DETAILS);
+        Element allHikeLocations = allHikeDetails.getChild(DATE_ELEMENT_STRING);
+        return getLocationStrings(allHikeLocations);
+    }
+
+    private String[] getLocationStrings(Element locationElement)
+    {
+        String[] locationString;
+
+        List locationList = locationElement.getChildren(LOCATION_ELEMENT_STRING);
 
         locationString = new String[locationList.size()];
 
-        for (int i = 0; i < locationList.size(); i++){
+        for (int i = 0; i < locationList.size(); i++)
+        {
             Element node = (Element) locationList.get(i);
 
             locationString[i] = node.getText();
@@ -291,20 +348,20 @@ public class FitnessController {
      */
     public String[] getHikeDates()
     {
-        String[] dateString;
+        documentFileSetup();
+
+        Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
+
+        String[] dateString = new String[allHikes.getContentSize()];
 
         documentFileSetup();
 
-        Element allHikes = rootNode.getChild("previouslyHiked");
+        int i = 0;
 
-        List dateList = allHikes.getChildren("date");
-
-        dateString = new String[dateList.size()];
-
-        for (int i = 0; i < dateList.size(); i++){
-            Element node = (Element) dateList.get(i);
-
-            dateString[i] = node.getText();
+        for (Element dateElement : allHikes.getChildren(DATE_ELEMENT_STRING))
+        {
+            dateString[i] = dateElement.getAttributeValue("id");
+            i++;
         }
 
         return dateString;

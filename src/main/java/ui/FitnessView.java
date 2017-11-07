@@ -609,31 +609,44 @@ public class FitnessView extends Application {
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
         container.getChildren().add(scheduledHikeTitle);
 
-        String[] locations = controller.getHikeLocations();
+        String[] locations = controller.getScheduledHikes();
         String[] dates = controller.getHikeDates();
 
-        for (int i = 0; i < locations.length; i++)
+        if (locations == null || dates == null)
         {
-            LocalDate date = LocalDate.parse(dates[i]);
-            if (date.equals(today) || date.isAfter(today))
+            Button back = makeBackButton(BACK, HOME_SCENE);
+
+            container.getChildren().add(back);
+
+            return new Scene(container, WIDTH, HEIGHT);
+        }
+
+        else
+        {
+            for (int i = 0; i < dates.length; i++)
             {
-                HBox hikeRow = new HBox();
-                hikeRow.setId("hikeRow");
+                LocalDate date = LocalDate.parse(dates[i]);
 
-                Label hikeDate = new Label(dates[i]);
-                Label hikeLocation = new Label(locations[i]);
+                if (date.equals(today) || date.isAfter(today))
+                {
+                    HBox hikeRow = new HBox();
+                    hikeRow.setId("hikeRow");
 
-                Button checkListButton = new Button("Check List");
-                setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
+                    Label hikeDate = new Label(dates[i]);
+                    Label hikeLocation = new Label(locations[i]);
 
-                Button reminderMessageButton = new Button("Reminder Messages");
-                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+                    Button checkListButton = new Button("Check List");
+                    setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
-                Button doneButton = new Button("Done");
-                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
+                    Button reminderMessageButton = new Button("Reminder Messages");
+                    setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
-                container.getChildren().add(hikeRow);
+                    Button doneButton = new Button("Done");
+                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
+
+                    hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                    container.getChildren().add(hikeRow);
+                }
             }
         }
 
@@ -671,7 +684,7 @@ public class FitnessView extends Application {
 
         Button next = makeNextButton(HOME_SCENE);
 
-        next.setOnMouseReleased(new EventHandler<MouseEvent>()
+        next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
