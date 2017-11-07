@@ -51,6 +51,7 @@ public class FitnessController {
     private Document xmlFileDocument;
     private Element rootNode;
 
+
     /**
      * This is a constructor method that allows us to handle the interaction with the view.
      *
@@ -198,7 +199,7 @@ public class FitnessController {
 
             String attributeHolder = dateNode.getAttributeValue("id");
             if (attributeHolder.contentEquals(dateToSearchFor)){
-                dateNode.addContent(new Element("heartRate").setText(heartRateValue));
+                dateNode.getChild("month").addContent(new Element("heartRate").setText(heartRateValue));
             }
         }
 
@@ -220,7 +221,7 @@ public class FitnessController {
 
             String attributeHolder = dateNode.getAttributeValue("id");
             if (attributeHolder.contentEquals(dateToSearchFor)){
-                dateNode.addContent(new Element("steps").setText(stepsTaken));
+                dateNode.getChild("month").addContent(new Element("steps").setText(stepsTaken));
             }
         }
 
@@ -241,7 +242,9 @@ public class FitnessController {
 
             String attributeHolder = dateNode.getAttributeValue("id");
             if (attributeHolder.contentEquals(dateToSearchFor)){
-                dateNode.addContent(new Element("months").setAttribute("id", numericMonth));
+                if (dateNode.getChild("month") == null){
+                    dateNode.addContent(new Element("month").setAttribute("id", numericMonth));
+                }
             }
         }
 

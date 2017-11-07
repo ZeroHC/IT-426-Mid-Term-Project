@@ -689,6 +689,12 @@ public class FitnessView extends Application {
                 Label hikeDate = new Label(dates[i]);
                 Label hikeLocation = new Label(locations[i]);
 
+                String fullDate = hikeDate.getText();
+
+                String month = fullDate.substring(5, 7);
+
+                controller.heartRateAndStepsOrganizer(month, fullDate);
+
                 Button checkListButton = new Button("Check List");
                 setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
