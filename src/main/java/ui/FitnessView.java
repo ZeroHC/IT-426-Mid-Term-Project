@@ -91,11 +91,6 @@ public class FitnessView extends Application {
     //A copy of the stage parameter in the start method.
     private Stage mainStage;
 
-    //Hike object to hold the current hike info
-    private Hike hike = new Hike();
-
-    private ReminderMessages reminderMessages = new ReminderMessages();
-
     //temporary location holder
     private Label tempLocationHolder;
 
@@ -653,8 +648,8 @@ public class FitnessView extends Application {
             {
                 if (!locationInput.getText().isEmpty() && !dateInput.getText().isEmpty())
                 {
-                    hike.setLocation(locationInput.getText());
-                    hike.setDate(dateInput.getText());
+                    controller.setHikeLocation(locationInput.getText());
+                    controller.setHikeDate(dateInput.getText());
                 }
 
                 //display an alert
@@ -755,7 +750,7 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        reminderMessages.setMessages(new ArrayList<>(messageList.length));
+        controller.setHikeReminderMessages(messageList.length);
 
         for (int i = 0; i < messageList.length; i++) {
             final CheckBox box = boxes[i];
@@ -764,9 +759,9 @@ public class FitnessView extends Application {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     if (newValue) {
-                        reminderMessages.addMessage(box.getText());
+                        controller.addHikeReminderMessage(box.getText());
                     } else {
-                        reminderMessages.removeMessage(box.getText());
+                        controller.removeHikeReminderMessage(box.getText());
                     }
                 }
             });
@@ -783,8 +778,8 @@ public class FitnessView extends Application {
             @Override
             public void handle(MouseEvent event)
             {
-                controller.addHike(hike);
-                controller.addNewReminderMessage(reminderMessages);
+                controller.addHike();
+                controller.addNewReminderMessage();
 
             }
         });
@@ -872,7 +867,7 @@ public class FitnessView extends Application {
             @Override
             public void handle(MouseEvent event)
             {
-                controller.addHike(hike);
+                controller.addHike();
             }
         });
 
