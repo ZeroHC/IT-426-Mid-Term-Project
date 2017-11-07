@@ -9,6 +9,7 @@ package controller;
 
 import javafx.scene.Scene;
 import model.Hike;
+import model.ReminderMessages;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;  
@@ -34,6 +35,7 @@ public class FitnessController {
     private static final String DATE_ELEMENT_STRING = "date";
     private static final String LOCATION_ELEMENT_STRING = "location";
     private static final String ALL_HIKE_DETAILS = "allHikeDetails";
+    private static final String REMINDER_MESSAGE_ELEMENT_STRING = "reminderMessage";
     //Used to hold the scene information passed from the view.
     private Scene scene;
 
@@ -201,8 +203,19 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public void addNewReminderMessage(){
+    public void addNewReminderMessage(ReminderMessages reminderMessages){
+        documentFileSetup();
 
+        Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
+        Element date = allHikes.getChild(DATE_ELEMENT_STRING);
+
+        for (int i = 0; i < reminderMessages.getMessages().size(); i++)
+        {
+            Element message = new Element(REMINDER_MESSAGE_ELEMENT_STRING).setText(reminderMessages.getMessages().get(i));
+            date.addContent(message);
+        }
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
     //Template method for setting up the document.
@@ -235,20 +248,27 @@ public class FitnessController {
     }
 
     /**
+     * this method adds one hike information to the file
      *
-     * @param hike
+     * @param hike user created hike
      */
     public void addHike(Hike hike)
     {
+        //add location to one specific spot in the file
         addHikeLocation(hike);
 
+        //add the date and location to the file
         addHikeDetails(hike);
     }
 
+    //this method adds the location to the previously hiked element
     private void addHikeLocation(Hike hike)
     {
+        //setup for the necessary documents
         documentFileSetup();
 
+        //if there is no location element inside of previously hiked element or if the hike location doesn't exits in file
+        //create a new location element
         if (rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING).getContentSize() == 0 || !duplicateChecker(hike.getLocation()))
         {
             Element allHikeLocations = rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING);
@@ -272,17 +292,24 @@ public class FitnessController {
         return false;
     }
 
+    //this method adds the date and the location of the hike to the xml file
     private void addHikeDetails(Hike hike)
     {
+        //setup for necessary document
         documentFileSetup();
 
+        //create a new element called date and with the hike date as the id attribute
         Element dateElement = new Element(DATE_ELEMENT_STRING).setAttribute("id", hike.getDate());
 
+        //create a new element under the date element called location
         dateElement.addContent(new Element(LOCATION_ELEMENT_STRING).setText(hike.getLocation()));
 
+        //get the element called allHikeDetails from the root
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
 
+        //add the date element to the allHikeDetails element
         allHikes.addContent(dateElement);
+
 
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
