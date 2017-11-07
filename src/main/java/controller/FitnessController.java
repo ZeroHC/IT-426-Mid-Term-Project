@@ -32,11 +32,16 @@ import java.util.List;
  */
 public class FitnessController {
 
+    //constants for storing element names
     private static final String PREVIOUSLY_HIKED_ELEMENT_STRING = "previouslyHiked";
     private static final String DATE_ELEMENT_STRING = "date";
     private static final String LOCATION_ELEMENT_STRING = "location";
     private static final String ALL_HIKE_DETAILS = "allHikeDetails";
     private static final String REMINDER_MESSAGE_ELEMENT_STRING = "reminderMessage";
+
+    //constant for storing the first index
+    private static final int FIRST_INDEX = 0;
+
     //Used to hold the scene information passed from the view.
     private Scene scene;
 
@@ -286,7 +291,8 @@ public class FitnessController {
         //setup for the necessary documents
         documentFileSetup();
 
-        //if there is no location element inside of previously hiked element or if the hike location doesn't exits in file
+        //if there is no location element inside of previously hiked element
+        //or if the hike location doesn't exits in file
         //create a new location element
         if (rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING).getContentSize() == 0 || !duplicateChecker(hike.getLocation()))
         {
@@ -298,16 +304,21 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    //this method checks if there is a duplicate location entry in the previously hiked element
     private boolean duplicateChecker(String checker)
     {
+        //use a string array to store all the location strings in previously hiked element
         String[] locations = getHikeLocations();
+
         for (String location : locations)
         {
+            //if the location strings contains the checker return true
             if (location.equals(checker))
             {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -334,83 +345,116 @@ public class FitnessController {
     }
 
     /**
+     * this method gets all the locations from the previously hiked element
      *
-     * @return
+     * @return a string array of locations
      */
     public String[] getHikeLocations()
     {
         documentFileSetup();
 
+        //gets an element called previously hiked from the root
         Element hikeLocations = rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING);
         return getLocationStrings(hikeLocations);
     }
 
+    /**
+     * this method gets all the locations from the all hike details element
+     *
+     * @return a string array of locations
+     */
     public String[] getScheduledHikes()
     {
         documentFileSetup();
 
+        //gets an element called all hike details from the root
         Element allHikeDetails = rootNode.getChild(ALL_HIKE_DETAILS);
 
+        //use a node list to store all the children called date from the all hike details element
         List dateList = allHikeDetails.getChildren(DATE_ELEMENT_STRING);
 
+        //create a string array for storing locations
         String[] locations = new String[dateList.size()];
 
-        int firstIndex = 0;
-
+        //use a for loop to go through the date list
         for (int i = 0; i < dateList.size(); i++)
         {
+            //create a temporary element to store date element at index i
             Element node = (Element) dateList.get(i);
+
+            //calls the getLocationStrings method to check if it returns an empty array
+            //if it returns an empty array, return the empty locations array
             if (getLocationStrings(node).length == 0)
             {
                 return locations;
             }
+
+            //else gets one location back from getLocationString method based on the date element passed in
             else
             {
-                locations[i] = getLocationStrings(node)[firstIndex];
+                locations[i] = getLocationStrings(node)[FIRST_INDEX];
             }
         }
 
+        //returns the location array
         return locations;
     }
 
+    //this method returns a location array based on the parent element passed in
     private String[] getLocationStrings(Element locationElement)
     {
-        String[] locationString;
+        //uses a string array to store location strings
+        String[] locationStrings;
 
+        //use a node list to store all the children called location based on the parent element
         List locationList = locationElement.getChildren(LOCATION_ELEMENT_STRING);
 
-        locationString = new String[locationList.size()];
+        //initialize the location string array
+        locationStrings = new String[locationList.size()];
 
+        //use a for loop to go through the location list
         for (int i = 0; i < locationList.size(); i++)
         {
+            //create a temporary element to store location element at index i
             Element node = (Element) locationList.get(i);
 
-            locationString[i] = node.getText();
+            //stores the element's text to the location string array
+            locationStrings[i] = node.getText();
         }
 
-        return locationString;
+        //returns the location array
+        return locationStrings;
     }
 
     /**
+     * this method gets all the dates from the all hike details element
      *
-     * @return
+     * @return a string array of dates
      */
     public String[] getHikeDates()
     {
         documentFileSetup();
 
+        //get an element called all hike details from the root
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
 
+        //use a node list to store all the children called date from the all hike details element
         List dateList = allHikes.getChildren(DATE_ELEMENT_STRING);
 
-        String[] dateString = new String[dateList.size()];
+        //initialize the date string array
+        String[] dateStrings = new String[dateList.size()];
 
+        //use a for loop to go through the date list
         for (int i = 0; i < dateList.size(); i++)
         {
+            //create a temporary element to store date element at index i
             Element date = (Element)dateList.get(i);
-            dateString[i] = date.getAttributeValue("id");
+
+            //stores the element's attribute value to the date string array
+            dateStrings[i] = date.getAttributeValue("id");
         }
 
-        return dateString;
+        //returns the date array
+        return dateStrings;
     }
 }

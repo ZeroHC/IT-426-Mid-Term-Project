@@ -632,6 +632,8 @@ public class FitnessView extends Application {
                     hike.setLocation(locationInput.getText());
                     hike.setDate(dateInput.getText());
                 }
+
+                //display an alert
                 else
                 {
                     displayAlertWindow();
@@ -662,44 +664,37 @@ public class FitnessView extends Application {
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
         container.getChildren().add(scheduledHikeTitle);
 
+        //uses one string array to store location data and another string array to store dates
         String[] locations = controller.getScheduledHikes();
         String[] dates = controller.getHikeDates();
 
-        if (locations == null || dates == null)
+        //uses a for loop to go through both arrays
+        for (int i = 0; i < dates.length; i++)
         {
-            Button back = makeBackButton(BACK, HOME_SCENE);
+            //parse the date as a local date object
+            LocalDate date = LocalDate.parse(dates[i]);
 
-            container.getChildren().add(back);
-
-            return new Scene(container, WIDTH, HEIGHT);
-        }
-
-        else
-        {
-            for (int i = 0; i < dates.length; i++)
+            //if the date is today or is after today
+            //then display the hike info
+            if (date.equals(today) || date.isAfter(today))
             {
-                LocalDate date = LocalDate.parse(dates[i]);
+                HBox hikeRow = new HBox();
+                hikeRow.setId("hikeRow");
 
-                if (date.equals(today) || date.isAfter(today))
-                {
-                    HBox hikeRow = new HBox();
-                    hikeRow.setId("hikeRow");
+                Label hikeDate = new Label(dates[i]);
+                Label hikeLocation = new Label(locations[i]);
 
-                    Label hikeDate = new Label(dates[i]);
-                    Label hikeLocation = new Label(locations[i]);
+                Button checkListButton = new Button("Check List");
+                setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
-                    Button checkListButton = new Button("Check List");
-                    setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
-
-                    Button reminderMessageButton = new Button("Reminder Messages");
-                    setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+                Button reminderMessageButton = new Button("Reminder Messages");
+                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
                     Button doneButton = new Button("Done");
                     setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
 
-                    hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
-                    container.getChildren().add(hikeRow);
-                }
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                container.getChildren().add(hikeRow);
             }
         }
 
