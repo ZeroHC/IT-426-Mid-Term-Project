@@ -37,7 +37,10 @@ import javafx.util.Duration;
 import model.Hike;
 import model.ReminderMessages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -120,10 +123,41 @@ public class FitnessView extends Application {
         stage.setScene(currentScene);
         stage.setResizable(false);
         stage.show();
+
         popUpMessage();
     }
 
     public void popUpMessage()
+    {
+        String[] dates = controller.getHikeDates();
+        if (dates == null)
+        {
+            defaultStartingScene();
+        }
+        else
+        {
+            //uses a for loop to go through both arrays
+            for (int i = 0; i < dates.length; i++)
+            {
+                //parse the date as a local date object
+                LocalDate date = LocalDate.parse(dates[i]);
+
+                //if the date is today or is after today
+                //then display the hike info
+                if (date.equals(today) || date.isAfter(today))
+                {
+                    Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
+                    hikeReminder.setTitle("Hike Master 9000");
+                    hikeReminder.setHeaderText(null);
+                    hikeReminder.setContentText();
+
+                    hikeReminder.showAndWait();
+                }
+            }
+        }
+    }
+
+    public void popUpMessageAlt()
     {
         Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
         hikeReminder.setTitle("Hike Master 9000");
@@ -731,22 +765,6 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        /*for (int i = 0; i < messageList.length; i++) {
-            final CheckBox box = boxes[i];
-            final String listItem = messageList[i];
-
-            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
-                        box.setText("Reminder Set!");
-                    } else {
-                        box.setText(listItem);
-                    }
-                }
-            });
-        }*/
-
         reminderMessages.setMessages(new ArrayList<>(messageList.length));
 
         for (int i = 0; i < messageList.length; i++) {
@@ -769,6 +787,7 @@ public class FitnessView extends Application {
         Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
 
         Button next = makeNextButton(HOME_SCENE);
+
 
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {

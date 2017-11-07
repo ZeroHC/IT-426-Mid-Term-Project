@@ -242,6 +242,26 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    public String getReminderMessage(String reminderValue, String dateToSearchFor)
+    {
+        Element allHikes = rootNode.getChild("allHikeDetails");
+
+        List dates = allHikes.getChildren("date");
+
+        Element dateNode;
+
+        for (int i = 0; i < dates.size(); i++){
+            dateNode = (Element) dates.get(i);
+
+            String attributeHolder = dateNode.getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor)){
+                dateNode.getText();
+            }
+        }
+        Element message = new Element(REMINDER_MESSAGE_ELEMENT_STRING).get
+        return rootNode.getChildren("reminderMessages");
+    }
+
     //Template method for setting up the document.
     private void documentFileSetup(){
 
@@ -437,6 +457,7 @@ public class FitnessController {
 
         //get an element called all hike details from the root
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
+
 
         //use a node list to store all the children called date from the all hike details element
         List dateList = allHikes.getChildren(DATE_ELEMENT_STRING);
