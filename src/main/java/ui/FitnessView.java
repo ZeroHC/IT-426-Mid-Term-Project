@@ -119,7 +119,7 @@ public class FitnessView extends Application {
     {
         Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
         hikeReminder.setTitle("Hike Master 9000");
-        hikeReminder.setHeaderText("Reminder");
+        hikeReminder.setHeaderText(null);
         hikeReminder.setContentText("Wear your fitbit!");
 
         hikeReminder.showAndWait();
