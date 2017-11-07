@@ -10,6 +10,7 @@ package controller;
 import javafx.scene.Scene;
 import model.Hike;
 import model.ReminderMessages;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;  
@@ -176,29 +177,47 @@ public class FitnessController {
      * @param heartRateValue A string with the numeric value of the user's heart rate.
      */
     //Needs to be updated.
-    public void addHeartRate(String heartRateValue){
+    public void addHeartRate(String heartRateValue, String dateToSearchFor){
 
         //Method call to setup the necessary document and file.
         documentFileSetup();
 
-        Element year = rootNode.getChild("year");
+        Element allHikes = rootNode.getChild("allHikeDetails");
 
-        Element month = year.getChild("month");
+        List dates = allHikes.getChildren("date");
 
-        month.addContent(new Element("heartRate").setText(heartRateValue));
+        Element dateNode;
+
+        for (int i = 0; i < dates.size(); i++){
+            dateNode = (Element) dates.get(i);
+
+            String attributeHolder = dateNode.getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor)){
+                dateNode.addContent(new Element("heartRate").setText(heartRateValue));
+            }
+        }
 
         writeToXMLFile(xmlFileDocument, xmlFile);
 
     }
 
-    public void addSteps(String stepsTaken){
+    public void addSteps(String stepsTaken, String dateToSearchFor){
         documentFileSetup();
 
-        Element year = rootNode.getChild("year");
+        Element allHikes = rootNode.getChild("allHikeDetails");
 
-        Element month = year.getChild("month");
+        List dates = allHikes.getChildren("date");
 
-        month.addContent(new Element("numberOfSteps").setText(stepsTaken));
+        Element dateNode;
+
+        for (int i = 0; i < dates.size(); i++){
+            dateNode = (Element) dates.get(i);
+
+            String attributeHolder = dateNode.getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor)){
+                dateNode.addContent(new Element("steps").setText(stepsTaken));
+            }
+        }
 
         writeToXMLFile(xmlFileDocument, xmlFile);
     }

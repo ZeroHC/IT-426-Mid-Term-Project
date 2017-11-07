@@ -79,6 +79,9 @@ public class FitnessView extends Application {
     private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", /*"CHECKLIST"*/};
     private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
+    //Holds the hike date for parsing.
+    private String hikeDate;
+
     //Scene object to hold current scene.
     private Scene currentScene;
 
@@ -155,6 +158,18 @@ public class FitnessView extends Application {
             public void handle(ActionEvent event) {
                 controller.setView(currentScene = sceneSelector(key));
                 mainStage.setScene(controller.updateView());
+            }
+        });
+    }
+
+    //Sets the action for buttons to change to the correct scene.
+    private void setButtonActionForSceneChange(Button button, String key, String date) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.setView(currentScene = sceneSelector(key));
+                mainStage.setScene(controller.updateView());
+                hikeDate = date;
             }
         });
     }
@@ -404,8 +419,8 @@ public class FitnessView extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if (!heartRateEntry.getText().isEmpty() && !stepsEntry.getText().isEmpty()){
-                    controller.addHeartRate(heartRateEntry.getText());
-                    controller.addSteps(stepsEntry.getText());
+                    controller.addHeartRate(heartRateEntry.getText(), hikeDate);
+                    controller.addSteps(stepsEntry.getText(), hikeDate);
                     heartRateEntry.setText("");
                     stepsEntry.setText("");
                     controller.setView(currentScene = sceneSelector(HOME_SCENE));
@@ -637,6 +652,8 @@ public class FitnessView extends Application {
     //scene for display scheduled hikes that is coming up
     private Scene scheduledHikes()
     {
+
+
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
         container.setSpacing(30);
@@ -678,7 +695,7 @@ public class FitnessView extends Application {
                     setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
                     Button doneButton = new Button("Done");
-                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
+                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
 
                     hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
                     container.getChildren().add(hikeRow);
