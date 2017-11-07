@@ -769,7 +769,6 @@ public class FitnessView extends Application {
 
         for (int i = 0; i < messageList.length; i++) {
             final CheckBox box = boxes[i];
-            final String listItem = messageList[i];
 
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
