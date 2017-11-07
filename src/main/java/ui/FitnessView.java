@@ -139,13 +139,17 @@ public class FitnessView extends Application {
 
                 //if the date is today or is after today
                 //then display the hike info
-                if (date.equals(today) || date.isAfter(today))
+                if (date.equals(today))
                 {
                     Alert hikeReminder = new Alert(Alert.AlertType.INFORMATION);
                     hikeReminder.setTitle("Hike Master 9000");
                     hikeReminder.setHeaderText(null);
-                    hikeReminder.setContentText(reminder);
-
+                    String messageHolder = "";
+                    for(String message:controller.getReminderMessage())
+                    {
+                        messageHolder = messageHolder + message + "\n";
+                    }
+                    hikeReminder.setContentText(messageHolder);
                     hikeReminder.showAndWait();
                 }
             }

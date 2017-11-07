@@ -249,7 +249,7 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public String[] getReminderMessage(String reminderMessages, String dateToSearchFor)
+    public String[] getReminderMessage()
     {
         //Field for string array to be returned.
         String[] reminderMessage;
