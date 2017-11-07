@@ -514,20 +514,26 @@ public class FitnessView extends Application {
         mainContainer.setSpacing(50);
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
 
+        //set a title for the scene
         Text selectHikeTitle = titleMaker("Select Hike");
         mainContainer.getChildren().add(selectHikeTitle);
 
         Label userNote = new Label("Select a hike or create new");
 
+        //use a jfoenix combo box to create a drop down menu which holds all the hiked locations
         JFXComboBox<Label> hikeList = new JFXComboBox<>();
         hikeList.setMinWidth(200);
 
+        //set a default drop down value called new
         Label newHike = new Label("New");
         hikeList.getItems().add(newHike);
         hikeList.setValue(newHike);
 
+        // use a string array to store locations
         String[] locations = controller.getHikeLocations();
 
+        //if the location string array is not null
+        //create the drop down items based on the location array
         if (locations != null)
         {
             for (String location : locations)
@@ -536,10 +542,12 @@ public class FitnessView extends Application {
             }
         }
 
+        //creates back and next buttons
         Button back = makeBackButton(null, HOME_SCENE);
 
         Button next = makeNextButton(HIKE_DETAIL_SCENE);
 
+        //creates a mouse event which passes a string value to next scene based on selected drop down item
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
@@ -575,23 +583,30 @@ public class FitnessView extends Application {
         VBox inputContainer = new VBox();
         inputContainer.setId("inputContainer");
 
+        //use a jfoenix text field to store hike location
         JFXTextField locationInput = new JFXTextField();
         locationInput.setPromptText("Location");
 
+        //if the temporary holder is not empty
+        //then set text in the location input field
+        //to the temporary holder
         if (!tempLocationHolder.getText().equals(""))
         {
             locationInput.setText(tempLocationHolder.getText());
             tempLocationHolder.setText("");
         }
 
+        //create a HBox to group the date input field and date picker
         HBox dateContainer = new HBox();
         JFXTextField dateInput = new JFXTextField();
         dateInput.setPromptText("Date");
 
+        //use a jfoenix date picker for easier use
         JFXDatePicker datePicker = new JFXDatePicker();
         datePicker.setDefaultColor(Color.valueOf("#3f51b5"));
         datePicker.setMaxWidth(0);
 
+        //store the value from date picker to the text field
         datePicker.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -607,16 +622,20 @@ public class FitnessView extends Application {
 
         Button next = makeNextButton(REMINDER_MESSAGES_SCENE);
 
+        //create a mouse event which instantiates a hike object
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
+                //if both input fields are not empty, then instantiate the hike object
                 if (!locationInput.getText().isEmpty() && !dateInput.getText().isEmpty())
                 {
                     hike.setLocation(locationInput.getText());
                     hike.setDate(dateInput.getText());
                 }
+
+                //display an alert
                 else
                 {
                     displayAlertWindow();
@@ -645,44 +664,37 @@ public class FitnessView extends Application {
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
         container.getChildren().add(scheduledHikeTitle);
 
+        //uses one string array to store location data and another string array to store dates
         String[] locations = controller.getScheduledHikes();
         String[] dates = controller.getHikeDates();
 
-        if (locations == null || dates == null)
+        //uses a for loop to go through both arrays
+        for (int i = 0; i < dates.length; i++)
         {
-            Button back = makeBackButton(BACK, HOME_SCENE);
+            //parse the date as a local date object
+            LocalDate date = LocalDate.parse(dates[i]);
 
-            container.getChildren().add(back);
-
-            return new Scene(container, WIDTH, HEIGHT);
-        }
-
-        else
-        {
-            for (int i = 0; i < dates.length; i++)
+            //if the date is today or is after today
+            //then display the hike info
+            if (date.equals(today) || date.isAfter(today))
             {
-                LocalDate date = LocalDate.parse(dates[i]);
+                HBox hikeRow = new HBox();
+                hikeRow.setId("hikeRow");
 
-                if (date.equals(today) || date.isAfter(today))
-                {
-                    HBox hikeRow = new HBox();
-                    hikeRow.setId("hikeRow");
+                Label hikeDate = new Label(dates[i]);
+                Label hikeLocation = new Label(locations[i]);
 
-                    Label hikeDate = new Label(dates[i]);
-                    Label hikeLocation = new Label(locations[i]);
+                Button checkListButton = new Button("Check List");
+                setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
-                    Button checkListButton = new Button("Check List");
-                    setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
+                Button reminderMessageButton = new Button("Reminder Messages");
+                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
-                    Button reminderMessageButton = new Button("Reminder Messages");
-                    setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+                Button doneButton = new Button("Done");
+                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
 
-                    Button doneButton = new Button("Done");
-                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE);
-
-                    hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
-                    container.getChildren().add(hikeRow);
-                }
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                container.getChildren().add(hikeRow);
             }
         }
 
@@ -715,22 +727,6 @@ public class FitnessView extends Application {
         }
 
         vBox.getChildren().addAll(boxes);
-
-        /*for (int i = 0; i < messageList.length; i++) {
-            final CheckBox box = boxes[i];
-            final String listItem = messageList[i];
-
-            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
-                        box.setText("Reminder Set!");
-                    } else {
-                        box.setText(listItem);
-                    }
-                }
-            });
-        }*/
 
         reminderMessages.setMessages(new ArrayList<>(messageList.length));
 
