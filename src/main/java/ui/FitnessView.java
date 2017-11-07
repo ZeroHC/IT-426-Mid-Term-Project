@@ -731,27 +731,10 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
-        /*for (int i = 0; i < messageList.length; i++) {
-            final CheckBox box = boxes[i];
-            final String listItem = messageList[i];
-
-            boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
-                        box.setText("Reminder Set!");
-                    } else {
-                        box.setText(listItem);
-                    }
-                }
-            });
-        }*/
-
         reminderMessages.setMessages(new ArrayList<>(messageList.length));
 
         for (int i = 0; i < messageList.length; i++) {
             final CheckBox box = boxes[i];
-            final String listItem = messageList[i];
 
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
