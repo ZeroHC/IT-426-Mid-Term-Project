@@ -24,13 +24,11 @@ import org.jdom2.output.XMLOutputter;
  * @author Joshua Hawks
  * @version 1.0
  */
-public class MakeDefaultXML {
+public class MakeDefaultXML
+{
 
     //Constant reminder messages that the application starts with.
-    private static final String[] defaultReminderMessages = {"Wear your fitbit!", "Be sure to stretch!",
-                                                "Grab your backpack!", "Check the forecast!",
-                                                "Drink plenty of water!", "Dress in layers!",
-                                                "Check the Checklist!"};
+    private static final String[] defaultReminderMessages = {"Wear your fitbit!", "Be sure to stretch!", "Grab your backpack!", "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check the Checklist!"};
 
     //Field used to make the root node of the file as well as adding child nodes to the document.
     private static Document xmlDocument;
@@ -41,7 +39,8 @@ public class MakeDefaultXML {
      * @param filePath This parameter provides the location to create the file in.
      * @throws IOException This exception is used to throw an IOException if something is missing.
      */
-    public static void defaultXMl(String filePath) throws IOException{
+    public static void defaultXMl(String filePath) throws IOException
+    {
 
         //Root of the document.
         xmlDocument = makeRoot("hiker");
@@ -78,25 +77,30 @@ public class MakeDefaultXML {
     }
 
     //A facade to make the root node.
-    private static Document makeRoot(String rootName){
+    private static Document makeRoot(String rootName)
+    {
         return new Document(new Element(rootName));
     }
 
     //A facade to make a child node to the root.
-    private static void makeNode(Document document, String nodeName){
+    private static void makeNode(Document document, String nodeName)
+    {
         document.getRootElement().addContent(new Element(nodeName));
     }
 
     //A facade to make a child node to another node.
-    private static void makeNode(Element element, String nodeName){
+    private static void makeNode(Element element, String nodeName)
+    {
         element.addContent(new Element(nodeName));
     }
 
     //A facade to make node children to another node.
-    private static void makeReminderMessages(Element element, String[] reminderMessages){
+    private static void makeReminderMessages(Element element, String[] reminderMessages)
+    {
 
         //Loop to add nodes to parent node.
-        for (int i = 0; i < reminderMessages.length; i++){
+        for (int i = 0; i < reminderMessages.length; i++)
+        {
 
             element.addContent(new Element("message").setText(reminderMessages[i]));
         }

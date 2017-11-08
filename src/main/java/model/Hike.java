@@ -1,3 +1,10 @@
+/*
+* Daniel Capps, Joshua Hawks, Hanchen Liu
+* 11/07/2017
+* Hike.java
+* This file creates a hike object.
+*/
+
 package model;
 
 /**

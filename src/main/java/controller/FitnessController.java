@@ -13,7 +13,7 @@ import model.ReminderMessages;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;  
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -31,8 +31,8 @@ import java.util.List;
  * @author Daniel Capps, Joshua Hawks, Hanchen Liu
  * @version 1.0
  */
-public class FitnessController {
-
+public class FitnessController
+{
     //constants for storing element names
     private static final String PREVIOUSLY_HIKED_ELEMENT_STRING = "previouslyHiked";
     private static final String DATE_ELEMENT_STRING = "date";
@@ -40,9 +40,12 @@ public class FitnessController {
     private static final String ALL_HIKE_DETAILS = "allHikeDetails";
     private static final String REMINDER_MESSAGE_ELEMENT_STRING = "reminderMessage";
 
+    //constant for storing attribute name
+    private static final String ID = "id";
+
     //constant for storing the first index
     private static final int FIRST_INDEX = 0;
-    public static final int MONTH = 12;
+    private static final int MONTH = 12;
 
     //Used to hold the scene information passed from the view.
     private Scene scene;
@@ -56,6 +59,7 @@ public class FitnessController {
     //Hike object to hold the current hike info
     private Hike hike = new Hike();
 
+    //reminder messages object to hold the selected reminder messages
     private ReminderMessages reminderMessages = new ReminderMessages();
 
     /**
@@ -65,7 +69,8 @@ public class FitnessController {
      *              initially has the default scene from the view.
      */
     //Constructor which initializes a scene for the start of the application.
-    public FitnessController(Scene scene){
+    public FitnessController(Scene scene)
+    {
         this.scene = scene;
     }
 
@@ -74,7 +79,8 @@ public class FitnessController {
      *
      * @return The method returns a scene object.
      */
-    public Scene updateView(){
+    public Scene updateView()
+    {
         return scene;
     }
 
@@ -83,7 +89,8 @@ public class FitnessController {
      *
      * @param scene Provides the value of the scene object that the field needs to be set to.
      */
-    public void setView(Scene scene){
+    public void setView(Scene scene)
+    {
         this.scene = scene;
     }
 
@@ -92,8 +99,8 @@ public class FitnessController {
      *
      * @return This method returns a string array with numeric strings.
      */
-    public int[] getStepData(){
-
+    public int[] getStepData()
+    {
         String[] totalSteps = new String[MONTH];
         int[] numberToDivideStepValuesBy = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -112,11 +119,14 @@ public class FitnessController {
         //List stepTakenList = dates.getChildren("month");
 
         //Inserts the value of each child into the array.
-        for(int i = 0; i < stepTakenList.size(); i++){
+        for (int i = 0; i < stepTakenList.size(); i++)
+        {
             Element node = (Element) stepTakenList.get(i);
 
-            if(node.getChild("month").getName() == "month"){
-                switch (node.getChild("month").getAttributeValue("id")){
+            if (node.getChild("month").getName() == "month")
+            {
+                switch (node.getChild("month").getAttributeValue(ID))
+                {
                     case "01":
                         totalSteps[0] = node.getChild("month").getChild("steps").getText();
                         stepValues[0] = stepValues[0] + Integer.parseInt(totalSteps[0]);
@@ -125,67 +135,67 @@ public class FitnessController {
 
                     case "02":
                         totalSteps[1] = node.getChild("month").getChild("steps").getText();
-                        stepValues[1] = stepValues[1] +  Integer.parseInt(totalSteps[1]);
+                        stepValues[1] = stepValues[1] + Integer.parseInt(totalSteps[1]);
                         numberToDivideStepValuesBy[1]++;
                         break;
 
                     case "03":
                         totalSteps[2] = node.getChild("month").getChild("steps").getText();
-                        stepValues[2] = stepValues[2] +  Integer.parseInt(totalSteps[2]);
+                        stepValues[2] = stepValues[2] + Integer.parseInt(totalSteps[2]);
                         numberToDivideStepValuesBy[2]++;
                         break;
 
                     case "04":
                         totalSteps[3] = node.getChild("month").getChild("steps").getText();
-                        stepValues[3] = stepValues[3] +  Integer.parseInt(totalSteps[3]);
+                        stepValues[3] = stepValues[3] + Integer.parseInt(totalSteps[3]);
                         numberToDivideStepValuesBy[3]++;
                         break;
 
                     case "05":
                         totalSteps[4] = node.getChild("month").getChild("steps").getText();
-                        stepValues[4] = stepValues[4] +  Integer.parseInt(totalSteps[4]);
+                        stepValues[4] = stepValues[4] + Integer.parseInt(totalSteps[4]);
                         numberToDivideStepValuesBy[4]++;
                         break;
 
                     case "06":
                         totalSteps[5] = node.getChild("month").getChild("steps").getText();
-                        stepValues[5] = stepValues[5] +  Integer.parseInt(totalSteps[5]);
+                        stepValues[5] = stepValues[5] + Integer.parseInt(totalSteps[5]);
                         numberToDivideStepValuesBy[5]++;
                         break;
 
                     case "07":
                         totalSteps[6] = node.getChild("month").getChild("steps").getText();
-                        stepValues[6] = stepValues[6] +  Integer.parseInt(totalSteps[6]);
+                        stepValues[6] = stepValues[6] + Integer.parseInt(totalSteps[6]);
                         numberToDivideStepValuesBy[6]++;
                         break;
 
                     case "08":
                         totalSteps[7] = node.getChild("month").getChild("steps").getText();
-                        stepValues[7] = stepValues[7] +  Integer.parseInt(totalSteps[7]);
+                        stepValues[7] = stepValues[7] + Integer.parseInt(totalSteps[7]);
                         numberToDivideStepValuesBy[7]++;
                         break;
 
                     case "09":
                         totalSteps[8] = node.getChild("month").getChild("steps").getText();
-                        stepValues[8] = stepValues[8] +  Integer.parseInt(totalSteps[8]);
+                        stepValues[8] = stepValues[8] + Integer.parseInt(totalSteps[8]);
                         numberToDivideStepValuesBy[8]++;
                         break;
 
                     case "10":
                         totalSteps[9] = node.getChild("month").getChild("steps").getText();
-                        stepValues[9] = stepValues[9] +  Integer.parseInt(totalSteps[9]);
+                        stepValues[9] = stepValues[9] + Integer.parseInt(totalSteps[9]);
                         numberToDivideStepValuesBy[9]++;
                         break;
 
                     case "11":
                         totalSteps[10] = node.getChild("month").getChild("steps").getText();
-                        stepValues[10] = stepValues[10] +  Integer.parseInt(totalSteps[10]);
+                        stepValues[10] = stepValues[10] + Integer.parseInt(totalSteps[10]);
                         numberToDivideStepValuesBy[10]++;
                         break;
 
                     case "12":
                         totalSteps[11] = node.getChild("month").getChild("steps").getText();
-                        stepValues[11] = stepValues[11] +  Integer.parseInt(totalSteps[11]);
+                        stepValues[11] = stepValues[11] + Integer.parseInt(totalSteps[11]);
                         numberToDivideStepValuesBy[11]++;
                         break;
                 }
@@ -196,14 +206,19 @@ public class FitnessController {
         return calculateAverageValues(stepValues, numberToDivideStepValuesBy);
     }
 
-    private int[] calculateAverageValues(int[] numberOfSteps, int[] dividerValue){
+    private int[] calculateAverageValues(int[] numberOfSteps, int[] dividerValue)
+    {
 
         int index = 0;
 
-        for (int steps : numberOfSteps) {
-            if(dividerValue[index] != 0){
-                numberOfSteps[index] = steps/dividerValue[index];
-            }else{
+        for (int steps : numberOfSteps)
+        {
+            if (dividerValue[index] != 0)
+            {
+                numberOfSteps[index] = steps / dividerValue[index];
+            }
+            else
+            {
                 numberOfSteps[index] = 0;
             }
             index++;
@@ -217,8 +232,8 @@ public class FitnessController {
      *
      * @return This method returns a string array with numeric strings.
      */
-    public int[] getHeartRateData(){
-
+    public int[] getHeartRateData()
+    {
         String[] totalHeartRate = new String[MONTH];
         int[] numberToDivideHeartRateBy = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -233,15 +248,15 @@ public class FitnessController {
 
         List stepTakenList = allHikes.getChildren("date");
 
-        //A list from the child node date.
-//         = dates.getChildren("month");
-
         //Inserts the value of each child into the array.
-        for(int i = 0; i < stepTakenList.size(); i++){
+        for (int i = 0; i < stepTakenList.size(); i++)
+        {
             Element node = (Element) stepTakenList.get(i);
 
-            if(node.getChild("month").getName() == "month"){
-                switch (node.getChild("month").getAttributeValue("id")){
+            if (node.getChild("month").getName().equals("month"))
+            {
+                switch (node.getChild("month").getAttributeValue(ID))
+                {
                     case "01":
                         totalHeartRate[0] = node.getChild("heartRate").getText();
                         heartRate[0] = heartRate[0] + Integer.parseInt(totalHeartRate[0]);
@@ -321,28 +336,33 @@ public class FitnessController {
         return calculateAverageValues(heartRate, numberToDivideHeartRateBy);
     }
 
-    public boolean hasChartValues(){
+    public boolean hasChartValues()
+    {
         documentFileSetup();
 
-        try {
+        try
+        {
             String stepValue = rootNode.getChild("allHikeDetails").
-                                        getChild("date").
-                                        getChild("month").
-                                        getChild("steps").
-                                        getText();
+                    getChild("date").
+                    getChild("month").
+                    getChild("steps").
+                    getText();
 
             String heartValue = rootNode.getChild("allHikeDetails").
-                                         getChild("date").
-                                         getChild("month").
-                                         getChild("heartRate").
-                                         getText();
+                    getChild("date").
+                    getChild("month").
+                    getChild("heartRate").
+                    getText();
 
-            if(stepValue.isEmpty() || heartValue.isEmpty()){
+            if (stepValue.isEmpty() || heartValue.isEmpty())
+            {
                 return false;
             }
 
             return true;
-        }catch (NullPointerException exception){
+        }
+        catch (NullPointerException exception)
+        {
             return false;
         }
     }
@@ -352,8 +372,8 @@ public class FitnessController {
      *
      * @return This method returns a string array with reminder messages.
      */
-    public String[] loadReminderMessages(){
-
+    public String[] loadReminderMessages()
+    {
         //Field for string array to be returned.
         String[] reminderString;
 
@@ -370,7 +390,8 @@ public class FitnessController {
         reminderString = new String[reminderMessageList.size()];
 
         //Inserts the value of each child into the array.
-        for (int i = 0; i < reminderMessageList.size(); i++){
+        for (int i = 0; i < reminderMessageList.size(); i++)
+        {
             Element node = (Element) reminderMessageList.get(i);
 
             reminderString[i] = node.getText();
@@ -385,7 +406,8 @@ public class FitnessController {
      * @param heartRateValue A string with the numeric value of the user's heart rate.
      */
     //Needs to be updated.
-    public void addHeartRate(String heartRateValue, String dateToSearchFor){
+    public void addHeartRate(String heartRateValue, String dateToSearchFor)
+    {
 
         //Method call to setup the necessary document and file.
         documentFileSetup();
@@ -396,12 +418,15 @@ public class FitnessController {
 
         Element dateNode;
 
-        for (int i = 0; i < dates.size(); i++){
+        for (int i = 0; i < dates.size(); i++)
+        {
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getChild("month").getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7))){
-                if(dateNode.getChild("month").getChild("heartRate") == null){
+            String attributeHolder = dateNode.getChild("month").getAttributeValue(ID);
+            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7)))
+            {
+                if (dateNode.getChild("month").getChild("heartRate") == null)
+                {
                     dateNode.getChild("month").addContent(new Element("heartRate").setText(heartRateValue));
                 }
             }
@@ -411,7 +436,8 @@ public class FitnessController {
 
     }
 
-    public void addSteps(String stepsTaken, String dateToSearchFor){
+    public void addSteps(String stepsTaken, String dateToSearchFor)
+    {
         documentFileSetup();
 
         Element allHikes = rootNode.getChild("allHikeDetails");
@@ -420,12 +446,15 @@ public class FitnessController {
 
         Element dateNode;
 
-        for (int i = 0; i < dates.size(); i++){
+        for (int i = 0; i < dates.size(); i++)
+        {
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getChild("month").getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7))){
-                if(dateNode.getChild("month").getChild("steps") == null){
+            String attributeHolder = dateNode.getChild("month").getAttributeValue(ID);
+            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7)))
+            {
+                if (dateNode.getChild("month").getChild("steps") == null)
+                {
                     dateNode.getChild("month").addContent(new Element("steps").setText(stepsTaken));
                 }
             }
@@ -434,7 +463,8 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public void heartRateAndStepsOrganizer(String numericMonth, String dateToSearchFor){
+    public void heartRateAndStepsOrganizer(String numericMonth, String dateToSearchFor)
+    {
         documentFileSetup();
 
         Element allHikes = rootNode.getChild("allHikeDetails");
@@ -443,13 +473,16 @@ public class FitnessController {
 
         Element dateNode;
 
-        for (int i = 0; i < dates.size(); i++){
+        for (int i = 0; i < dates.size(); i++)
+        {
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor)){
-                if (dateNode.getChild("month") == null){
-                    dateNode.addContent(new Element("month").setAttribute("id", numericMonth));
+            String attributeHolder = dateNode.getAttributeValue(ID);
+            if (attributeHolder.contentEquals(dateToSearchFor))
+            {
+                if (dateNode.getChild("month") == null)
+                {
+                    dateNode.addContent(new Element("month").setAttribute(ID, numericMonth));
                 }
             }
         }
@@ -460,7 +493,8 @@ public class FitnessController {
     /**
      * this method adds all the checked reminder messages to the hike
      */
-    public void addReminderMessageToHike(){
+    public void addReminderMessageToHike()
+    {
         documentFileSetup();
 
         //dig down to the date elements
@@ -502,7 +536,7 @@ public class FitnessController {
         {
             //if the attribute value is the same as the specific date that's being passed
             //get the date element
-            String id = date.getAttributeValue("id");
+            String id = date.getAttributeValue(ID);
             if (id.equals(dateString))
             {
                 dateElement = date;
@@ -516,7 +550,8 @@ public class FitnessController {
         reminderMessage = new String[reminderMessageList.size()];
 
         //Inserts the value of each child into the array.
-        for (int i = 0; i < reminderMessageList.size(); i++){
+        for (int i = 0; i < reminderMessageList.size(); i++)
+        {
             Element node = (Element) reminderMessageList.get(i);
 
             reminderMessage[i] = node.getText();
@@ -526,9 +561,10 @@ public class FitnessController {
     }
 
     //Template method for setting up the document.
-    private void documentFileSetup(){
-
-        try {
+    private void documentFileSetup()
+    {
+        try
+        {
             builder = new SAXBuilder();
 
             xmlFile = new File("data/master.xml");
@@ -537,19 +573,27 @@ public class FitnessController {
 
             rootNode = xmlFileDocument.getRootElement();
 
-        }catch (IOException exception){
+        }
+        catch (IOException exception)
+        {
             System.out.println(exception.getMessage());
-        }catch (JDOMException exception){
+        }
+        catch (JDOMException exception)
+        {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void writeToXMLFile(Document xmlDocument, File xmlFile){
-        try {
+    private void writeToXMLFile(Document xmlDocument, File xmlFile)
+    {
+        try
+        {
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
             xmlOutput.output(xmlDocument, new FileWriter(xmlFile.getAbsolutePath()));
-        }catch (IOException exception){
+        }
+        catch (IOException exception)
+        {
             System.out.println(exception.getMessage());
         }
     }
@@ -610,7 +654,7 @@ public class FitnessController {
         documentFileSetup();
 
         //create a new element called date and with the hike date as the id attribute
-        Element dateElement = new Element(DATE_ELEMENT_STRING).setAttribute("id", hike.getDate());
+        Element dateElement = new Element(DATE_ELEMENT_STRING).setAttribute(ID, hike.getDate());
 
         //create a new element under the date element called location
         dateElement.addContent(new Element(LOCATION_ELEMENT_STRING).setText(hike.getLocation()));
@@ -730,17 +774,18 @@ public class FitnessController {
         for (int i = 0; i < dateList.size(); i++)
         {
             //create a temporary element to store date element at index i
-            Element date = (Element)dateList.get(i);
+            Element date = (Element) dateList.get(i);
 
             //stores the element's attribute value to the date string array
-            dateStrings[i] = date.getAttributeValue("id");
+            dateStrings[i] = date.getAttributeValue(ID);
         }
 
         //returns the date array
         return dateStrings;
     }
 
-    public String getDate(){
+    public String getDate()
+    {
         return hike.getDate();
     }
 
@@ -794,7 +839,8 @@ public class FitnessController {
         reminderMessages.removeMessage(message);
     }
 
-    public void addNewReminderMessage(String message){
+    public void addNewReminderMessage(String message)
+    {
         documentFileSetup();
 
         rootNode.getChild("reminders").addContent(new Element("message").setText(message));

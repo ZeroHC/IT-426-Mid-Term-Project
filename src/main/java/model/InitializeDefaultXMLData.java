@@ -18,20 +18,19 @@ import static model.MakeDefaultXML.defaultXMl;
  * @author Hanchen Liu, Joshua Hawks
  * @version 1.0
  */
-public class InitializeDefaultXMLData {
+public class InitializeDefaultXMLData
+{
 
     //The path that the file should be made in.
-    private final static File defaultXMLData = new File(System.getProperty("user.dir") +
-                                                        "/data/master.xml");
+    private final static File defaultXMLData = new File(System.getProperty("user.dir") + "/data/master.xml");
 
     /**
      * A method that checks to see if the directory and file are present in the correct path.
-     *
      */
-    public static void InitializeDefaultData(){
-
-        try {
-
+    public static void InitializeDefaultData()
+    {
+        try
+        {
             //
             if (defaultXMLData.getParentFile().mkdir() && defaultXMLData.createNewFile())
             {
@@ -39,11 +38,14 @@ public class InitializeDefaultXMLData {
 
                 //Method call to make the xml document based on the path provided.
                 defaultXMl(defaultXMLData.getAbsolutePath());
-            }else {
+            }
+            else
+            {
                 System.out.println("The file already exists...");
             }
-
-        }catch (Exception exception){
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
         }
     }
