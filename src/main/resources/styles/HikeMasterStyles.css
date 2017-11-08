@@ -114,5 +114,10 @@ Button:hover{
 
 #hikeRow{
     -fx-alignment: center;
-    -fx-spacing: 30px;
+    -fx-spacing: 40px;
+}
+
+.scroll-pane{
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
 }

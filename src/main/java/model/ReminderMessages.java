@@ -12,6 +12,7 @@ public class ReminderMessages
 {
     //use an array list of strings to store messages
     private ArrayList<String> messages;
+    private String messageFromXML;
 
     /**
      * this method gets the reminder messages
@@ -21,6 +22,11 @@ public class ReminderMessages
     public ArrayList<String> getMessages()
     {
         return messages;
+    }
+
+    public String getMessageFromXML()
+    {
+        return messageFromXML;
     }
 
     /**
