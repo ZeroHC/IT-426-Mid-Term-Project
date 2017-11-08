@@ -106,86 +106,86 @@ public class FitnessController {
         //Gets the child node
         Element allHikes = rootNode.getChild("allHikeDetails");
 
-        Element dates = allHikes.getChild("date");
+        List stepTakenList = allHikes.getChildren("date");
 
         //A list from the child node date.
-        List stepTakenList = dates.getChildren("month");
+        //List stepTakenList = dates.getChildren("month");
 
         //Inserts the value of each child into the array.
         for(int i = 0; i < stepTakenList.size(); i++){
             Element node = (Element) stepTakenList.get(i);
 
-            if(node.getName() == "month"){
-                switch (node.getAttributeValue("id")){
+            if(node.getChild("month").getName() == "month"){
+                switch (node.getChild("month").getAttributeValue("id")){
                     case "01":
-                        totalSteps[0] = node.getChild("steps").getText();
-                        stepValues[0] += Integer.parseInt(totalSteps[0]);
+                        totalSteps[0] = node.getChild("month").getChild("steps").getText();
+                        stepValues[0] = stepValues[0] + Integer.parseInt(totalSteps[0]);
                         numberToDivideStepValuesBy[0]++;
                         break;
 
                     case "02":
-                        totalSteps[1] = node.getChild("steps").getText();
-                        stepValues[1] += Integer.parseInt(totalSteps[1]);
+                        totalSteps[1] = node.getChild("month").getChild("steps").getText();
+                        stepValues[1] = stepValues[1] +  Integer.parseInt(totalSteps[1]);
                         numberToDivideStepValuesBy[1]++;
                         break;
 
                     case "03":
-                        totalSteps[2] = node.getChild("steps").getText();
-                        stepValues[2] += Integer.parseInt(totalSteps[2]);
+                        totalSteps[2] = node.getChild("month").getChild("steps").getText();
+                        stepValues[2] = stepValues[2] +  Integer.parseInt(totalSteps[2]);
                         numberToDivideStepValuesBy[2]++;
                         break;
 
                     case "04":
-                        totalSteps[3] = node.getChild("steps").getText();
-                        stepValues[3] += Integer.parseInt(totalSteps[3]);
+                        totalSteps[3] = node.getChild("month").getChild("steps").getText();
+                        stepValues[3] = stepValues[3] +  Integer.parseInt(totalSteps[3]);
                         numberToDivideStepValuesBy[3]++;
                         break;
 
                     case "05":
-                        totalSteps[4] = node.getChild("steps").getText();
-                        stepValues[4] += Integer.parseInt(totalSteps[4]);
+                        totalSteps[4] = node.getChild("month").getChild("steps").getText();
+                        stepValues[4] = stepValues[4] +  Integer.parseInt(totalSteps[4]);
                         numberToDivideStepValuesBy[4]++;
                         break;
 
                     case "06":
-                        totalSteps[5] = node.getChild("steps").getText();
-                        stepValues[5] += Integer.parseInt(totalSteps[5]);
+                        totalSteps[5] = node.getChild("month").getChild("steps").getText();
+                        stepValues[5] = stepValues[5] +  Integer.parseInt(totalSteps[5]);
                         numberToDivideStepValuesBy[5]++;
                         break;
 
                     case "07":
-                        totalSteps[6] = node.getChild("steps").getText();
-                        stepValues[6] += Integer.parseInt(totalSteps[6]);
+                        totalSteps[6] = node.getChild("month").getChild("steps").getText();
+                        stepValues[6] = stepValues[6] +  Integer.parseInt(totalSteps[6]);
                         numberToDivideStepValuesBy[6]++;
                         break;
 
                     case "08":
-                        totalSteps[7] = node.getChild("steps").getText();
-                        stepValues[7] += Integer.parseInt(totalSteps[7]);
+                        totalSteps[7] = node.getChild("month").getChild("steps").getText();
+                        stepValues[7] = stepValues[7] +  Integer.parseInt(totalSteps[7]);
                         numberToDivideStepValuesBy[7]++;
                         break;
 
                     case "09":
-                        totalSteps[8] = node.getChild("steps").getText();
-                        stepValues[8] += Integer.parseInt(totalSteps[8]);
+                        totalSteps[8] = node.getChild("month").getChild("steps").getText();
+                        stepValues[8] = stepValues[8] +  Integer.parseInt(totalSteps[8]);
                         numberToDivideStepValuesBy[8]++;
                         break;
 
                     case "10":
-                        totalSteps[9] = node.getChild("steps").getText();
-                        stepValues[9] += Integer.parseInt(totalSteps[9]);
+                        totalSteps[9] = node.getChild("month").getChild("steps").getText();
+                        stepValues[9] = stepValues[9] +  Integer.parseInt(totalSteps[9]);
                         numberToDivideStepValuesBy[9]++;
                         break;
 
                     case "11":
-                        totalSteps[10] = node.getChild("steps").getText();
-                        stepValues[10] += Integer.parseInt(totalSteps[10]);
+                        totalSteps[10] = node.getChild("month").getChild("steps").getText();
+                        stepValues[10] = stepValues[10] +  Integer.parseInt(totalSteps[10]);
                         numberToDivideStepValuesBy[10]++;
                         break;
 
                     case "12":
-                        totalSteps[11] = node.getChild("steps").getText();
-                        stepValues[11] += Integer.parseInt(totalSteps[11]);
+                        totalSteps[11] = node.getChild("month").getChild("steps").getText();
+                        stepValues[11] = stepValues[11] +  Integer.parseInt(totalSteps[11]);
                         numberToDivideStepValuesBy[11]++;
                         break;
                 }
@@ -231,86 +231,86 @@ public class FitnessController {
         //Gets the child node
         Element allHikes = rootNode.getChild("allHikeDetails");
 
-        Element dates = allHikes.getChild("date");
+        List stepTakenList = allHikes.getChildren("date");
 
         //A list from the child node date.
-        List stepTakenList = dates.getChildren("month");
+//         = dates.getChildren("month");
 
         //Inserts the value of each child into the array.
         for(int i = 0; i < stepTakenList.size(); i++){
             Element node = (Element) stepTakenList.get(i);
 
-            if(node.getName() == "month"){
-                switch (node.getAttributeValue("id")){
+            if(node.getChild("month").getName() == "month"){
+                switch (node.getChild("month").getAttributeValue("id")){
                     case "01":
                         totalHeartRate[0] = node.getChild("heartRate").getText();
-                        heartRate[0] += Integer.parseInt(totalHeartRate[0]);
+                        heartRate[0] = heartRate[0] + Integer.parseInt(totalHeartRate[0]);
                         numberToDivideHeartRateBy[0]++;
                         break;
 
                     case "02":
-                        totalHeartRate[1] = node.getChild("heartRate").getText();
-                        heartRate[1] += Integer.parseInt(totalHeartRate[1]);
+                        totalHeartRate[1] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[1] = heartRate[1] + Integer.parseInt(totalHeartRate[1]);
                         numberToDivideHeartRateBy[1]++;
                         break;
 
                     case "03":
-                        totalHeartRate[2] = node.getChild("heartRate").getText();
-                        heartRate[2] += Integer.parseInt(totalHeartRate[2]);
+                        totalHeartRate[2] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[2] = heartRate[2] + Integer.parseInt(totalHeartRate[2]);
                         numberToDivideHeartRateBy[2]++;
                         break;
 
                     case "04":
-                        totalHeartRate[3] = node.getChild("heartRate").getText();
-                        heartRate[3] += Integer.parseInt(totalHeartRate[3]);
+                        totalHeartRate[3] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[3] = heartRate[3] + Integer.parseInt(totalHeartRate[3]);
                         numberToDivideHeartRateBy[3]++;
                         break;
 
                     case "05":
-                        totalHeartRate[4] = node.getChild("heartRate").getText();
-                        heartRate[4] += Integer.parseInt(totalHeartRate[4]);
+                        totalHeartRate[4] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[4] = heartRate[4] + Integer.parseInt(totalHeartRate[4]);
                         numberToDivideHeartRateBy[4]++;
                         break;
 
                     case "06":
-                        totalHeartRate[5] = node.getChild("heartRate").getText();
-                        heartRate[5] += Integer.parseInt(totalHeartRate[5]);
+                        totalHeartRate[5] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[5] = heartRate[5] + Integer.parseInt(totalHeartRate[5]);
                         numberToDivideHeartRateBy[5]++;
                         break;
 
                     case "07":
-                        totalHeartRate[6] = node.getChild("heartRate").getText();
-                        heartRate[6] += Integer.parseInt(totalHeartRate[6]);
+                        totalHeartRate[6] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[6] = heartRate[6] + Integer.parseInt(totalHeartRate[6]);
                         numberToDivideHeartRateBy[6]++;
                         break;
 
                     case "08":
-                        totalHeartRate[7] = node.getChild("heartRate").getText();
-                        heartRate[7] += Integer.parseInt(totalHeartRate[7]);
+                        totalHeartRate[7] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[7] = heartRate[7] + Integer.parseInt(totalHeartRate[7]);
                         numberToDivideHeartRateBy[7]++;
                         break;
 
                     case "09":
-                        totalHeartRate[8] = node.getChild("heartRate").getText();
-                        heartRate[8] += Integer.parseInt(totalHeartRate[8]);
+                        totalHeartRate[8] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[8] = heartRate[8] + Integer.parseInt(totalHeartRate[8]);
                         numberToDivideHeartRateBy[8]++;
                         break;
 
                     case "10":
-                        totalHeartRate[9] = node.getChild("heartRate").getText();
-                        heartRate[9] += Integer.parseInt(totalHeartRate[9]);
+                        totalHeartRate[9] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[9] = heartRate[9] + Integer.parseInt(totalHeartRate[9]);
                         numberToDivideHeartRateBy[9]++;
                         break;
 
                     case "11":
-                        totalHeartRate[10] = node.getChild("heartRate").getText();
-                        heartRate[10] += Integer.parseInt(totalHeartRate[10]);
+                        totalHeartRate[10] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[10] = heartRate[10] + Integer.parseInt(totalHeartRate[10]);
                         numberToDivideHeartRateBy[10]++;
                         break;
 
                     case "12":
-                        totalHeartRate[11] = node.getChild("heartRate").getText();
-                        heartRate[11] += Integer.parseInt(totalHeartRate[11]);
+                        totalHeartRate[11] = node.getChild("month").getChild("heartRate").getText();
+                        heartRate[11] = heartRate[11] + Integer.parseInt(totalHeartRate[11]);
                         numberToDivideHeartRateBy[11]++;
                         break;
                 }
@@ -326,16 +326,16 @@ public class FitnessController {
 
         try {
             String stepValue = rootNode.getChild("allHikeDetails").
-                    getChild("date").
-                    getChild("month").
-                    getChild("steps").
-                    getText();
+                                        getChild("date").
+                                        getChild("month").
+                                        getChild("steps").
+                                        getText();
 
             String heartValue = rootNode.getChild("allHikeDetails").
-                    getChild("date").
-                    getChild("month").
-                    getChild("heartRate").
-                    getText();
+                                         getChild("date").
+                                         getChild("month").
+                                         getChild("heartRate").
+                                         getText();
 
             if(stepValue.isEmpty() || heartValue.isEmpty()){
                 return false;
