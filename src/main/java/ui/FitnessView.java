@@ -182,9 +182,10 @@ public class FitnessView extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                hikeDate = date;
+                //hikeDate.contentEquals(date);
 //                final String month = hikeDate.substring(5, 7);
 //                controller.heartRateAndStepsOrganizer(month, hikeDate);
+                controller.setHikeDate(date);
                 controller.setView(currentScene = sceneSelector(key));
                 mainStage.setScene(controller.updateView());
             }
@@ -434,8 +435,8 @@ public class FitnessView extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if (!heartRateEntry.getText().isEmpty() && !stepsEntry.getText().isEmpty()){
-                    controller.addHeartRate(heartRateEntry.getText(), hikeDate);
-                    controller.addSteps(stepsEntry.getText(), hikeDate);
+                    controller.addHeartRate(heartRateEntry.getText(), controller.getDate());
+                    controller.addSteps(stepsEntry.getText(), controller.getDate());
                     heartRateEntry.setText("");
                     stepsEntry.setText("");
                     controller.setView(currentScene = sceneSelector(SCHEDULED_HIKE_SCENE));
@@ -728,7 +729,7 @@ public class FitnessView extends Application {
                 Label hikeDate = new Label("Date: " + dates[i]);
                 Label hikeLocation = new Label("Location: " + locations[i]);
 
-                String fullDate = hikeDate.getText();
+                String fullDate = dates[i];
 
                 String month = fullDate.substring(5, 7);
 
@@ -744,7 +745,8 @@ public class FitnessView extends Application {
                 setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE);
 
                 Button doneButton = new Button("Add Exercise Data");
-                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
+                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, dates[i]);
+
                 //creates a temporary index that is going to be passed into the event handler
                 final int index = i;
 
@@ -762,7 +764,9 @@ public class FitnessView extends Application {
                 Button addExerciseDataButton = new Button("Add Exercise Data");
                 setButtonActionForSceneChange(addExerciseDataButton, EXERCISE_TRACKER_SCENE, dates[i]);
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseDataButton);
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation,
+                                             checkListButton, reminderMessageButton, addExerciseDataButton);
+
                 container.getChildren().add(hikeRow);
             }
         }

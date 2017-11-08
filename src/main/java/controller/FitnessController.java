@@ -399,9 +399,9 @@ public class FitnessController {
         for (int i = 0; i < dates.size(); i++){
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor)){
-                if (dateNode.getChild("month").getChild("heartRate").getText() == null){
+            String attributeHolder = dateNode.getChild("month").getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7))){
+                if(dateNode.getChild("month").getChild("heartRate") == null){
                     dateNode.getChild("month").addContent(new Element("heartRate").setText(heartRateValue));
                 }
             }
@@ -423,9 +423,9 @@ public class FitnessController {
         for (int i = 0; i < dates.size(); i++){
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getAttributeValue("id");
-            if (attributeHolder.contentEquals(dateToSearchFor)){
-                if(dateNode.getChild("month").getChild("steps").getText() == null){
+            String attributeHolder = dateNode.getChild("month").getAttributeValue("id");
+            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7))){
+                if(dateNode.getChild("month").getChild("steps") == null){
                     dateNode.getChild("month").addContent(new Element("steps").setText(stepsTaken));
                 }
             }
@@ -738,6 +738,10 @@ public class FitnessController {
 
         //returns the date array
         return dateStrings;
+    }
+
+    public String getDate(){
+        return hike.getDate();
     }
 
     /**
