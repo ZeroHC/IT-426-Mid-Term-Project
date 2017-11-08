@@ -414,7 +414,7 @@ public class FitnessView extends Application {
                     controller.addSteps(stepsEntry.getText(), hikeDate);
                     heartRateEntry.setText("");
                     stepsEntry.setText("");
-                    controller.setView(currentScene = sceneSelector(HOME_SCENE));
+                    controller.setView(currentScene = sceneSelector(SCHEDULED_HIKE_SCENE));
                     mainStage.setScene(controller.updateView());
                 }else {
                     displayAlertWindow();
@@ -433,8 +433,8 @@ public class FitnessView extends Application {
     //Scene for displaying user's data on heart rate and steps taken.
     private Scene exerciseProgress() {
 
-        String[] stepData = controller.getStepData();
-        String[] heartRateData = controller.getHeartRateData();
+        int[] stepData = controller.getStepData();
+        int[] heartRateData = controller.getHeartRateData();
 
         VBox mainContainer = new VBox();
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
@@ -472,10 +472,11 @@ public class FitnessView extends Application {
         final LineChart<Number, Number> heartRate = new LineChart<>(xMonth, yHeartRate);
 
         XYChart.Series<Number, Number> heartCoordinates = new XYChart.Series<>();
-        heartCoordinates.setName("Heart Rate per Hike");
+        heartCoordinates.setName("Average Heart Rate per Hike");
 
-        for(int i = 0; i < heartRateData.length; i++){
-            heartCoordinates.getData().add(new XYChart.Data<>(i + 1, Integer.parseInt(heartRateData[i])));
+        //is for heartrate
+        for(int i = 0; i < 12; i++){
+            heartCoordinates.getData().add(new XYChart.Data<>(i + 1, heartRateData[i]));
         }
 
         heartRate.getData().add(heartCoordinates);
@@ -489,10 +490,10 @@ public class FitnessView extends Application {
         final LineChart<Number, Number> steps = new LineChart<>(xStepMonth, ySteps);
 
         XYChart.Series<Number, Number> stepCoordinates = new XYChart.Series<>();
-        stepCoordinates.setName("Steps per Hike");
+        stepCoordinates.setName("Average Steps per Hike");
 
         for (int i = 0; i < stepData.length; i++){
-            stepCoordinates.getData().add(new XYChart.Data<>(i + 1, Integer.parseInt(stepData[i])));
+            stepCoordinates.getData().add(new XYChart.Data<>(i + 1, stepData[i]));
         }
 
         steps.getData().add(stepCoordinates);
@@ -603,10 +604,6 @@ public class FitnessView extends Application {
             @Override
             public void handle(ActionEvent event) {
                 dateInput.setText(datePicker.getValue().toString());
-
-                //to delete later.
-                final String monthHolder = dateInput.getText(5,7);
-                System.out.println(monthHolder);
             }
         });
 
@@ -696,10 +693,10 @@ public class FitnessView extends Application {
                 Button reminderMessageButton = new Button("Reminder Messages");
                 setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
 
-                    Button doneButton = new Button("Add Exercise Data");
-                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
+                    Button addExerciseDataButton = new Button("Add Exercise Data");
+                    setButtonActionForSceneChange(addExerciseDataButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseDataButton);
                 container.getChildren().add(hikeRow);
             }
         }
