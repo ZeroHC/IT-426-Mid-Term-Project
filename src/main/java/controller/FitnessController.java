@@ -793,4 +793,12 @@ public class FitnessController {
     {
         reminderMessages.removeMessage(message);
     }
+
+    public void addNewReminderMessage(String message){
+        documentFileSetup();
+
+        rootNode.getChild("reminders").addContent(new Element("message").setText(message));
+
+        writeToXMLFile(xmlFileDocument, xmlFile);
+    }
 }

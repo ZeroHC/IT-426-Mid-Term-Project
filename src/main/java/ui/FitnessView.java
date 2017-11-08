@@ -67,10 +67,11 @@ public class FitnessView extends Application {
     private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
     private static final String EXERCISE_TRACKER_SCENE = "EXERCISE TRACKER";
     private static final String BINNED_REMINDER_MESSAGE = "BINNED_REMINDER_MESSAGE";
+    public static final int TEXTFIELD_MAX_WIDTH = 250;
 
     //Checklist needs to be implemented into the scheduled hike scene.
     //Each checklist must correspond to the hike that owns that checklist.
-    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS"};
+    private final String[] BUTTON_NAMES_FOR_HOME = {"NEW HIKE", "SCHEDULED HIKE", "EXERCISE PROGRESS", "CREATE REMINDERS"};
     private static final String[] CHECKLIST = new String[]{"backpack", "binoculars", "flashlight", "compass", "rain coat", "map", "food", "water"};
 
     //Holds the hike date for parsing.
@@ -91,6 +92,12 @@ public class FitnessView extends Application {
     //Controller to perform necessary actions.
     private FitnessController controller = new FitnessController(defaultStartingScene());
     private String temporaryDateHolder;
+
+    //VBoxes for container template.
+    VBox container;
+    VBox top;
+    VBox middle;
+    VBox bottom;
 
     //Initial scene setup for application.
     private Scene defaultStartingScene() {
@@ -249,8 +256,8 @@ public class FitnessView extends Application {
     }
 
     //Makes a submit button that can have a customized action set
-    private Button makeBasicSubmitButton(){
-        Button button = new Button("SUBMIT");
+    private Button makeBasicButton(String buttonName){
+        Button button = new Button(buttonName);
         DropShadow shadow = addDropShadow();
         addMouseHoverEvent(button, shadow);
 
@@ -306,6 +313,10 @@ public class FitnessView extends Application {
 
             case BINNED_REMINDER_MESSAGE:
                 scene = reminderButtonScene();
+                break;
+
+            case "CREATE REMINDERS":
+                scene = makeReminderMessages();
                 break;
         }
 
@@ -378,7 +389,8 @@ public class FitnessView extends Application {
 
         buttons[0].setId("new-hike-btn-icon");
         buttons[1].setId("scheduled-btn-icon");
-        buttons[BUTTON_SHADOW_OFFSET].setId("exercise-progress-btn-icon");
+        buttons[2].setId("exercise-progress-btn-icon");
+        buttons[3].setId("new-reminder-message-btn-icon");
 
         addButtons(menuContainer, buttons);
 
@@ -388,29 +400,7 @@ public class FitnessView extends Application {
     //Scene for adding information about user's heart rate and steps taken.
     private Scene exerciseTracker() {
 
-        VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
-        mainContainer.setAlignment(Pos.TOP_CENTER);
-        mainContainer.setMaxSize(EXERCISE_TRACKER_WIDTH, HEIGHT);
-
-        VBox top = new VBox();
-        top.setAlignment(Pos.TOP_CENTER);
-        top.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        top.getStyleClass().add("window-top");
-
-        VBox middle = new VBox();
-        middle.setAlignment(Pos.CENTER);
-        middle.setSpacing(10);
-        middle.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
-        middle.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
-        middle.getStyleClass().add("window-mid");
-
-        VBox bottom = new VBox();
-        bottom.setAlignment(Pos.CENTER);
-        bottom.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        bottom.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        bottom.getStyleClass().add("window-bot");
+        vboxSceneTemplate();
 
         Text title = titleMaker("Exercise Tracker");
 
@@ -420,17 +410,17 @@ public class FitnessView extends Application {
 
         heartRateEntry.setAlignment(Pos.CENTER);
 
-        heartRateEntry.setMaxWidth(250);
+        heartRateEntry.setMaxWidth(TEXTFIELD_MAX_WIDTH);
 
         Label steps = labelMaker("Steps");
         JFXTextField stepsEntry = new JFXTextField();
 
         stepsEntry.setAlignment(Pos.CENTER);
-        stepsEntry.setMaxWidth(250);
+        stepsEntry.setMaxWidth(TEXTFIELD_MAX_WIDTH);
 
         middle.getChildren().addAll(heartRate, heartRateEntry, steps, stepsEntry);
 
-        Button submitButton = makeBasicSubmitButton();
+        Button submitButton = makeBasicButton("SUBMIT");
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -450,9 +440,9 @@ public class FitnessView extends Application {
         top.getChildren().add(title);
         bottom.getChildren().add(submitButton);
 
-        mainContainer.getChildren().addAll(top, middle, bottom);
+        container.getChildren().addAll(top, middle, bottom);
 
-        return new Scene(mainContainer, WIDTH, HEIGHT);
+        return new Scene(container, WIDTH, HEIGHT);
     }
 
     //Scene for displaying user's data on heart rate and steps taken.
@@ -473,30 +463,7 @@ public class FitnessView extends Application {
             }
         }
 
-        VBox mainContainer = new VBox();
-        mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
-        mainContainer.setAlignment(Pos.TOP_LEFT);
-        mainContainer.setMinSize(WIDTH, HEIGHT);
-        mainContainer.setMaxSize(WIDTH, HEIGHT);
-
-        VBox top = new VBox();
-        top.setAlignment(Pos.TOP_CENTER);
-        top.setMaxSize(WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        top.setMinSize(WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        top.getStyleClass().add("window-top");
-
-        VBox middle = new VBox();
-        middle.setAlignment(Pos.CENTER);
-        middle.setMaxSize(WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
-        middle.setMinSize(WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
-        middle.getStyleClass().add("window-mid");
-
-        VBox bottom = new VBox();
-        bottom.setAlignment(Pos.CENTER);
-        bottom.setMaxSize(WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        bottom.setMinSize(WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
-        bottom.getStyleClass().add("window-bot");
-
+        vboxSceneTemplate();
         Text title = titleMaker("Exercise Progress");
         top.getChildren().add(title);
 
@@ -540,14 +507,16 @@ public class FitnessView extends Application {
 
         chartBox.getChildren().addAll(heartRate, steps);
         middle.getChildren().add(chartBox);
+        middle.setMaxWidth(WIDTH);
+        middle.setMinWidth(WIDTH);
 
 
         Button back = makeBackButton(BACK, HOME_SCENE);
         bottom.getChildren().add(back);
 
-        mainContainer.getChildren().addAll(top, middle, bottom);
+        container.getChildren().addAll(top, middle, bottom);
 
-        return new Scene(mainContainer, WIDTH, HEIGHT);
+        return new Scene(container, WIDTH, HEIGHT);
     }
 
     //scene for user to select or create a trail
@@ -694,19 +663,20 @@ public class FitnessView extends Application {
     //scene for display scheduled hikes that is coming up
     private Scene scheduledHikes()
     {
+
+        vboxSceneTemplate();
         //creates a scroll pane to make all hike info viewable when overflow
         ScrollPane windowScroller = new ScrollPane();
-        VBox container = new VBox();
-        container.setAlignment(Pos.CENTER);
-        container.setSpacing(30);
+        VBox subContainer = new VBox();
+        subContainer.setAlignment(Pos.CENTER);
+        subContainer.setSpacing(30);
         windowScroller.getStylesheets().add("styles/HikeMasterStyles.css");
 
         windowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
-        windowScroller.setContent(container);
+        windowScroller.setContent(subContainer);
 
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
-        container.getChildren().add(scheduledHikeTitle);
 
         //uses one string array to store location data and another string array to store dates
         String[] locations = controller.getScheduledHikes();
@@ -767,16 +737,21 @@ public class FitnessView extends Application {
                 hikeRow.getChildren().addAll(hikeDate, hikeLocation,
                                              checkListButton, reminderMessageButton, addExerciseDataButton);
 
-                container.getChildren().add(hikeRow);
+                subContainer.getChildren().add(hikeRow);
             }
         }
 
         //back button that brings user to home scene
         Button back = makeBackButton(BACK, HOME_SCENE);
 
-        container.getChildren().add(back);
+        top.getChildren().add(scheduledHikeTitle);
+        middle.getChildren().add(windowScroller);
+        middle.setMinWidth(WIDTH);
+        middle.setMaxWidth(WIDTH);
+        bottom.getChildren().add(back);
+        container.getChildren().addAll(top, middle, bottom);
 
-        return new Scene(windowScroller, WIDTH, HEIGHT);
+        return new Scene(container, WIDTH, HEIGHT);
     }
 
     //
@@ -929,10 +904,78 @@ public class FitnessView extends Application {
 
         reminderContainer.getChildren().add(back);
 
-        Scene listedMessagesScene = new Scene(reminderContainer, WIDTH, HEIGHT);
-        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
+//        Scene listedMessagesScene =
+//        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
-        return listedMessagesScene;
+        return new Scene(reminderContainer, WIDTH, HEIGHT);
+    }
+
+    private Scene makeReminderMessages(){
+        vboxSceneTemplate();
+
+        Text reminderTitle = titleMaker("New Reminder Message");
+
+        JFXTextField reminderMessageInput = new JFXTextField();
+        reminderMessageInput.setPromptText("Enter new reminder message");
+        reminderMessageInput.setMaxWidth(TEXTFIELD_MAX_WIDTH);
+
+        HBox buttonContainer = new HBox();
+        buttonContainer.setSpacing(10);
+        buttonContainer.setAlignment(Pos.CENTER);
+
+        Button cancel = makeBasicButton("CANCEL");
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.setView(currentScene = sceneSelector(HOME_SCENE));
+                mainStage.setScene(controller.updateView());
+            }
+        });
+
+        Button submit = makeBasicButton("SUBMIT");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.addNewReminderMessage(reminderMessageInput.getText());
+                controller.setView(currentScene = sceneSelector(HOME_SCENE));
+                mainStage.setScene(controller.updateView());
+            }
+        });
+
+        top.getChildren().add(reminderTitle);
+        buttonContainer.getChildren().addAll(cancel, submit);
+        middle.getChildren().add(reminderMessageInput);
+        bottom.getChildren().add(buttonContainer);
+        container.getChildren().addAll(top, middle, bottom);
+
+        return new Scene(container, WIDTH, HEIGHT);
+
+    }
+
+    private void vboxSceneTemplate(){
+        container = new VBox();
+        container.getStylesheets().add("styles/HikeMasterStyles.css");
+        container.setAlignment(Pos.TOP_CENTER);
+        container.setMaxSize(EXERCISE_TRACKER_WIDTH, HEIGHT);
+
+        top = new VBox();
+        top.setAlignment(Pos.TOP_CENTER);
+        top.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
+        top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
+        top.getStyleClass().add("window-top");
+
+        middle = new VBox();
+        middle.setAlignment(Pos.CENTER);
+        middle.setSpacing(10);
+        middle.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
+        middle.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
+        middle.getStyleClass().add("window-mid");
+
+        bottom = new VBox();
+        bottom.setAlignment(Pos.CENTER);
+        bottom.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
+        bottom.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
+        bottom.getStyleClass().add("window-bot");
     }
 
     //this method will display an alert window

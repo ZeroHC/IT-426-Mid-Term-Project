@@ -81,6 +81,13 @@ Button:hover{
 #exercise-progress-btn-icon:hover{
     -fx-graphic: url("../images/web/ic_show_chart_white_24dp_1x.png");
 }
+#new-reminder-message-btn-icon{
+    -fx-graphic: url("../images/web/ic_add_circle_outline_black_24dp_1x.png");
+}
+
+#new-reminder-message-btn-icon:hover{
+    -fx-graphic: url("../images/web/ic_add_circle_outline_white_24dp_1x.png");
+}
 
 .label-text{
     -fx-font-weight: bolder;
