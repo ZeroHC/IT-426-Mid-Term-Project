@@ -233,11 +233,17 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public void addNewReminderMessage(){
+    /**
+     * this method adds all the checked reminder messages to the hike
+     */
+    public void addReminderMessageToHike(){
         documentFileSetup();
 
+        //dig down to the date elements
         Element allHikes = rootNode.getChild(ALL_HIKE_DETAILS);
         List<Element> dates = allHikes.getChildren(DATE_ELEMENT_STRING);
+
+        //make sure the reminder messages are binned to the hikes
         Element last = dates.get(dates.size() - 1);
 
         for (int i = 0; i < reminderMessages.getMessages().size(); i++)
@@ -249,8 +255,17 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    /**
+     * this method goes through the file and finds all the reminder messages
+     * based on the specific date
+     *
+     * @param dateString a string of date
+     * @return an array of reminder messages
+     */
     public String[] getReminderMessageBasedOnDate(String dateString)
     {
+        documentFileSetup();
+
         //Field for string array to be returned.
         String[] reminderMessage;
 
@@ -258,9 +273,11 @@ public class FitnessController {
         Element hikes = rootNode.getChild(ALL_HIKE_DETAILS);
         Element dateElement = null;
 
-
+        //get the date element at the specific date
         for (Element date : hikes.getChildren(DATE_ELEMENT_STRING))
         {
+            //if the attribute value is the same as the specific date that's being passed
+            //get the date element
             String id = date.getAttributeValue("id");
             if (id.equals(dateString))
             {

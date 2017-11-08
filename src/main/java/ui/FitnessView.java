@@ -10,8 +10,6 @@ package ui;
 
 import com.jfoenix.controls.*;
 import controller.FitnessController;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,16 +31,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import model.Hike;
-import model.ReminderMessages;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class provides a GUI for users to be able to interact with the application.
@@ -616,9 +606,12 @@ public class FitnessView extends Application {
         VBox inputContainer = new VBox();
         inputContainer.setId("inputContainer");
 
+        //uses a jfoenix text field to take user input on location
         JFXTextField locationInput = new JFXTextField();
         locationInput.setPromptText("Location");
 
+        //if user selected a drop down item that is not New from the select hike scene
+        //assign the text of location input field to whatever the user selected
         if (!tempLocationHolder.getText().equals(""))
         {
             locationInput.setText(tempLocationHolder.getText());
@@ -626,13 +619,17 @@ public class FitnessView extends Application {
         }
 
         HBox dateContainer = new HBox();
+
+        //uses a jfoenix text field to take user input on date
         JFXTextField dateInput = new JFXTextField();
         dateInput.setPromptText("Date");
 
+        //uses a jfoenix date picker for assisting user to choose a hike date
         JFXDatePicker datePicker = new JFXDatePicker();
         datePicker.setDefaultColor(Color.valueOf("#3f51b5"));
         datePicker.setMaxWidth(0);
 
+        //set the date input field text to whatever the date user picked from the date picker
         datePicker.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -644,15 +641,19 @@ public class FitnessView extends Application {
 
         inputContainer.getChildren().addAll(locationInput, dateContainer);
 
+        //back button to go back to select hike scene
         Button back = makeBackButton(null, SELECT_HIKE_SCENE);
 
+        //next button to go to reminder messages scene
         Button next = makeNextButton(REMINDER_MESSAGES_SCENE);
 
+        //check if the input fields are filled or not when pressing the next button
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
+                // if both input fields are not empty, set the location and date to a hike object
                 if (!locationInput.getText().isEmpty() && !dateInput.getText().isEmpty())
                 {
                     controller.setHikeLocation(locationInput.getText());
@@ -680,6 +681,7 @@ public class FitnessView extends Application {
     //scene for display scheduled hikes that is coming up
     private Scene scheduledHikes()
     {
+        //creates a scroll pane to make all hike info viewable when overflow
         ScrollPane windowScroller = new ScrollPane();
         VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
@@ -710,16 +712,22 @@ public class FitnessView extends Application {
                 HBox hikeRow = new HBox();
                 hikeRow.setId("hikeRow");
 
-                Label hikeDate = new Label(dates[i]);
-                Label hikeLocation = new Label(locations[i]);
+                //display the date and the location of one hike
+                Label hikeDate = new Label("Date: " + dates[i]);
+                Label hikeLocation = new Label("Location: " + locations[i]);
 
+                //creates a check list button that brings up a check list
                 Button checkListButton = new Button("Check List");
                 setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
+                //creates a reminder message button that brings up the associated reminder messages of the hike
                 Button reminderMessageButton = new Button("Reminder Messages");
                 setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE);
 
+                //creates a temporary index that is going to be passed into the event handler
                 final int index = i;
+
+                //set the temporary date holder to the date at this index
                 reminderMessageButton.setOnMousePressed(new EventHandler<MouseEvent>()
                 {
                     @Override
@@ -729,14 +737,16 @@ public class FitnessView extends Application {
                     }
                 });
 
-                Button doneButton = new Button("Add Exercise Data");
-                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, dates[i]);
+                //creates an add exercise data button that allows user to input heart rate and steps of the hike
+                Button addExerciseDataButton = new Button("Add Exercise Data");
+                setButtonActionForSceneChange(addExerciseDataButton, EXERCISE_TRACKER_SCENE, dates[i]);
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseDataButton);
                 container.getChildren().add(hikeRow);
             }
         }
 
+        //back button that brings user to home scene
         Button back = makeBackButton(BACK, HOME_SCENE);
 
         container.getChildren().add(back);
@@ -767,17 +777,27 @@ public class FitnessView extends Application {
 
         vBox.getChildren().addAll(boxes);
 
+        //set up a list for storing reminder messages
         controller.setHikeReminderMessages(messageList.length);
 
+        //check the state of the check boxes
         for (int i = 0; i < messageList.length; i++) {
             final CheckBox box = boxes[i];
 
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+                {
+                    //if the box is checked, add the reminder message to list
+                    if (newValue)
+                    {
                         controller.addHikeReminderMessage(box.getText());
-                    } else {
+                    }
+
+                    //else if the box is not checked or changed from checked to unchecked
+                    //remove the reminder message from list
+                    else
+                    {
                         controller.removeHikeReminderMessage(box.getText());
                     }
                 }
@@ -796,8 +816,11 @@ public class FitnessView extends Application {
             @Override
             public void handle(MouseEvent event)
             {
+                //adds the hike info to the file
                 controller.addHike();
-                controller.addNewReminderMessage();
+
+                //adds the associated reminder messages all together with the hike info
+                controller.addReminderMessageToHike();
 
             }
         });
