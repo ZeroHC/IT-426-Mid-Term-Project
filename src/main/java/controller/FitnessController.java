@@ -203,6 +203,8 @@ public class FitnessController {
         for (int steps : numberOfSteps) {
             if(dividerValue[index] != 0){
                 numberOfSteps[index] = steps/dividerValue[index];
+            }else{
+                numberOfSteps[index] = 0;
             }
             index++;
         }
@@ -317,6 +319,32 @@ public class FitnessController {
         }
 
         return calculateAverageValues(heartRate, numberToDivideHeartRateBy);
+    }
+
+    public boolean hasChartValues(){
+        documentFileSetup();
+
+        try {
+            String stepValue = rootNode.getChild("allHikeDetails").
+                    getChild("date").
+                    getChild("month").
+                    getChild("steps").
+                    getText();
+
+            String heartValue = rootNode.getChild("allHikeDetails").
+                    getChild("date").
+                    getChild("month").
+                    getChild("heartRate").
+                    getText();
+
+            if(stepValue.isEmpty() || heartValue.isEmpty()){
+                return false;
+            }
+
+            return true;
+        }catch (NullPointerException exception){
+            return false;
+        }
     }
 
     /**

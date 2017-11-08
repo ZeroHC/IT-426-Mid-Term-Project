@@ -457,8 +457,20 @@ public class FitnessView extends Application {
     //Scene for displaying user's data on heart rate and steps taken.
     private Scene exerciseProgress() {
 
-        int[] stepData = controller.getStepData();
-        int[] heartRateData = controller.getHeartRateData();
+        int[] stepData;
+        int[] heartRateData;
+
+        if(controller.hasChartValues()){
+            stepData = controller.getStepData();
+            heartRateData = controller.getHeartRateData();
+        }else{
+            stepData = new int[12];
+            heartRateData = new int[12];
+            for(int i = 0; i < stepData.length; i++){
+                stepData[i] = 0;
+                heartRateData[i] = 0;
+            }
+        }
 
         VBox mainContainer = new VBox();
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
@@ -746,10 +758,10 @@ public class FitnessView extends Application {
                 });
 
                 //creates an add exercise data button that allows user to input heart rate and steps of the hike
-                Button addExerciseDataButton = new Button("Add Exercise Data");
-                setButtonActionForSceneChange(addExerciseDataButton, EXERCISE_TRACKER_SCENE, dates[i]);
+                Button addExerciseData = new Button("Add Exercise Data");
+                setButtonActionForSceneChange(addExerciseData, EXERCISE_TRACKER_SCENE, dates[i]);
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseDataButton);
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseData);
                 container.getChildren().add(hikeRow);
             }
         }
