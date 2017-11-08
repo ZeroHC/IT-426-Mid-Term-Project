@@ -76,6 +76,7 @@ public class FitnessView extends Application {
     private static final String SCHEDULED_HIKE_SCENE = "SCHEDULED HIKE";
     private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
     private static final String EXERCISE_TRACKER_SCENE = "EXERCISE TRACKER";
+    private static final String BINNED_REMINDER_MESSAGE = "BINNED_REMINDER_MESSAGE";
 
     //Checklist needs to be implemented into the scheduled hike scene.
     //Each checklist must correspond to the hike that owns that checklist.
@@ -99,6 +100,7 @@ public class FitnessView extends Application {
 
     //Controller to perform necessary actions.
     private FitnessController controller = new FitnessController(defaultStartingScene());
+    private String temporaryDateHolder;
 
     //Initial scene setup for application.
     private Scene defaultStartingScene() {
@@ -145,7 +147,7 @@ public class FitnessView extends Application {
                     hikeReminder.setTitle("Hike Master 9000");
                     hikeReminder.setHeaderText(null);
                     String messageHolder = "";
-                    for(String message:controller.getReminderMessage())
+                    for(String message:controller.getReminderMessageBasedOnDate(dates[i]))
                     {
                         messageHolder = messageHolder + message + "\n";
                     }
@@ -308,6 +310,10 @@ public class FitnessView extends Application {
             case REMINDER_MESSAGES_SCENE:
                 scene = reminderMessages();
                 break;
+
+            case BINNED_REMINDER_MESSAGE:
+                scene = reminderButtonScene();
+                break;
         }
 
         return scene;
@@ -399,9 +405,6 @@ public class FitnessView extends Application {
         top.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.getStyleClass().add("window-top");
-
-        HBox menuHolder = new HBox();
-        VBox menu = new VBox();
 
         VBox middle = new VBox();
         middle.setAlignment(Pos.CENTER);
@@ -714,10 +717,20 @@ public class FitnessView extends Application {
                 setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
                 Button reminderMessageButton = new Button("Reminder Messages");
-                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+                setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE);
 
-                    Button doneButton = new Button("Add Exercise Data");
-                    setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
+                final int index = i;
+                reminderMessageButton.setOnMousePressed(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent event)
+                    {
+                        temporaryDateHolder = dates[index];
+                    }
+                });
+
+                Button doneButton = new Button("Add Exercise Data");
+                setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, dates[i]);
 
                 hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
                 container.getChildren().add(hikeRow);
@@ -777,6 +790,7 @@ public class FitnessView extends Application {
         Button next = makeNextButton(HOME_SCENE);
 
 
+        // when the next button is being pressed, it will add the hike info and reminder messages to the xml file
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
@@ -828,7 +842,7 @@ public class FitnessView extends Application {
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue == true) {
+                    if (newValue) {
                         box.setText(listItem + " packed!");
                     } else {
                         box.setText(listItem);
@@ -854,7 +868,8 @@ public class FitnessView extends Application {
         Text reminderTitle = titleMaker("Reminders");
         reminderContainer.getChildren().add(reminderTitle);
 
-        String[] messageList = controller.loadReminderMessages();
+        //gets all reminder messages based on the hike date
+        String[] messageList = controller.getReminderMessageBasedOnDate(temporaryDateHolder);
 
         ListView listedMessages = new ListView();
 
@@ -862,25 +877,9 @@ public class FitnessView extends Application {
 
         reminderContainer.getChildren().add(listedMessages);
 
-        Button add = makeAddButton(ADD);
+        Button back = makeBackButton(BACK, SCHEDULED_HIKE_SCENE);
 
-        Button done = makeDoneButton(DONE);
-
-        add.setOnMouseReleased(new EventHandler<MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-                controller.addHike();
-            }
-        });
-
-        HBox buttonRow = new HBox();
-        buttonRow.setId("buttonRow");
-
-        buttonRow.getChildren().addAll(add, done);
-
-        reminderContainer.getChildren().add(buttonRow);
+        reminderContainer.getChildren().add(back);
 
         Scene listedMessagesScene = new Scene(reminderContainer, WIDTH, HEIGHT);
         listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
@@ -888,6 +887,7 @@ public class FitnessView extends Application {
         return listedMessagesScene;
     }
 
+    //this method will display an alert window
     private void displayAlertWindow()
     {
         Alert missingEntry = new Alert(Alert.AlertType.INFORMATION);

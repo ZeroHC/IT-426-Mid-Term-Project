@@ -249,18 +249,27 @@ public class FitnessController {
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
-    public String[] getReminderMessage()
+    public String[] getReminderMessageBasedOnDate(String dateString)
     {
         //Field for string array to be returned.
         String[] reminderMessage;
 
         //Dig down to the reminder messages.
         Element hikes = rootNode.getChild(ALL_HIKE_DETAILS);
-        Element date = hikes.getChild(DATE_ELEMENT_STRING);
+        Element dateElement = null;
 
+
+        for (Element date : hikes.getChildren(DATE_ELEMENT_STRING))
+        {
+            String id = date.getAttributeValue("id");
+            if (id.equals(dateString))
+            {
+                dateElement = date;
+            }
+        }
 
         //A list of the children in the reminder node.
-        List reminderMessageList = date.getChildren(REMINDER_MESSAGE_ELEMENT_STRING);
+        List reminderMessageList = dateElement.getChildren(REMINDER_MESSAGE_ELEMENT_STRING);
 
         //Provides the array with the exact size it needs to be to hold the list.
         reminderMessage = new String[reminderMessageList.size()];
@@ -273,7 +282,6 @@ public class FitnessController {
         }
 
         return reminderMessage;
-
     }
 
     //Template method for setting up the document.
@@ -491,26 +499,51 @@ public class FitnessController {
         return dateStrings;
     }
 
+    /**
+     * this method set the location for a hike object
+     *
+     * @param location hike location
+     */
     public void setHikeLocation(String location)
     {
         hike.setLocation(location);
     }
 
+    /**
+     * this method set the date for a hike object
+     *
+     * @param date hike date
+     */
     public void setHikeDate(String date)
     {
         hike.setDate(date);
     }
 
-    public void setHikeReminderMessages(int capacity)
+    /**
+     * this method setup an array list for reminder messages
+     *
+     * @param size size of array list
+     */
+    public void setHikeReminderMessages(int size)
     {
-        reminderMessages.setMessages(new ArrayList<>(capacity));
+        reminderMessages.setMessages(new ArrayList<>(size));
     }
 
+    /**
+     * this method adds a message to the reminder messages object
+     *
+     * @param message a reminder message
+     */
     public void addHikeReminderMessage(String message)
     {
         reminderMessages.addMessage(message);
     }
 
+    /**
+     * this method removes a message from the reminder messages object
+     *
+     * @param message a reminder message
+     */
     public void removeHikeReminderMessage(String message)
     {
         reminderMessages.removeMessage(message);

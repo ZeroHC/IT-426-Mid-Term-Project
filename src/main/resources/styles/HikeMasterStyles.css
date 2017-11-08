@@ -116,3 +116,8 @@ Button:hover{
     -fx-alignment: center;
     -fx-spacing: 30px;
 }
+
+.scroll-pane{
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}
