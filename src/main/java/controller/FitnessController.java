@@ -789,4 +789,27 @@ public class FitnessController {
     {
         reminderMessages.removeMessage(message);
     }
+
+
+    public void setChecklist()
+    {
+        documentFileSetup();
+
+        //gets an element called all hike details from the root
+        Element hikes = rootNode.getChild(ALL_HIKE_DETAILS);
+
+        //use a node list to store all the children called date from the all hike details element
+        List dates = hikes.getChildren(DATE_ELEMENT_STRING);
+
+        //create a string array for storing checklist information
+        String[] checklist = new String[dates.size()];
+
+        //use a for loop to go through the date list
+        for (int i = 0; i < dates.size(); i++)
+        {
+            //create a temporary element to store date element at index i
+            Element node = (Element) dates.get(i);
+
+        }
+    }
 }
