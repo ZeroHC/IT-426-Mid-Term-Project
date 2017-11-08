@@ -137,7 +137,7 @@ public class FitnessView extends Application {
                     hikeReminder.setTitle("Hike Master 9000");
                     hikeReminder.setHeaderText(null);
                     String messageHolder = "";
-                    for(String message:controller.loadReminderMessages())
+                    for(String message:controller.getReminderMessageBasedOnDate(dates[i]))
                     {
                         messageHolder = messageHolder + message + "\n";
                     }
@@ -302,6 +302,10 @@ public class FitnessView extends Application {
             case REMINDER_MESSAGES_SCENE:
                 scene = reminderMessages();
                 break;
+
+            case BINNED_REMINDER_MESSAGE:
+                scene = reminderButtonScene();
+                break;
         }
 
         return scene;
@@ -393,9 +397,6 @@ public class FitnessView extends Application {
         top.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.getStyleClass().add("window-top");
-
-        HBox menuHolder = new HBox();
-        VBox menu = new VBox();
 
         VBox middle = new VBox();
         middle.setAlignment(Pos.CENTER);
@@ -723,8 +724,9 @@ public class FitnessView extends Application {
                 HBox hikeRow = new HBox();
                 hikeRow.setId("hikeRow");
 
-                Label hikeDate = new Label(dates[i]);
-                Label hikeLocation = new Label(locations[i]);
+                //display the date and the location of one hike
+                Label hikeDate = new Label("Date: " + dates[i]);
+                Label hikeLocation = new Label("Location: " + locations[i]);
 
                 String fullDate = hikeDate.getText();
 
@@ -733,21 +735,39 @@ public class FitnessView extends Application {
                 controller.heartRateAndStepsOrganizer(month, fullDate);
 
                 //creates a check list button that brings up a check list
+                //creates a check list button that brings up a check list
                 Button checkListButton = new Button("Check List");
                 setButtonActionForSceneChange(checkListButton, CHECKLIST_SCENE);
 
                 //creates a reminder message button that brings up the associated reminder messages of the hike
                 Button reminderMessageButton = new Button("Reminder Messages");
-                setButtonActionForSceneChange(reminderMessageButton, REMINDER_MESSAGES_SCENE);
+                setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE);
 
                 Button doneButton = new Button("Add Exercise Data");
                 setButtonActionForSceneChange(doneButton, EXERCISE_TRACKER_SCENE, (String) dates[i]);
+                //creates a temporary index that is going to be passed into the event handler
+                final int index = i;
 
-                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, doneButton);
+                //set the temporary date holder to the date at this index
+                reminderMessageButton.setOnMousePressed(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent event)
+                    {
+                        temporaryDateHolder = dates[index];
+                    }
+                });
+
+                //creates an add exercise data button that allows user to input heart rate and steps of the hike
+                Button addExerciseDataButton = new Button("Add Exercise Data");
+                setButtonActionForSceneChange(addExerciseDataButton, EXERCISE_TRACKER_SCENE, dates[i]);
+
+                hikeRow.getChildren().addAll(hikeDate, hikeLocation, checkListButton, reminderMessageButton, addExerciseDataButton);
                 container.getChildren().add(hikeRow);
             }
         }
 
+        //back button that brings user to home scene
         Button back = makeBackButton(BACK, HOME_SCENE);
 
         container.getChildren().add(back);
@@ -787,10 +807,18 @@ public class FitnessView extends Application {
 
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+                {
+                    //if the box is checked, add the reminder message to list
+                    if (newValue)
+                    {
                         controller.addHikeReminderMessage(box.getText());
-                    } else {
+                    }
+
+                    //else if the box is not checked or changed from checked to unchecked
+                    //remove the reminder message from list
+                    else
+                    {
                         controller.removeHikeReminderMessage(box.getText());
                     }
                 }
@@ -858,7 +886,7 @@ public class FitnessView extends Application {
             boxes[i].selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue == true) {
+                    if (newValue) {
                         box.setText(listItem + " packed!");
                     } else {
                         box.setText(listItem);
@@ -884,7 +912,8 @@ public class FitnessView extends Application {
         Text reminderTitle = titleMaker("Reminders");
         reminderContainer.getChildren().add(reminderTitle);
 
-        String[] messageList = controller.loadReminderMessages();
+        //gets all reminder messages based on the hike date
+        String[] messageList = controller.getReminderMessageBasedOnDate(temporaryDateHolder);
 
         ListView listedMessages = new ListView();
 
@@ -892,25 +921,9 @@ public class FitnessView extends Application {
 
         reminderContainer.getChildren().add(listedMessages);
 
-        Button add = makeAddButton(ADD);
+        Button back = makeBackButton(BACK, SCHEDULED_HIKE_SCENE);
 
-        Button done = makeDoneButton(DONE);
-
-        add.setOnMouseReleased(new EventHandler<MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-                controller.addHike();
-            }
-        });
-
-        HBox buttonRow = new HBox();
-        buttonRow.setId("buttonRow");
-
-        buttonRow.getChildren().addAll(add, done);
-
-        reminderContainer.getChildren().add(buttonRow);
+        reminderContainer.getChildren().add(back);
 
         Scene listedMessagesScene = new Scene(reminderContainer, WIDTH, HEIGHT);
         listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
