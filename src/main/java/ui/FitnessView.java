@@ -133,10 +133,8 @@ public class FitnessView extends Application
         popUpMessage();
     }
 
-    /**
-     * Launches a pop to display reminder messages that are associated with the current date.
-     */
-    public void popUpMessage()
+    //Launches a pop to display reminder messages that are associated with the current date.
+    private void popUpMessage()
     {
         //holds an array of hike dates.
         String[] dates = controller.getHikeDates();
