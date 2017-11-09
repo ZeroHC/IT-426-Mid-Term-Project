@@ -189,9 +189,6 @@ public class FitnessView extends Application
             @Override
             public void handle(ActionEvent event)
             {
-                //hikeDate.contentEquals(date);
-//                final String month = hikeDate.substring(5, 7);
-//                controller.heartRateAndStepsOrganizer(month, hikeDate);
                 controller.setHikeDate(date);
                 controller.setView(currentScene = sceneSelector(key));
                 mainStage.setScene(controller.updateView());

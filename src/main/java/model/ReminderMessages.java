@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * this class creates a reminder messages object
  *
- * @author Hanchen Liu
+ * @author Hanchen Liu, Joshua Hawks, & Dan Capps
  * @version 1.0
  */
 public class ReminderMessages
