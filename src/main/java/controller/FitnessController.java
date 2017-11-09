@@ -359,22 +359,21 @@ public class FitnessController
 
         try
         {
-            String stepValue = rootNode.getChild("allHikeDetails").
-                                        getChild("date").
-                                        getChild("month").
-                                        getChild("steps").
-                                        getText();
+            //List of date nodes.
+            List dates = rootNode.getChild("allHikeDetails").getChildren("date");
 
-            String heartValue = rootNode.getChild("allHikeDetails").
-                                         getChild("date").
-                                         getChild("month").
-                                         getChild("heartRate").
-                                         getText();
+            //Loops through each date node to ensure there is no missing data.
+            for (int i = 0; i < dates.size(); i++){
+                Element dateNode = (Element) dates.get(i);
 
-            //Empty data returns false.
-            if (stepValue.isEmpty() || heartValue.isEmpty())
-            {
-                return false;
+                String stepValue = dateNode.getChild("month").getChild("steps").getText();
+                String heartValue = dateNode.getChild("month").getChild("heartRate").getText();
+
+                //Empty data returns false.
+                if (stepValue.isEmpty() || heartValue.isEmpty())
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -429,18 +428,25 @@ public class FitnessController
         //Method call to setup the necessary document and file.
         documentFileSetup();
 
+        //Gets a child node of root.
         Element allHikes = rootNode.getChild("allHikeDetails");
 
+        //List of children node called date.
         List dates = allHikes.getChildren("date");
 
+        //Element that holds the date nodes.
         Element dateNode;
 
+        //Searches for the date.
         for (int i = 0; i < dates.size(); i++)
         {
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getChild("month").getAttributeValue(ID);
-            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7)))
+            //gets the attribute value of the date node.
+            String attributeHolder = dateNode.getAttributeValue(ID);
+
+            //Insert steps if node is null
+            if (attributeHolder.contentEquals(dateToSearchFor))
             {
                 if (dateNode.getChild("month").getChild("heartRate") == null)
                 {
@@ -449,6 +455,7 @@ public class FitnessController
             }
         }
 
+        //Writes to the xml file.
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
@@ -460,20 +467,28 @@ public class FitnessController
      */
     public void addSteps(String stepsTaken, String dateToSearchFor)
     {
+        //Sets the files and root node.
         documentFileSetup();
 
+        //Gets a child node of root.
         Element allHikes = rootNode.getChild("allHikeDetails");
 
+        //List of children node called date.
         List dates = allHikes.getChildren("date");
 
+        //Element that holds the date nodes.
         Element dateNode;
 
+        //Searches for the date.
         for (int i = 0; i < dates.size(); i++)
         {
             dateNode = (Element) dates.get(i);
 
-            String attributeHolder = dateNode.getChild("month").getAttributeValue(ID);
-            if (attributeHolder.contentEquals(dateToSearchFor.substring(5, 7)))
+            //gets the attribute value of the date node.
+            String attributeHolder = dateNode.getAttributeValue(ID);
+
+            //Insert steps if node is null
+            if (attributeHolder.contentEquals(dateToSearchFor))
             {
                 if (dateNode.getChild("month").getChild("steps") == null)
                 {
@@ -482,6 +497,7 @@ public class FitnessController
             }
         }
 
+        //Writes to the xml file.
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
