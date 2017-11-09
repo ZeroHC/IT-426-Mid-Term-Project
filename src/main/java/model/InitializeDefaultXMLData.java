@@ -31,7 +31,7 @@ public class InitializeDefaultXMLData
     {
         try
         {
-            //
+            // if the file and folder don't exist, create them
             if (DEFAULT_XML_DATA.getParentFile().mkdir() && DEFAULT_XML_DATA.createNewFile())
             {
                 System.out.println("The file was created ^_^ ");
