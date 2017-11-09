@@ -10,7 +10,6 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -26,9 +25,8 @@ import org.jdom2.output.XMLOutputter;
  */
 public class MakeDefaultXML
 {
-
     //Constant reminder messages that the application starts with.
-    private static final String[] defaultReminderMessages = {"Wear your fitbit!", "Be sure to stretch!", "Grab your backpack!", "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check the Checklist!"};
+    private static final String[] DEFAULT_REMINDER_MESSAGES = {"Wear your fitbit!", "Be sure to stretch!", "Grab your backpack!", "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check the Checklist!"};
 
     //Field used to make the root node of the file as well as adding child nodes to the document.
     private static Document xmlDocument;
@@ -41,7 +39,6 @@ public class MakeDefaultXML
      */
     public static void defaultXMl(String filePath) throws IOException
     {
-
         //Root of the document.
         xmlDocument = makeRoot("hiker");
 
@@ -51,9 +48,6 @@ public class MakeDefaultXML
         //Makes a child node to the root for previously hiked trails.
         makeNode(xmlDocument, "previouslyHiked");
 
-/*        //Makes a child node to the previously hiked trails called location
-        root.getChild("previouslyHiked").addContent(new Element("location"));*/
-
         //Makes a child node to the root to hold the reminder messages.
         makeNode(xmlDocument, "reminders");
 
@@ -61,7 +55,7 @@ public class MakeDefaultXML
         Element reminders = root.getChild("reminders");
 
         //Makes child nodes with reminder messages for the reminders node
-        makeReminderMessages(reminders, defaultReminderMessages);
+        makeReminderMessages(reminders, DEFAULT_REMINDER_MESSAGES);
 
         //Makes a child node in root called all hikes.
         makeNode(xmlDocument, "allHikeDetails");

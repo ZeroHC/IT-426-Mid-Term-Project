@@ -22,7 +22,7 @@ public class InitializeDefaultXMLData
 {
 
     //The path that the file should be made in.
-    private final static File defaultXMLData = new File(System.getProperty("user.dir") + "/data/master.xml");
+    private final static File DEFAULT_XML_DATA = new File(System.getProperty("user.dir") + "/data/master.xml");
 
     /**
      * A method that checks to see if the directory and file are present in the correct path.
@@ -31,13 +31,13 @@ public class InitializeDefaultXMLData
     {
         try
         {
-            //
-            if (defaultXMLData.getParentFile().mkdir() && defaultXMLData.createNewFile())
+            // if the file and folder don't exist, create them
+            if (DEFAULT_XML_DATA.getParentFile().mkdir() && DEFAULT_XML_DATA.createNewFile())
             {
                 System.out.println("The file was created ^_^ ");
 
                 //Method call to make the xml document based on the path provided.
-                defaultXMl(defaultXMLData.getAbsolutePath());
+                defaultXMl(DEFAULT_XML_DATA.getAbsolutePath());
             }
             else
             {

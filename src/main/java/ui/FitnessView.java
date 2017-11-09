@@ -52,6 +52,12 @@ public class FitnessView extends Application
     private static final String SELECT_HIKE_SCENE = "NEW HIKE";
     private static final String HIKE_DETAIL_SCENE = "HIKE DETAIL";
     private static final String REMINDER_MESSAGES_SCENE = "REMINDER MESSAGES";
+    private static final String CHECKLIST_SCENE = "CHECKLIST";
+    private static final String SCHEDULED_HIKE_SCENE = "SCHEDULED HIKE";
+    private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
+    private static final String EXERCISE_TRACKER_SCENE = "EXERCISE TRACKER";
+    private static final String BINNED_REMINDER_MESSAGE_SCENE = "BINNED_REMINDER_MESSAGE_SCENE";
+    private static final String MAKE_REMINDER_MESSAGES_SCENE = "CREATE REMINDERS";
     private static final int EXERCISE_TRACKER_WIDTH = 500;
     private static final int EXERCISE_TRACKER_HEADER_FOOTER = 100;
     private static final int BUTTON_SHADOW_RADIUS = 1;
@@ -59,14 +65,10 @@ public class FitnessView extends Application
     private static final int JANUARY = 1;
     private static final int DISPLAY_EACH_MONTH = 1;
     private static final int DECEMBER = 12;
-    private static final String CHECKLIST_SCENE = "CHECKLIST";
-    private static final String SCHEDULED_HIKE_SCENE = "SCHEDULED HIKE";
-    private static final String EXERCISE_PROGRESS_SCENE = "EXERCISE PROGRESS";
-    private static final String EXERCISE_TRACKER_SCENE = "EXERCISE TRACKER";
-    private static final String BINNED_REMINDER_MESSAGE = "BINNED_REMINDER_MESSAGE";
     private static final int TEXTFIELD_MAX_WIDTH = 250;
     private static final String FIELD_MISSING_ERROR = "You are missing one or more fields";
     private static final String HIKE_CREATED_MESSAGE = "Hike Created! You can view upcoming hikes in the Scheduled Hike page.";
+    private static final String PROGRAM_TITLE = "Hike Master 9000";
 
     //Checklist needs to be implemented into the scheduled hike scene.
     //Each checklist must correspond to the hike that owns that checklist.
@@ -113,7 +115,7 @@ public class FitnessView extends Application
         mainStage = stage;
 
         //Sets the title of the application.
-        stage.setTitle("Hike Master 9000");
+        stage.setTitle(PROGRAM_TITLE);
 
         //Sets the application icon.
         stage.getIcons().add(new Image("images/leafIcon32x33.jpg"));
@@ -319,11 +321,11 @@ public class FitnessView extends Application
                 scene = reminderMessages();
                 break;
 
-            case BINNED_REMINDER_MESSAGE:
+            case BINNED_REMINDER_MESSAGE_SCENE:
                 scene = uniqueReminderList();
                 break;
 
-            case "CREATE REMINDERS":
+            case MAKE_REMINDER_MESSAGES_SCENE:
                 scene = makeReminderMessages();
                 break;
         }
@@ -401,7 +403,7 @@ public class FitnessView extends Application
         title.setAlignment(Pos.CENTER);
         title.setPadding(new Insets(50));
 
-        Text titleText = titleMaker("Hike Master 9000");
+        Text titleText = titleMaker(PROGRAM_TITLE);
 
         //Provides a reflection for the title.
         Reflection reflection = new Reflection();
@@ -754,10 +756,12 @@ public class FitnessView extends Application
         subContainer.setSpacing(30);
         windowScroller.getStylesheets().add("styles/HikeMasterStyles.css");
 
+        //always show a vertical scroller
         windowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         windowScroller.setContent(subContainer);
 
+        //set scene title
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
 
         //uses one string array to store location data and another string array to store dates
@@ -793,7 +797,7 @@ public class FitnessView extends Application
 
                 //creates a reminder message button that brings up the associated reminder messages of the hike
                 Button reminderMessageButton = new Button("Reminder Messages");
-                setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE);
+                setButtonActionForSceneChange(reminderMessageButton, BINNED_REMINDER_MESSAGE_SCENE);
 
                 //creates a temporary index that is going to be passed into the event handler
                 final int index = i;
@@ -1123,7 +1127,7 @@ public class FitnessView extends Application
         Alert alertWindow = new Alert(Alert.AlertType.INFORMATION);
 
         //Alert Title
-        alertWindow.setTitle("Hike Master 9000");
+        alertWindow.setTitle(PROGRAM_TITLE);
 
         //Sets the icon image for the alert.
         ((Stage)alertWindow.getDialogPane().getScene().getWindow()).getIcons().add(new Image("images/leafIcon32x33.jpg"));
