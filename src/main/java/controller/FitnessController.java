@@ -101,7 +101,10 @@ public class FitnessController
      */
     public int[] getStepData()
     {
+        //Holds the string value of the steps taken.
         String[] totalSteps = new String[MONTH];
+
+        //Denominator for the calculation of averages.
         int[] numberToDivideStepValuesBy = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         //Field for string to be returned.
@@ -203,14 +206,18 @@ public class FitnessController
 
         }
 
+        //Finds the average for steps and returns an array of those averages.
         return calculateAverageValues(stepValues, numberToDivideStepValuesBy);
     }
 
+    //Calculates the average number of any given value.
     private int[] calculateAverageValues(int[] numberOfSteps, int[] dividerValue)
     {
 
+        //Index to get access to the values of that index.
         int index = 0;
 
+        //Calculates the average or provides dummy data to avoid errors.
         for (int steps : numberOfSteps)
         {
             if (dividerValue[index] != 0)
@@ -221,6 +228,7 @@ public class FitnessController
             {
                 numberOfSteps[index] = 0;
             }
+
             index++;
         }
 
@@ -234,7 +242,10 @@ public class FitnessController
      */
     public int[] getHeartRateData()
     {
+        //Used to hold the numeric string of the heart rate.
         String[] totalHeartRate = new String[MONTH];
+
+        //Denominator to divide the heart rate by.
         int[] numberToDivideHeartRateBy = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         //Field for string to be returned.
@@ -333,9 +344,15 @@ public class FitnessController
 
         }
 
+        //Finds the average for heart rate and returns an array of those averages.
         return calculateAverageValues(heartRate, numberToDivideHeartRateBy);
     }
 
+    /**
+     * Used to provide a boolean on whether the data is present or not.
+     *
+     * @return Returns true if there is data or false if there is no data or a null value is provided.
+     */
     public boolean hasChartValues()
     {
         documentFileSetup();
@@ -343,17 +360,18 @@ public class FitnessController
         try
         {
             String stepValue = rootNode.getChild("allHikeDetails").
-                    getChild("date").
-                    getChild("month").
-                    getChild("steps").
-                    getText();
+                                        getChild("date").
+                                        getChild("month").
+                                        getChild("steps").
+                                        getText();
 
             String heartValue = rootNode.getChild("allHikeDetails").
-                    getChild("date").
-                    getChild("month").
-                    getChild("heartRate").
-                    getText();
+                                         getChild("date").
+                                         getChild("month").
+                                         getChild("heartRate").
+                                         getText();
 
+            //Empty data returns false.
             if (stepValue.isEmpty() || heartValue.isEmpty())
             {
                 return false;
@@ -363,6 +381,7 @@ public class FitnessController
         }
         catch (NullPointerException exception)
         {
+            //If a null was found, then returns false.
             return false;
         }
     }
@@ -463,21 +482,35 @@ public class FitnessController
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
+    /**
+     * Makes a parent node for the heartRate and steps node.
+     *
+     * @param numericMonth Provides the numeric string of the month.
+     * @param dateToSearchFor Provides a date string to search for.
+     */
     public void heartRateAndStepsOrganizer(String numericMonth, String dateToSearchFor)
     {
+        //Setup for the file.
         documentFileSetup();
 
+        //Child of the root.
         Element allHikes = rootNode.getChild("allHikeDetails");
 
+        //List that holds the children of the parent.
         List dates = allHikes.getChildren("date");
 
+        //Element that holds the date node.
         Element dateNode;
 
+        //Loop for searching for the date.
         for (int i = 0; i < dates.size(); i++)
         {
             dateNode = (Element) dates.get(i);
 
+            //Gets the value of the attribute of that date.
             String attributeHolder = dateNode.getAttributeValue(ID);
+
+            //Checks the date and then creates the month element with given id.
             if (attributeHolder.contentEquals(dateToSearchFor))
             {
                 if (dateNode.getChild("month") == null)
@@ -487,6 +520,7 @@ public class FitnessController
             }
         }
 
+        //Writes to the xml file.
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 
@@ -565,12 +599,16 @@ public class FitnessController
     {
         try
         {
+            //Makes a Sax parser.
             builder = new SAXBuilder();
 
+            //Calls the file from the path
             xmlFile = new File("data/master.xml");
 
+            //Makes a document based on the xml file.
             xmlFileDocument = (Document) builder.build(xmlFile);
 
+            //Provides the root node of the document.
             rootNode = xmlFileDocument.getRootElement();
 
         }
@@ -584,12 +622,18 @@ public class FitnessController
         }
     }
 
+    //Writes to the xml file
     private void writeToXMLFile(Document xmlDocument, File xmlFile)
     {
         try
         {
+            //Output object.
             XMLOutputter xmlOutput = new XMLOutputter();
+
+            //Provides indentation to xml to make it easier for humans to read.
             xmlOutput.setFormat(Format.getPrettyFormat());
+
+            //Writes to the xml file
             xmlOutput.output(xmlDocument, new FileWriter(xmlFile.getAbsolutePath()));
         }
         catch (IOException exception)
@@ -839,12 +883,20 @@ public class FitnessController
         reminderMessages.removeMessage(message);
     }
 
+    /**
+     * Adds a new reminder message to the xml file.
+     *
+     * @param message This parameter provides the string that is to become the new reminder message.
+     */
     public void addNewReminderMessage(String message)
     {
+        //Sets up the files
         documentFileSetup();
 
+        //Sets the text to the new message element
         rootNode.getChild("reminders").addContent(new Element("message").setText(message));
 
+        //Writes to the file.
         writeToXMLFile(xmlFileDocument, xmlFile);
     }
 }

@@ -109,19 +109,37 @@ public class FitnessView extends Application
     @Override
     public void start(Stage stage)
     {
+        //field that is a copy of the stage parameter.
         mainStage = stage;
+
+        //Sets the title of the application.
         stage.setTitle("Hike Master 9000");
+
+        //Sets the application icon.
         stage.getIcons().add(new Image("images/leafIcon32x33.jpg"));
+
+        //Sets the scene for the stage.
         stage.setScene(currentScene);
+
+        //Makes it so the user may not resize the application window.
         stage.setResizable(false);
+
+        //Displays the stage.
         stage.show();
 
+        //method that show the alert for reminders.
         popUpMessage();
     }
 
+    /**
+     * Launches a pop to display reminder messages that are associated with the current date.
+     */
     public void popUpMessage()
     {
+        //holds an array of hike dates.
         String[] dates = controller.getHikeDates();
+
+        //Conditional that will display an alert if there is a reminder that needs to be displayed for that date.
         if (dates == null)
         {
             defaultStartingScene();
@@ -150,17 +168,24 @@ public class FitnessView extends Application
     }
 
     //Makes an array of buttons
-    private Button[] makeButtons(String[] name)
+    private Button[] makeHomeButtons(String[] name)
     {
+        //An array to hold buttons.
         Button[] buttons = new Button[name.length];
 
+        //Applies a shadow to the buttons.
         DropShadow shadow = addDropShadow();
 
+        //A loop to make the actual button.
         for (int i = INITIALIZING_VALUE; i < name.length; i++)
         {
             buttons[i] = new Button(name[i].toUpperCase());
             buttons[i].getStyleClass().add("home-btn");
+
+            //Adds a mouse hovering event.
             addMouseHoverEvent(buttons[i], shadow);
+
+            //Sets the action for the button.
             setButtonActionForSceneChange(buttons[i], name[i]);
         }
 
@@ -175,7 +200,10 @@ public class FitnessView extends Application
             @Override
             public void handle(ActionEvent event)
             {
+                //Sets controller to hold the new scene.
                 controller.setView(currentScene = sceneSelector(key));
+
+                //Updates the current scene with the current set scene.
                 mainStage.setScene(controller.updateView());
             }
         });
@@ -189,9 +217,6 @@ public class FitnessView extends Application
             @Override
             public void handle(ActionEvent event)
             {
-                //hikeDate.contentEquals(date);
-//                final String month = hikeDate.substring(5, 7);
-//                controller.heartRateAndStepsOrganizer(month, hikeDate);
                 controller.setHikeDate(date);
                 controller.setView(currentScene = sceneSelector(key));
                 mainStage.setScene(controller.updateView());
@@ -203,7 +228,11 @@ public class FitnessView extends Application
     private Button makeBackButton(String buttonName, String sceneName)
     {
         Button button = new Button(buttonName);
+
+        //add a icon to the button.
         button.getStyleClass().add("back-btn-icon");
+
+        //Adds shadow to the button.
         DropShadow shadow = addDropShadow();
 
         addMouseHoverEvent(button, shadow);
@@ -240,6 +269,7 @@ public class FitnessView extends Application
     //Helper method for adding multiple buttons to node.
     private void addButtons(VBox container, Button[] buttons)
     {
+        //adds buttons
         for (Button button : buttons)
         {
             container.getChildren().add(button);
@@ -250,8 +280,10 @@ public class FitnessView extends Application
     private Scene sceneSelector(String sceneName)
     {
 
+        //Scene to be returned.
         Scene scene = null;
 
+        //Assigns the scene that is to be returned.
         switch (sceneName)
         {
             case HOME_SCENE:
@@ -288,7 +320,7 @@ public class FitnessView extends Application
                 break;
 
             case BINNED_REMINDER_MESSAGE:
-                scene = reminderButtonScene();
+                scene = uniqueReminderList();
                 break;
 
             case "CREATE REMINDERS":
@@ -308,6 +340,7 @@ public class FitnessView extends Application
     //Adds mouse events to buttons.
     private void addMouseHoverEvent(Button button, DropShadow shadow)
     {
+        //Provides an event handler for when the mouse is hovering over the object.
         EventHandler<MouseEvent> mouseOverEventEventHandler = new EventHandler<MouseEvent>()
         {
             @Override
@@ -317,6 +350,7 @@ public class FitnessView extends Application
             }
         };
 
+        //Provides and event handler for when the mouse is not hovering the object.
         EventHandler<MouseEvent> mouseOffEventEventHandler = new EventHandler<MouseEvent>()
         {
             @Override
@@ -333,7 +367,10 @@ public class FitnessView extends Application
     //Generates text for title headings.
     private Text titleMaker(String titleName)
     {
+        //Makes a title.
         Text title = new Text(titleName);
+
+        //Provides a style for the title.
         title.getStyleClass().add("title-text");
         return title;
     }
@@ -341,7 +378,10 @@ public class FitnessView extends Application
     //Generates text for labels.
     private Label labelMaker(String labelName)
     {
+        //Makes a label
         Label label = new Label(labelName);
+
+        //Provides a style for the label.
         label.getStyleClass().add("label-text");
         return label;
     }
@@ -349,18 +389,21 @@ public class FitnessView extends Application
     //Starting screen.
     private Scene home()
     {
+        //Holds the elements of the scene.
         VBox menuContainer = new VBox();
         menuContainer.setAlignment(Pos.CENTER);
         menuContainer.setSpacing(20);
         menuContainer.getStylesheets().add("styles/HikeMasterStyles.css");
         menuContainer.setId("home-image");
 
+        //Holds the title of the scene.
         HBox title = new HBox();
         title.setAlignment(Pos.CENTER);
         title.setPadding(new Insets(50));
 
         Text titleText = titleMaker("Hike Master 9000");
 
+        //Provides a reflection for the title.
         Reflection reflection = new Reflection();
         reflection.getFraction();
         titleText.setEffect(reflection);
@@ -369,8 +412,9 @@ public class FitnessView extends Application
 
         menuContainer.getChildren().add(title);
 
-        Button[] buttons = makeButtons(BUTTON_NAMES_FOR_HOME);
+        Button[] buttons = makeHomeButtons(BUTTON_NAMES_FOR_HOME);
 
+        //Provides an id to assign a unique icon to each button.
         buttons[0].setId("new-hike-btn-icon");
         buttons[1].setId("scheduled-btn-icon");
         buttons[2].setId("exercise-progress-btn-icon");
@@ -384,20 +428,26 @@ public class FitnessView extends Application
     //Scene for adding information about user's heart rate and steps taken.
     private Scene exerciseTracker()
     {
-
+        //Provides a template form.
         vboxSceneTemplate();
 
+        //Title for the scene
         Text title = titleMaker("Exercise Tracker");
 
+        //Label for the heart rate.
         Label heartRate = labelMaker("Heart Rate");
 
+        //Jfoenix textfield for the heart rate.
         JFXTextField heartRateEntry = new JFXTextField();
 
         heartRateEntry.setAlignment(Pos.CENTER);
 
         heartRateEntry.setMaxWidth(TEXTFIELD_MAX_WIDTH);
 
+        //Label for steps taken.
         Label steps = labelMaker("Steps");
+
+        //Textfield that takes in the input for steps taken.
         JFXTextField stepsEntry = new JFXTextField();
 
         stepsEntry.setAlignment(Pos.CENTER);
@@ -405,23 +455,32 @@ public class FitnessView extends Application
 
         middle.getChildren().addAll(heartRate, heartRateEntry, steps, stepsEntry);
 
+        //A button for submitting the textfield inputs.
         Button submitButton = makeBasicButton("SUBMIT");
         submitButton.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
             {
+                //Adds heart rate and step data to the xml and moves onto the next scene.
+                //If it's false, then it pops up an alert that says that they are missing inputs.
                 if (!heartRateEntry.getText().isEmpty() && !stepsEntry.getText().isEmpty())
                 {
+                    //Inserts data into the xml
                     controller.addHeartRate(heartRateEntry.getText(), controller.getDate());
                     controller.addSteps(stepsEntry.getText(), controller.getDate());
+
+                    //clears the textfields.
                     heartRateEntry.setText("");
                     stepsEntry.setText("");
+
+                    //Sets and updates the scene.
                     controller.setView(currentScene = sceneSelector(SCHEDULED_HIKE_SCENE));
                     mainStage.setScene(controller.updateView());
                 }
                 else
                 {
+                    //Alert
                     displayAlertWindow(FIELD_MISSING_ERROR);
                 }
             }
@@ -438,10 +497,11 @@ public class FitnessView extends Application
     //Scene for displaying user's data on heart rate and steps taken.
     private Scene exerciseProgress()
     {
-
+        //Used to hold the calculated data for the graphs.
         int[] stepData;
         int[] heartRateData;
 
+        //Checks to see if the value is present or null.
         if (controller.hasChartValues())
         {
             stepData = controller.getStepData();
@@ -449,6 +509,7 @@ public class FitnessView extends Application
         }
         else
         {
+            //provides dummy data.
             stepData = new int[12];
             heartRateData = new int[12];
             for (int i = 0; i < stepData.length; i++)
@@ -459,21 +520,29 @@ public class FitnessView extends Application
         }
 
         vboxSceneTemplate();
+
+        //Scene Title
         Text title = titleMaker("Exercise Progress");
         top.getChildren().add(title);
 
+        //Month
         NumberAxis xMonth = new NumberAxis(JANUARY, DECEMBER, DISPLAY_EACH_MONTH);
         xMonth.setLabel("Month");
 
+        //Heart rate
         NumberAxis yHeartRate = new NumberAxis(0, 240, 60);
         yHeartRate.setLabel("Heart Rate");
 
+        //The line chart for user's heart rate.
         final LineChart<Number, Number> heartRate = new LineChart<>(xMonth, yHeartRate);
 
+        //Holds the coordinates for heart rate
         XYChart.Series<Number, Number> heartCoordinates = new XYChart.Series<>();
+
+        //Tells what the line represents.
         heartCoordinates.setName("Average Heart Rate per Hike");
 
-        //is for heartrate
+        //Assigns coordinates for the heart rate.
         for (int i = 0; i < 12; i++)
         {
             heartCoordinates.getData().add(new XYChart.Data<>(i + 1, heartRateData[i]));
@@ -481,17 +550,22 @@ public class FitnessView extends Application
 
         heartRate.getData().add(heartCoordinates);
 
+        //Month
         NumberAxis xStepMonth = new NumberAxis(JANUARY, DECEMBER, DISPLAY_EACH_MONTH);
         xStepMonth.setLabel("Month");
 
+        //The number of steps the user has taken.
         NumberAxis ySteps = new NumberAxis(0, 30000, 5000);
         ySteps.setLabel("Steps");
 
+        //Line chart for the steps the user has taken.
         final LineChart<Number, Number> steps = new LineChart<>(xStepMonth, ySteps);
 
+        //Holds coordinates for steps.
         XYChart.Series<Number, Number> stepCoordinates = new XYChart.Series<>();
         stepCoordinates.setName("Average Steps per Hike");
 
+        //Assigns coordinates
         for (int i = 0; i < stepData.length; i++)
         {
             stepCoordinates.getData().add(new XYChart.Data<>(i + 1, stepData[i]));
@@ -519,16 +593,19 @@ public class FitnessView extends Application
     //scene for user to select or create a trail
     private Scene newTrail()
     {
+        //Holds the elements of the scene
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setSpacing(50);
         mainContainer.getStylesheets().add("styles/HikeMasterStyles.css");
 
+        //Scene title.
         Text selectHikeTitle = titleMaker("Select Hike");
         mainContainer.getChildren().add(selectHikeTitle);
 
         Label userNote = new Label("Select a hike or create new");
 
+        //Box that holds the values of new or previous hiking locations
         JFXComboBox<Label> hikeList = new JFXComboBox<>();
         hikeList.setMinWidth(200);
 
@@ -538,6 +615,7 @@ public class FitnessView extends Application
 
         String[] locations = controller.getHikeLocations();
 
+        //Assigns locations.
         if (locations != null)
         {
             for (String location : locations)
@@ -550,6 +628,7 @@ public class FitnessView extends Application
 
         Button next = makeNextButton(HIKE_DETAIL_SCENE);
 
+        //Sets and action for holding the location.
         next.setOnMousePressed(new EventHandler<MouseEvent>()
         {
             @Override
@@ -665,7 +744,9 @@ public class FitnessView extends Application
     //scene for display scheduled hikes that is coming up
     private Scene scheduledHikes()
     {
+        //Template structure
         vboxSceneTemplate();
+
         //creates a scroll pane to make all hike info viewable when overflow
         ScrollPane windowScroller = new ScrollPane();
         VBox subContainer = new VBox();
@@ -740,6 +821,7 @@ public class FitnessView extends Application
         //back button that brings user to home scene
         Button back = makeBackButton(BACK, HOME_SCENE);
 
+        //Adds the children to their proper nodes.
         top.getChildren().add(scheduledHikeTitle);
         middle.getChildren().add(windowScroller);
         middle.setMinWidth(WIDTH);
@@ -750,22 +832,27 @@ public class FitnessView extends Application
         return new Scene(container, WIDTH, HEIGHT);
     }
 
-    //
+    //Provides a list of reminders for the user during the creation of a new hike.
     private Scene reminderMessages()
     {
+        //main container for all the elements of the page.
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
 
+        //The title of the scene.
         Text title = titleMaker("Reminder Messages");
 
         vBox.getChildren().add(title);
 
+        //stores the values for the reminder message.
         String[] messageList = controller.loadReminderMessages();
 
+        //Check boxes using the Jfoenix library.
         JFXCheckBox[] boxes = new JFXCheckBox[messageList.length];
 
+        //Loops through the message list to make viewable checkboxes.
         for (int i = 0; i < messageList.length; i++)
         {
             JFXCheckBox box = new JFXCheckBox(messageList[i]);
@@ -804,8 +891,10 @@ public class FitnessView extends Application
             });
         }
 
+        //Goes back to the previous scene.
         Button back = makeBackButton(null, HIKE_DETAIL_SCENE);
 
+        //Goes back to the starting scene.
         Button next = makeNextButton(HOME_SCENE);
 
         // when the next button is being pressed, it will add the hike info and reminder messages to the xml file
@@ -840,25 +929,32 @@ public class FitnessView extends Application
 
         vBox.getChildren().add(buttonRow);
 
+        //Scene to be returned.
         Scene listedMessagesScene = new Scene(vBox, WIDTH, HEIGHT);
+
+        //Style for the scene.
         listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return listedMessagesScene;
     }
 
-    //
+    //Provides a checklist that users can work with ensure that they have all stuff checked off.
     private Scene checkList()
     {
+        //main container for the elements of the scene.
         VBox vBox = new VBox();
         vBox.getStylesheets().add("styles/HikeMasterStyles.css");
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
+
+        //Title for the scene.
         Text checklistTitle = titleMaker("Checklist");
         vBox.getChildren().add(checklistTitle);
 
         JFXCheckBox[] boxes = new JFXCheckBox[CHECKLIST.length];
 
+        //Assigns a checklist item to a check box object.
         for (int i = 0; i < CHECKLIST.length; i++)
         {
             JFXCheckBox box = new JFXCheckBox(CHECKLIST[i]);
@@ -868,6 +964,7 @@ public class FitnessView extends Application
 
         vBox.getChildren().addAll(boxes);
 
+        //Appends or removes the "packed" term for each checklist item.
         for (int i = 0; i < CHECKLIST.length; i++)
         {
             final CheckBox box = boxes[i];
@@ -896,8 +993,10 @@ public class FitnessView extends Application
         return new Scene(vBox, WIDTH, HEIGHT);
     }
 
-    private Scene reminderButtonScene()
+    //Displays a unique list of  reminders for any given hike.
+    private Scene uniqueReminderList()
     {
+        //Holds all the elements of the scene.
         VBox reminderContainer = new VBox();
         reminderContainer.setAlignment(Pos.CENTER);
         reminderContainer.getStylesheets().add("styles/HikeMasterStyles.css");
@@ -920,26 +1019,33 @@ public class FitnessView extends Application
 
         reminderContainer.getChildren().add(back);
 
-//        Scene listedMessagesScene =
-//        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
-
         return new Scene(reminderContainer, WIDTH, HEIGHT);
     }
 
+    //Adds new custom reminder messages to the xml data.
     private Scene makeReminderMessages()
     {
+        //Template structure for scene.
         vboxSceneTemplate();
 
+        //Title for scene
         Text reminderTitle = titleMaker("New Reminder Message");
 
+        //Textfield for user input
         JFXTextField reminderMessageInput = new JFXTextField();
+
+        //A prompt in the test field to entice users to enter a new message.
         reminderMessageInput.setPromptText("Enter new reminder message");
+
+        //Sets the width of the textfield
         reminderMessageInput.setMaxWidth(TEXTFIELD_MAX_WIDTH);
+        reminderMessageInput.setMinWidth(TEXTFIELD_MAX_WIDTH);
 
         HBox buttonContainer = new HBox();
         buttonContainer.setSpacing(10);
         buttonContainer.setAlignment(Pos.CENTER);
 
+        //A button to just go back to the home scene.
         Button cancel = makeBasicButton("CANCEL");
         cancel.setOnAction(new EventHandler<ActionEvent>()
         {
@@ -951,18 +1057,23 @@ public class FitnessView extends Application
             }
         });
 
+        //Adds the new message to the xml file and then goes to the home scene.
         Button submit = makeBasicButton("SUBMIT");
         submit.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
             {
+                //Adds message to xml file
                 controller.addNewReminderMessage(reminderMessageInput.getText());
+
+                //sets and updates to new scene.
                 controller.setView(currentScene = sceneSelector(HOME_SCENE));
                 mainStage.setScene(controller.updateView());
             }
         });
 
+        //Assigns children to their parent nodes.
         top.getChildren().add(reminderTitle);
         buttonContainer.getChildren().addAll(cancel, submit);
         middle.getChildren().add(reminderMessageInput);
@@ -973,19 +1084,23 @@ public class FitnessView extends Application
 
     }
 
+    //A template to be used to help make the scenes more uniform.
     private void vboxSceneTemplate()
     {
+        //The parent that holds all the separate children parts for the scene.
         container = new VBox();
         container.getStylesheets().add("styles/HikeMasterStyles.css");
         container.setAlignment(Pos.TOP_CENTER);
         container.setMaxSize(EXERCISE_TRACKER_WIDTH, HEIGHT);
 
+        //Handles the upper third of the window
         top = new VBox();
         top.setAlignment(Pos.TOP_CENTER);
         top.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
         top.getStyleClass().add("window-top");
 
+        //Handles the middle section of the window
         middle = new VBox();
         middle.setAlignment(Pos.CENTER);
         middle.setSpacing(10);
@@ -993,6 +1108,7 @@ public class FitnessView extends Application
         middle.setMinSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_BODY_HEIGHT);
         middle.getStyleClass().add("window-mid");
 
+        //Handles the elements of the lower third of the window.
         bottom = new VBox();
         bottom.setAlignment(Pos.CENTER);
         bottom.setMaxSize(EXERCISE_TRACKER_WIDTH, EXERCISE_TRACKER_HEADER_FOOTER);
@@ -1003,16 +1119,22 @@ public class FitnessView extends Application
     //this method will display an alert window
     private void displayAlertWindow(String alertMessage)
     {
+        //Makes an alert object.
         Alert alertWindow = new Alert(Alert.AlertType.INFORMATION);
 
+        //Alert Title
         alertWindow.setTitle("Hike Master 9000");
 
+        //Sets the icon image for the alert.
         ((Stage)alertWindow.getDialogPane().getScene().getWindow()).getIcons().add(new Image("images/leafIcon32x33.jpg"));
 
+        //Removes the alert header
         alertWindow.setHeaderText(null);
 
+        //Alert message
         alertWindow.setContentText(alertMessage);
 
+        //Displays alert and awaits user action.
         alertWindow.showAndWait();
     }
 }
