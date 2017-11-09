@@ -26,7 +26,6 @@ import org.jdom2.output.XMLOutputter;
  */
 public class MakeDefaultXML
 {
-
     //Constant reminder messages that the application starts with.
     private static final String[] defaultReminderMessages = {"Wear your fitbit!", "Be sure to stretch!", "Grab your backpack!", "Check the forecast!", "Drink plenty of water!", "Dress in layers!", "Check the Checklist!"};
 
@@ -41,7 +40,6 @@ public class MakeDefaultXML
      */
     public static void defaultXMl(String filePath) throws IOException
     {
-
         //Root of the document.
         xmlDocument = makeRoot("hiker");
 
@@ -50,9 +48,6 @@ public class MakeDefaultXML
 
         //Makes a child node to the root for previously hiked trails.
         makeNode(xmlDocument, "previouslyHiked");
-
-/*        //Makes a child node to the previously hiked trails called location
-        root.getChild("previouslyHiked").addContent(new Element("location"));*/
 
         //Makes a child node to the root to hold the reminder messages.
         makeNode(xmlDocument, "reminders");

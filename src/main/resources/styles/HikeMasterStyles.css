@@ -1,40 +1,73 @@
+/*
+* Daniel Capps, Joshua Hawks, Hanchen Liu
+* 11/08/2017
+* HikeMasterStyles.css
+*
+* this is the css file for formatting all the scenes.
+*/
+
+/*
+* set up a background color and font size for all scenes
+*/
 .root{
-    /*-fx-background-color: #cce6ff;*/
     -fx-background-color: white;
     -fx-font-size: 16px;
 }
 
+/*
+* set up a background image for the home scene
+*/
 #home-image{
     -fx-background-image: url(../images/HikingBackground.jpg);
 }
 
+/*
+* set up background color for window top, mid and bottom
+*/
 .window-top, .window-mid, .window-bot{
     -fx-background-color: white;
 }
 
+/*
+* set up styles for all buttons
+*/
 Button{
     -fx-border-style: none;
     -fx-border-radius: 2px;
-    -fx-pref-height: 36px;
+    -fx-min-height: 40px;
+    -fx-min-width: 100px;
     -fx-background-color: white, TRANSPARENT, TRANSPARENT, TRANSPARENT;
     -fx-cursor: hand;
 }
 
+/*
+* change the button's background color and text fill when hover
+*/
 Button:hover{
     -fx-background-color: #1565c0;
     -fx-text-fill: white;
 }
 
+
+/*
+* set the size for home button
+*/
 .home-btn{
     -fx-min-width: 220px;
     -fx-max-width: 220px;
 }
 
+/*
+* set the alignment and spacing for a row of button
+*/
 #buttonRow{
     -fx-alignment: center;
     -fx-spacing: 30px;
 }
 
+/*
+* set up icons for different buttons
+*/
 .back-btn-icon{
     -fx-graphic: url("../images/web/ic_arrow_back_black_24dp_1x.png");
 }
@@ -42,6 +75,7 @@ Button:hover{
 .back-btn-icon:hover{
     -fx-graphic: url("../images/web/ic_arrow_back_white_24dp_1x.png");
 }
+
 .forward-btn-icon{
     -fx-graphic: url("../images/web/ic_arrow_forward_black_24dp_1x.png");
 }
@@ -89,20 +123,31 @@ Button:hover{
     -fx-graphic: url("../images/web/ic_add_circle_outline_white_24dp_1x.png");
 }
 
+/*
+* set up the font weight and size for label text
+*/
 .label-text{
     -fx-font-weight: bolder;
     -fx-font-size: 40px;
 }
 
+/*
+* set up the font size for title text
+*/
 .title-text{
     -fx-font-size: 50px;
-    /*-fx-fill: white;*/
 }
 
+/*
+* set up alignment for check boxes
+*/
 .check-box{
     -fx-alignment: center-left;
 }
 
+/*
+* set up spacing, padding, alignment and max width for the container that contains user input fields
+*/
 #inputContainer{
     -fx-spacing: 30px;
     -fx-padding: 50px;
@@ -110,20 +155,25 @@ Button:hover{
     -fx-max-width: 300px;
 }
 
+
+/*
+* set up the alignment for h boxes
+*/
 .hBox{
     -fx-alignment: center-left;
 }
 
-.button{
-    -fx-min-height: 40px;
-    -fx-min-width: 100px;
-}
-
+/*
+* set up the alignment and spacing for a row of hike data and buttons
+*/
 #hikeRow{
     -fx-alignment: center;
     -fx-spacing: 40px;
 }
 
+/*
+* set up the scroll pane to fit on window's width and height, which will center the scroll pane
+*/
 .scroll-pane{
     -fx-fit-to-width: true;
     -fx-fit-to-height: true;

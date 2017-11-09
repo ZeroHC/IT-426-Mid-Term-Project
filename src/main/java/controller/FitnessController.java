@@ -206,6 +206,7 @@ public class FitnessController
         return calculateAverageValues(stepValues, numberToDivideStepValuesBy);
     }
 
+    //this method calculates the
     private int[] calculateAverageValues(int[] numberOfSteps, int[] dividerValue)
     {
 
@@ -405,10 +406,8 @@ public class FitnessController
      *
      * @param heartRateValue A string with the numeric value of the user's heart rate.
      */
-    //Needs to be updated.
     public void addHeartRate(String heartRateValue, String dateToSearchFor)
     {
-
         //Method call to setup the necessary document and file.
         documentFileSetup();
 
@@ -433,9 +432,14 @@ public class FitnessController
         }
 
         writeToXMLFile(xmlFileDocument, xmlFile);
-
     }
 
+    /**
+     * This method adds the number of steps to the xml file.
+     *
+     * @param stepsTaken A string with the numeric value of the user's steps
+     * @param dateToSearchFor
+     */
     public void addSteps(String stepsTaken, String dateToSearchFor)
     {
         documentFileSetup();
@@ -504,6 +508,7 @@ public class FitnessController
         //make sure the reminder messages are binned to the hikes
         Element last = dates.get(dates.size() - 1);
 
+        //uses a for loop to add all reminder messages
         for (int i = 0; i < reminderMessages.getMessages().size(); i++)
         {
             Element message = new Element(REMINDER_MESSAGE_ELEMENT_STRING).setText(reminderMessages.getMessages().get(i));
@@ -584,6 +589,7 @@ public class FitnessController
         }
     }
 
+    //this method writes data to an XML file
     private void writeToXMLFile(Document xmlDocument, File xmlFile)
     {
         try
@@ -680,6 +686,7 @@ public class FitnessController
 
         //gets an element called previously hiked from the root
         Element hikeLocations = rootNode.getChild(PREVIOUSLY_HIKED_ELEMENT_STRING);
+
         return getLocationStrings(hikeLocations);
     }
 
@@ -839,6 +846,11 @@ public class FitnessController
         reminderMessages.removeMessage(message);
     }
 
+    /**
+     * this method adds a new reminder message to the xml file
+     *
+     * @param message a string of message that is going to be added to reminder message
+     */
     public void addNewReminderMessage(String message)
     {
         documentFileSetup();

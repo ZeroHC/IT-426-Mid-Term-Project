@@ -673,10 +673,12 @@ public class FitnessView extends Application
         subContainer.setSpacing(30);
         windowScroller.getStylesheets().add("styles/HikeMasterStyles.css");
 
+        //always show a vertical scroller
         windowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         windowScroller.setContent(subContainer);
 
+        //set scene title
         Text scheduledHikeTitle = titleMaker("Scheduled Hikes");
 
         //uses one string array to store location data and another string array to store dates
@@ -919,9 +921,6 @@ public class FitnessView extends Application
         Button back = makeBackButton(BACK, SCHEDULED_HIKE_SCENE);
 
         reminderContainer.getChildren().add(back);
-
-//        Scene listedMessagesScene =
-//        listedMessagesScene.getStylesheets().add("styles/HikeMasterStyles.css");
 
         return new Scene(reminderContainer, WIDTH, HEIGHT);
     }
